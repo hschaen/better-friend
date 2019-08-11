@@ -1,9 +1,11 @@
 var friendNumber = 0;
 var friendCount = 0;
+var i = 0;
 var friendName = '';
 var newFriendListItem = '';
 var searchText = '';
 var friendArray = [];
+
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     friendName = $("#friendsName").val();       
@@ -12,6 +14,7 @@ $("#addFriendBtn").on("click", function(e) {
     friendArray.push(friendName);
     console.log(friendArray);
     friendCount++;
+    $('#friendsName').val('');
 });
 $("#searchFriendsBtn").on("click", function(e) {
     e.preventDefault();
@@ -20,15 +23,14 @@ $("#searchFriendsBtn").on("click", function(e) {
     }
     searchText = $("#searchFriendsText").val();
     console.log(searchText);
-    for (var i = 0; i < friendArray.length; i++) {
-        if (friendArray[i] == searchText) {
+    for (i = 0; i < friendArray.length; i++) {
+        if (friendArray[i] === searchText) {
             console.log("it's a match");
             friendNumber = friendArray.indexOf(friendArray[i]);
             $('li').removeClass("active");
             $('[data-friendNumber=' + friendNumber+ ']').addClass("active");
             $('#friendCardName').text(friendArray[i]);
-        } else {
-            alert ('friend not found');
+            return true;
         }
     }
 })
