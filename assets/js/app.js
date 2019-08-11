@@ -4,17 +4,21 @@ var i = 0;
 var friendName = '';
 var newFriendListItem = '';
 var searchText = '';
+var dataFriendNumber = '';
 var friendArray = [];
 
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     friendName = $("#friendsName").val();       
-    newFriendListItem = '<li class="list-group-item" data-friendNumber='+friendCount+'>' + friendName + '</li>';
+    newFriendListItem = '<li class="list-group-item friendItem" data-friendNumber='+friendCount+'>' + friendName + '</li>';
     $("#friendsList").append(newFriendListItem);
     friendArray.push(friendName);
     console.log(friendArray);
     friendCount++;
     $('#friendsName').val('');
+});
+$(document).on("click", ".friendItem", function() {
+    alert($(this).text());
 });
 $("#searchFriendsBtn").on("click", function(e) {
     e.preventDefault();
@@ -28,9 +32,12 @@ $("#searchFriendsBtn").on("click", function(e) {
             console.log("it's a match");
             friendNumber = friendArray.indexOf(friendArray[i]);
             $('li').removeClass("active");
-            $('[data-friendNumber=' + friendNumber+ ']').addClass("active");
+            dataFriendNumber = $('[data-friendNumber=' + friendNumber+ ']');
+            $("#friendsList li").find(dataFriendNumber).focus();
+            dataFriendNumber.addClass("active");
             $('#friendCardName').text(friendArray[i]);
             return true;
+            
         }
     }
 })
