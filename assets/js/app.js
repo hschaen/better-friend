@@ -1,15 +1,25 @@
 var friendNumber = 0;
+var friendNumberInList = 0;
 var friendCount = 0;
+var newFriendNumber = 0;
 var i = 0;
+var numberInList = "";
 var friendName = '';
+var friendNameIs = '';
 var addFriendName = '';
 var newFriendListItem = '';
 var searchText = '';
 var dataFriendNumber = '';
 var friendContainer = '';
 var birthdayText = '';
+var facebookText = '';
+var facebookInfo = '';
+var birthdayLog = '';
+var setFriendFullInfo = {};
 var friendArray = [];
+var friendFullInfo = {};
 var editInfoBtn = true;
+var bd1 = '';
 
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
@@ -23,9 +33,12 @@ $("#addFriendBtn").on("click", function(e) {
         $("#friendsList").append(newFriendListItem);
         friendArray.push(friendName);
         console.log(friendArray);
-        friendCount++;
+        newFriendNumber = friendArray.length;
+        friendFullInfo['no' + friendCount] = {friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"}
+        localStorage.setItem("friendInfo", JSON.stringify(friendFullInfo));
         $('#friendsName').val('');
         $('#noFriendsList').hide();
+        friendCount++;
     }
 });
 $(document).on("click", ".friendItem", function() {
@@ -34,6 +47,11 @@ $(document).on("click", ".friendItem", function() {
     $(this).addClass("active");
     $('#friendCardName').text($(this).text());
     $("#friendInfo").show();
+    friendNumberInList = friendArray.indexOf($(this).text());
+    friendName = $(this).text();
+    bd1 = JSON.parse(localStorage.getItem('friendInfo'));
+    birthdayLog = bd1["no" + friendNumberInList].birthday;
+    console.log(birthdayLog);
     
 });
 $("#searchFriendsBtn").on("click", function(e) {
@@ -95,24 +113,42 @@ $(".editFriendInfo").on("click", function() {
 });
 $("#saveInfo").on("click", function() {
     if (editInfoBtn) {
-        console.log("edit info activated");
+        //birthdayInfo
         birthdayInfo = $("#birthdayText").text();
-        $("form#birthdayForm").show();birthdayText = $("#birthdayInput").val();
-
+        $("form#birthdayForm").show();
+        birthdayText = $("#birthdayInput").val();
         $("#birthdayInfo").hide();
         $("#birthdayInput").attr("placeholder", birthdayInfo);
         $(this).addClass("saveBirthdayInfo").removeClass("editFriendInfo").text("Save Info");
+        //facebookInfo
+        facebookInfo = $("#facebookText").text();
+        $("form#facebookForm").show();
+        facebookText = $("#facebookInput").val();
+        $("#facebookInfo").hide();
+        $("#facebookInput").attr("placeholder", facebookInfo);
+        $(this).addClass("saveBirthdayInfo").removeClass("editFriendInfo").text("Save Info");
+        //change btn state
         editInfoBtn = false;
     } else {
         console.log("save info activated");
         birthdayText = $("#birthdayInput").val();
-        $("#birthdayText").text(birthdayText);
-        $("#birthdayForm").hide();
-        $("#birthdayInfo").show();
+        facebookText = $("#facebookInput").val();
+        if (birthdayText !== '' || facebookText !== '') {
+            $("#birthdayText").text(birthdayText);
+            $("#facebookText").text(facebookText);
+            facebookInfo = "https://fb.me/" + facebookText;
+        } else {
+            alert ("is Empty!");
+        }
+        $("#birthdayForm, #facebookForm").hide();
+        $("#birthdayInfo, #facebookInfo").show();
         $(this).addClass("editFriendInfo").removeClass("saveBirthdayInfo").text("Saved");
         setTimeout(function() {
             $('#saveInfo').text("Edit Info");
         }, 500);
+        friendFullInfo['no' + friendNumberInList] = {friendNameIs:friendName, birthday: birthdayText, facebook: facebookInfo}
+        setFriendFullInfo = friendFullInfo['no' + friendNumberInList]
+        localStorage.setItem("friendInfo", JSON.stringify(setFriendFullInfo));
         editInfoBtn = true;
 
 
@@ -123,6 +159,6 @@ $(document).ready(function() {
     if(friendArray.length === 0) {
         $('#noFriendsList').show();
     }
-    $("#searchFriends, #friendInfo, #birthdayForm").hide();
+    $("#searchFriends, #friendInfo, #birthdayForm, #facebookForm").hide();
     
 })
