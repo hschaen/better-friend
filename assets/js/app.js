@@ -15,18 +15,25 @@ var birthdayText = '';
 var facebookText = '';
 var facebookInfo = '';
 var birthdayLog = '';
+var facebookLog = '';
+var nameLog = '';
+var bd1 = '';
 var setFriendFullInfo = {};
 var friendArray = [];
+var friendsArray = [];
 var friendFullInfo = {};
 var editInfoBtn = true;
-var bd1 = '';
 
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     addFriendName = $('#friendsName').val().trim();
+    if (friendArray.indexOf(addFriendName) > -1) {
+        alert("already added!");
+        return false;
+    }
     if (addFriendName === '') {
         alert("Enter a name.");
-        return false;
+        return false; 
     } else {
         friendName = $("#friendsName").val();       
         newFriendListItem = '<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendName + '</li>';
@@ -34,8 +41,9 @@ $("#addFriendBtn").on("click", function(e) {
         friendArray.push(friendName);
         console.log(friendArray);
         newFriendNumber = friendArray.length;
-        friendFullInfo['no' + friendCount] = {friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"}
-        localStorage.setItem("friendInfo", JSON.stringify(friendFullInfo));
+        //friendFullInfo['no' + friendCount] = {friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"}
+        friendsArray.push({friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"});
+        localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $('#friendsName').val('');
         $('#noFriendsList').hide();
         friendCount++;
@@ -50,8 +58,12 @@ $(document).on("click", ".friendItem", function() {
     friendNumberInList = friendArray.indexOf($(this).text());
     friendName = $(this).text();
     bd1 = JSON.parse(localStorage.getItem('friendInfo'));
-    birthdayLog = bd1["no" + friendNumberInList].birthday;
-    console.log(birthdayLog);
+    birthdayLog = bd1[friendNumberInList].birthday;
+    facebookLog = bd1[friendNumberInList].facebook;
+    nameLog = bd1[friendNumberInList].friendNameIs;
+    $("#birthdayText").text(birthdayLog);
+    $("#facebookText").text(facebookLog);
+    $("#friendCardName").text(nameLog);
     
 });
 $("#searchFriendsBtn").on("click", function(e) {
@@ -114,19 +126,20 @@ $(".editFriendInfo").on("click", function() {
 $("#saveInfo").on("click", function() {
     if (editInfoBtn) {
         //birthdayInfo
-        birthdayInfo = $("#birthdayText").text();
         $("form#birthdayForm").show();
-        birthdayText = $("#birthdayInput").val();
         $("#birthdayInfo").hide();
-        $("#birthdayInput").attr("placeholder", birthdayInfo);
-        $(this).addClass("saveBirthdayInfo").removeClass("editFriendInfo").text("Save Info");
-        //facebookInfo
-        facebookInfo = $("#facebookText").text();
+        if(friendsArray[friendNumberInList].birthday == "MM/DD/YYYY") {
+            $("#birthdayInput").val("");
+            $("#birthdayInput").attr("placeholder", birthdayLog);
+        } else {
+            $("#birthdayInput").val(friendsArray[friendNumberInList].birthday);
+        }
+        $(this).text("Save Info");
+        //facebookInfo 
         $("form#facebookForm").show();
-        facebookText = $("#facebookInput").val();
         $("#facebookInfo").hide();
-        $("#facebookInput").attr("placeholder", facebookInfo);
-        $(this).addClass("saveBirthdayInfo").removeClass("editFriendInfo").text("Save Info");
+        $("#facebookInput").attr("placeholder", facebookLog);
+        $("#friendsList li").addClass("disabled");
         //change btn state
         editInfoBtn = false;
     } else {
@@ -142,18 +155,15 @@ $("#saveInfo").on("click", function() {
         }
         $("#birthdayForm, #facebookForm").hide();
         $("#birthdayInfo, #facebookInfo").show();
-        $(this).addClass("editFriendInfo").removeClass("saveBirthdayInfo").text("Saved");
+        $(this).text("Saved");
         setTimeout(function() {
             $('#saveInfo').text("Edit Info");
         }, 500);
-        friendFullInfo['no' + friendNumberInList] = {friendNameIs:friendName, birthday: birthdayText, facebook: facebookInfo}
-        setFriendFullInfo = friendFullInfo['no' + friendNumberInList]
-        localStorage.setItem("friendInfo", JSON.stringify(setFriendFullInfo));
+        friendsArray[friendNumberInList] = {friendNameIs:friendName, birthday: birthdayText, facebook: facebookInfo}
+        localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
+        $("#friendsList li").removeClass("disabled");
         editInfoBtn = true;
-
-
     }
-    
 });
 $(document).ready(function() {
     if(friendArray.length === 0) {
