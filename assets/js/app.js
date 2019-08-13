@@ -24,6 +24,23 @@ var friendArray = [];
 var friendsArray = [];
 var friendFullInfo = {};
 var editInfoBtn = true;
+var today = 0;
+var dd = "";
+var mm = "";
+var yyyy = 0;
+function yourBirthday() {
+    today = new Date();
+    dd = String(today.getDate()).padStart(2, '0');
+    mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    yyyy = today.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+    if (today === birthdayLog) {
+        console.log("Happy Birthday");
+    } else {
+        console.log("not your bday, sry.");
+    }
+}
 function addFriendNamesToArray() {
     console.log("fired");
     for (var f = 0; f < friendsArray.length; f++) {
@@ -44,6 +61,8 @@ function friendLookUp() {
     $("#phoneText").text(phoneLog);
     $("#addressText").text(addressLog);
     $("#friendCardName").text(friendArray[fNum]);
+    yourBirthday();
+
 }
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
@@ -86,6 +105,8 @@ $(document).on("click", ".friendItem", function() {
     $("#phoneText").text(phoneLog);
     $("#addressText").text(addressLog);
     $(this).addClass("active");
+    yourBirthday();
+
 });
 $("#searchFriendsBtn").on("click", function(e) {
     e.preventDefault();
