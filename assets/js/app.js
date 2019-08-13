@@ -42,7 +42,7 @@ $("#addFriendBtn").on("click", function(e) {
         console.log(friendArray);
         newFriendNumber = friendArray.length;
         //friendFullInfo['no' + friendCount] = {friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"}
-        friendsArray.push({friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"});
+        friendsArray.push({friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "{{userid}}"});
         localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $('#friendsName').val('');
         $('#noFriendsList').hide();
@@ -136,9 +136,15 @@ $("#saveInfo").on("click", function() {
         }
         $(this).text("Save Info");
         //facebookInfo 
+        if(friendsArray[friendNumberInList].facebook == "{{userid}}") {
+            $("#facebookInput").val("");
+            $("#facebookInput").attr("placeholder", "{{userid}");
+            console.log("wipey");
+        } else {
+            $("#facebookInput").val(friendsArray[friendNumberInList].facebook);
+        }
         $("form#facebookForm").show();
         $("#facebookInfo").hide();
-        $("#facebookInput").attr("placeholder", facebookLog);
         $("#friendsList li").addClass("disabled");
         //change btn state
         editInfoBtn = false;
@@ -149,7 +155,7 @@ $("#saveInfo").on("click", function() {
         if (birthdayText !== '' || facebookText !== '') {
             $("#birthdayText").text(birthdayText);
             $("#facebookText").text(facebookText);
-            facebookInfo = "https://fb.me/" + facebookText;
+            facebookInfo = facebookText;
         } else {
             alert ("is Empty!");
         }
@@ -166,8 +172,17 @@ $("#saveInfo").on("click", function() {
     }
 });
 $(document).ready(function() {
-    if(friendArray.length === 0) {
+    friendsArray = JSON.parse(localStorage.getItem("friendInfo"));
+    if(friendsArray.length == 0) {
         $('#noFriendsList').show();
+        console.log("empty");
+    } else {
+        $('#noFriendsList').hide();
+        for (var k = 0; k < friendsArray.length; k++) {
+            $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendsArray[k].friendNameIs + '</li>');
+            friendCount++;
+        }
+        console.log("full");
     }
     $("#searchFriends, #friendInfo, #birthdayForm, #facebookForm").hide();
     
