@@ -76,23 +76,59 @@
                 <div class="card-body">
                     <h5 class="card-title">Info</h5>
                     <div class="card-text">
+                        <!-- Phone Info -->
+                        <div id="phone">
+                            <p id="phoneInfo">Phone #: <span id="phoneText">(XXX) XXX-XXXX</span></p>
+                            <form class="form-inline" id="phoneForm">
+                                <div class="form-group">
+                                    <label for="phoneInput">Phone:</label>
+                                    <input id="phoneInput" class="form-control" type="text" name="phoneInput">
+                                    
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Address Info -->
+                        <div id="address">
+                            <p id="addressInfo">Address: <span id="addressText"></span></p>
+                            <form class="form-inline" id="addressForm">
+                                <div class="form-group">
+                                    <label for="addressInput">Address:</label>
+                                    <input id="addressInput" class="form-control" type="text" name="addressInput">
+                                    
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Birthday Info -->
                         <div id="birthday">
                             <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span></p>
                             <form class="form-inline" id="birthdayForm">
                                 <div class="form-group">
-                                    <label for="">Birthday:</label>
-                                    <input id="birthdayInput" class="form-control" type="text" name="">
+                                    <label for="birthdayInput">Birthday:</label>
+                                    <input id="birthdayInput" class="form-control" type="text" name="birthdayInput">
                                     
                                 </div>
                             </form>
+                        </div>
+                        <!-- Facebook Info -->
+                        <div id="facebook">
                             <p id="facebookInfo">Facebook: https://fb.me/<span id="facebookText">{{facebook ID}}</span></p>
                             <form class="form-inline" id="facebookForm">
-                                    <div class="form-group">
-                                        <label for="">Facebook ID:</label>
-                                        <input id="facebookInput" class="form-control" type="text" name="">
-                                        
-                                    </div>
-                                </form>
+                                <div class="form-group">
+                                    <label for="facebookInput">Facebook ID:</label>
+                                    <input id="facebookInput" class="form-control" type="text" name="facebookInput">
+                                    
+                                </div>
+                            </form>
+                        </div>
+                        <!-- Instagram Info -->
+                        <div id="instagram">
+                            <p id="instagramInfo">Instagram: https://instagram.com/<span id="instagramText">{{instagram ID}}</span></p>
+                            <form class="form-inline" id="instagramForm">
+                                <div class="form-group">
+                                    <label for="instagramInput">Instagram ID:</label>
+                                    <input id="instagramInput" class="form-control" type="text" name="instagramInput">
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
