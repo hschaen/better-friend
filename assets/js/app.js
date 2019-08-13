@@ -2,7 +2,7 @@ var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 0;
 var newFriendNumber = 0;
-var i = 0;
+var fNum = 0;
 var numberInList = "";
 var friendName = '';
 var friendNameIs = '';
@@ -30,6 +30,15 @@ function addFriendNamesToArray() {
         friendArray.push(friendsArray[f].friendNameIs);
     } 
 }
+function friendLookUp() {
+    $("#friendInfo").show();
+    birthdayLog = friendsArray[fNum].birthday;
+    facebookLog = friendsArray[fNum].facebook;
+    nameLog = friendsArray[fNum].friendNameIs;
+    $("#birthdayText").text(birthdayLog);
+    $("#facebookText").text(facebookLog);
+    $("#friendCardName").text(friendArray[fNum]);
+}
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     addFriendName = $('#friendsName').val().trim();
@@ -56,30 +65,39 @@ $("#addFriendBtn").on("click", function(e) {
 });
 $(document).on("click", ".friendItem", function() {
     $('.friendItem').removeClass("active");
-    $(this).addClass("active");
-    $('#friendCardName').text($(this).text());
-    $("#friendInfo").show();
     friendNumberInList = $(this).attr("data-friendnumber");
+    $("#friendInfo").show();
     birthdayLog = friendsArray[friendNumberInList].birthday;
     facebookLog = friendsArray[friendNumberInList].facebook;
     nameLog = friendsArray[friendNumberInList].friendNameIs;
     $("#birthdayText").text(birthdayLog);
     $("#facebookText").text(facebookLog);
     $("#friendCardName").text(nameLog);
+    $(this).addClass("active");
     
 });
 $("#searchFriendsBtn").on("click", function(e) {
     e.preventDefault();
-    if (friendsArray.length == 0) {
-        alert('add some friends');
-    }
+    $(".friendItem").removeClass("active");
+    $("#listOfFriends, #friendInfo").hide();
     searchText = $("#searchFriendsText").val();
     console.log(searchText);
-    for (i = 0; i < friendsArray.length; i++) {
-        if (friendsArray[i] === searchText) {
+    if (friendArray.length === 0) {
+        alert('add some friends');
+        return false;
+    } 
+    for (var m = 0; m < friendArray.length; m++) {
+        if (friendArray[m] === searchText) {
             console.log("it's a match");
+
+            $('.friendItem').removeClass("active");
+
             $("#listOfFriends").show();
-            $('#friendCardName').text(friendsArray[i]);
+            $("[data-friendnumber='" + m + "'").addClass("active");
+            $("#friendInfo").show();
+            fNum = m;
+            $('#friendCardName').text(friendArray[fNum]);
+            friendLookUp();
             return true;
         }
     }
@@ -89,9 +107,15 @@ $("#addFriendsLink").on("click", function() {
     $("#pageTitle").text("Add Friends");
     $(this).parent().addClass("active");
     $("#viewFriendsLink").parent().removeClass("active");
+    $(".friendItem").removeClass("active");
+
     $("#pageTitle").text("Add Friends");
-    $("#listOfFriends").hide();
-    $("#friendInfo").hide();
+    if (friendArray.length != 0) {
+        $("#listOfFriends").show();
+    } else {
+        $("#listOfFriends").hide();
+    }
+    $("#friendInfo, #searchFriends").hide();
 
 
 })
