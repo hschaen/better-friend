@@ -40,3 +40,9 @@ Information You Get
 5. Deals/Groupons
 6. Birthday Reminders
 7. Important Life Events
+
+Tasks/Priorities
+- Add Friend
+- Add Friend Properties
+- Search Friend
+- See Friend Properties

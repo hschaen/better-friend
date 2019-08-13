@@ -124,11 +124,10 @@ $("#viewFriendsLink").on("click", function() {
     $("listOfFriends").show();
     $(this).parent().addClass("active");
     $("#addFriendsLink").parent().removeClass("active");
+    $(".friendItem").removeClass("active");
     $("#pageTitle").text("View Friends");
     $("#friendInfo").hide();
     $("#searchFriends").hide();
-
-    
 });
 $("#searchFriendsLink").on("click", function() {
     $("#addFriends").hide();
@@ -144,7 +143,7 @@ $(".editFriendInfo").on("click", function() {
 
 });
 $("#saveInfo").on("click", function() {
-    if (editInfoBtn) {
+    if (editInfoBtn) { //if the edit button is clicked
         //birthdayInfo
         $("form#birthdayForm").show();
         $("#birthdayInfo").hide();
@@ -192,25 +191,22 @@ $("#saveInfo").on("click", function() {
         editInfoBtn = true;
     }
 });
+
 $(document).ready(function() {
-    console.log("fired again");
     $("#searchFriends, #friendInfo, #birthdayForm, #facebookForm").hide();
-    if(localStorage.getItem("friendInfo") === null) {
+    if(localStorage.getItem("friendInfo") === null) { //check to see if there is anything in the local storage
         return false;
     } else {
-        
-        friendsArray = JSON.parse(localStorage.getItem("friendInfo"));
+        friendsArray = JSON.parse(localStorage.getItem("friendInfo")); // pull whatever is stored in local storage into a variable and then populate the friendsArray
         addFriendNamesToArray();
-        if(friendsArray.length == 0) {
+        if(friendsArray.length == 0) { //if there are no objects in the arrray, show message
             $('#noFriendsList').show();
-            console.log("empty");
         } else {
             $('#noFriendsList').hide();
-            for (var k = 0; k < friendsArray.length; k++) {
+            for (var k = 0; k < friendsArray.length; k++) { // otherwise show list of friends
                 $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendsArray[k].friendNameIs + '</li>');
                 friendCount++;
             }
-            console.log("full");
         }
     }
 });
