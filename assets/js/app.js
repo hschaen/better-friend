@@ -24,7 +24,12 @@ var friendArray = [];
 var friendsArray = [];
 var friendFullInfo = {};
 var editInfoBtn = true;
-
+function addFriendNamesToArray() {
+    console.log("fired");
+    for (var f = 0; f < friendsArray.length; f++) {
+        friendArray.push(friendsArray[f].friendNameIs);
+    } 
+}
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     addFriendName = $('#friendsName').val().trim();
@@ -65,16 +70,16 @@ $(document).on("click", ".friendItem", function() {
 });
 $("#searchFriendsBtn").on("click", function(e) {
     e.preventDefault();
-    if (friendArray.length == 0) {
+    if (friendsArray.length == 0) {
         alert('add some friends');
     }
     searchText = $("#searchFriendsText").val();
     console.log(searchText);
-    for (i = 0; i < friendArray.length; i++) {
-        if (friendArray[i] === searchText) {
+    for (i = 0; i < friendsArray.length; i++) {
+        if (friendsArray[i] === searchText) {
             console.log("it's a match");
             $("#listOfFriends").show();
-            $('#friendCardName').text(friendArray[i]);
+            $('#friendCardName').text(friendsArray[i]);
             return true;
         }
     }
@@ -164,11 +169,14 @@ $("#saveInfo").on("click", function() {
     }
 });
 $(document).ready(function() {
+    console.log("fired again");
     $("#searchFriends, #friendInfo, #birthdayForm, #facebookForm").hide();
     if(localStorage.getItem("friendInfo") === null) {
         return false;
     } else {
+        
         friendsArray = JSON.parse(localStorage.getItem("friendInfo"));
+        addFriendNamesToArray();
         if(friendsArray.length == 0) {
             $('#noFriendsList').show();
             console.log("empty");
@@ -181,5 +189,5 @@ $(document).ready(function() {
             console.log("full");
         }
     }
-    
 });
+
