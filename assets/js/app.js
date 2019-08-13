@@ -13,6 +13,9 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 var ref = database.ref("server/saving-data/fireblog");
+var auth = firebase.auth();
+var provider = new firebase.auth.FacebookAuthProvider();
+
 var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 0;
@@ -45,6 +48,31 @@ var today = 0;
 var dd = "";
 var mm = "";
 var yyyy = 0;
+
+function fbSignIn() {
+    // provider.setCustomParameters({
+    //     'display' : 'popup'
+    // });
+    firebase.auth().signInWithRedirect(provider);
+    firebase.auth().getRedirectResult().then(function(result) {
+        if (result.credential) {
+          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken;
+          // ...
+        }
+        // The signed-in user info.
+        var user = result.user;
+    }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+    });
+}
 function yourBirthday() {
     today = new Date();
     dd = String(today.getDate()).padStart(2, '0');
@@ -353,5 +381,6 @@ $(document).ready(function() {
             }
         }
     }
-});
+fbSignIn();
 
+});
