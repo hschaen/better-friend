@@ -18,6 +18,7 @@ var birthdayLog = '';
 var facebookLog = '';
 var nameLog = '';
 var bd1 = '';
+var friendsNameText = '';
 var setFriendFullInfo = {};
 var friendArray = [];
 var friendsArray = [];
@@ -41,7 +42,6 @@ $("#addFriendBtn").on("click", function(e) {
         friendArray.push(friendName);
         console.log(friendArray);
         newFriendNumber = friendArray.length;
-        //friendFullInfo['no' + friendCount] = {friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "https://fb.me/{{userid}}"}
         friendsArray.push({friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "{{userid}}"});
         localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $('#friendsName').val('');
@@ -50,17 +50,14 @@ $("#addFriendBtn").on("click", function(e) {
     }
 });
 $(document).on("click", ".friendItem", function() {
-    // alert($(this).text());
     $('.friendItem').removeClass("active");
     $(this).addClass("active");
     $('#friendCardName').text($(this).text());
     $("#friendInfo").show();
-    friendNumberInList = friendArray.indexOf($(this).text());
-    friendName = $(this).text();
-    bd1 = JSON.parse(localStorage.getItem('friendInfo'));
-    birthdayLog = bd1[friendNumberInList].birthday;
-    facebookLog = bd1[friendNumberInList].facebook;
-    nameLog = bd1[friendNumberInList].friendNameIs;
+    friendNumberInList = $(this).attr("data-friendnumber");
+    birthdayLog = friendsArray[friendNumberInList].birthday;
+    facebookLog = friendsArray[friendNumberInList].facebook;
+    nameLog = friendsArray[friendNumberInList].friendNameIs;
     $("#birthdayText").text(birthdayLog);
     $("#facebookText").text(facebookLog);
     $("#friendCardName").text(nameLog);
@@ -76,12 +73,6 @@ $("#searchFriendsBtn").on("click", function(e) {
     for (i = 0; i < friendArray.length; i++) {
         if (friendArray[i] === searchText) {
             console.log("it's a match");
-            // friendNumber = friendArray.indexOf(friendArray[i]);
-            // $('li').removeClass("active");
-            // dataFriendNumber = $('[data-friendnumber=' + friendNumber+ ']');
-            // $("#friendsList").find(dataFriendNumber).focus();
-            // dataFriendNumber.addClass("active");
-            // friendContainer = $('#listOfFriends');
             $("#listOfFriends").show();
             $('#friendCardName').text(friendArray[i]);
             return true;
@@ -152,6 +143,7 @@ $("#saveInfo").on("click", function() {
         console.log("save info activated");
         birthdayText = $("#birthdayInput").val();
         facebookText = $("#facebookInput").val();
+        friendName = $(".friendItem.active").text();
         if (birthdayText !== '' || facebookText !== '') {
             $("#birthdayText").text(birthdayText);
             $("#facebookText").text(facebookText);
@@ -165,25 +157,29 @@ $("#saveInfo").on("click", function() {
         setTimeout(function() {
             $('#saveInfo').text("Edit Info");
         }, 500);
-        friendsArray[friendNumberInList] = {friendNameIs:friendName, birthday: birthdayText, facebook: facebookInfo}
+        friendsArray[friendNumberInList] = {friendNameIs: friendName, birthday: birthdayText, facebook: facebookInfo}
         localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $("#friendsList li").removeClass("disabled");
         editInfoBtn = true;
     }
 });
 $(document).ready(function() {
-    friendsArray = JSON.parse(localStorage.getItem("friendInfo"));
-    if(friendsArray.length == 0) {
-        $('#noFriendsList').show();
-        console.log("empty");
-    } else {
-        $('#noFriendsList').hide();
-        for (var k = 0; k < friendsArray.length; k++) {
-            $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendsArray[k].friendNameIs + '</li>');
-            friendCount++;
-        }
-        console.log("full");
-    }
     $("#searchFriends, #friendInfo, #birthdayForm, #facebookForm").hide();
+    if(localStorage.getItem("friendInfo") === null) {
+        return false;
+    } else {
+        friendsArray = JSON.parse(localStorage.getItem("friendInfo"));
+        if(friendsArray.length == 0) {
+            $('#noFriendsList').show();
+            console.log("empty");
+        } else {
+            $('#noFriendsList').hide();
+            for (var k = 0; k < friendsArray.length; k++) {
+                $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendsArray[k].friendNameIs + '</li>');
+                friendCount++;
+            }
+            console.log("full");
+        }
+    }
     
-})
+});
