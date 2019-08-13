@@ -1,3 +1,18 @@
+// Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
+    authDomain: "better-friend-app.firebaseapp.com",
+    databaseURL: "https://better-friend-app.firebaseio.com",
+    projectId: "better-friend-app",
+    storageBucket: "better-friend-app.appspot.com",
+    messagingSenderId: "826334661400",
+    appId: "1:826334661400:web:2c7de318313607c2"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var database = firebase.database();
+var ref = database.ref("server/saving-data/fireblog");
 var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 0;
@@ -88,7 +103,7 @@ $("#addFriendBtn").on("click", function(e) {
         friendArray.push(friendName);
         console.log(friendArray);
         newFriendNumber = friendArray.length;
-        friendsArray.push({friendNameIs:friendName, email: "name@domain.com", birthday: "MM/DD/YYYY", facebook: "{{userid}}", instagram: "{{userid}", phone: "XXX-XXX-XXXX", address: "Street, City, State, Zip"});
+        friendsArray.push({friendNameIs:friendName, email: "name@domain.com", birthday: "MM/DD/YYYY", facebook: "{{userid}}", instagram: "{{userid}}", phone: "XXX-XXX-XXXX", address: "Street, City, State, Zip"});
         localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $('#friendsName').val('');
         $('#noFriendsList').hide();
@@ -106,14 +121,39 @@ $(document).on("click", ".friendItem", function() {
     emailLog = friendsArray[friendNumberInList].email;
     instagramLog = friendsArray[friendNumberInList].instagram;
     nameLog = friendsArray[friendNumberInList].friendNameIs;
-    $("#birthdayText").text(birthdayLog);
-    $("#facebookInfo").html("Facebook: <a alt='" + nameLog + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
-    // $("#facebookText").text(facebookLog);
+
+    if (birthdayLog !== '') {
+        $("#birthdayText").text(birthdayLog);
+    }
+    if (facebookLog !== '') {
+        $("#facebookInfo").html("Facebook: <a alt='" + friendName + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
+    }
+    if (instagramLog !== '') {
+        $("#instagramText").text(instagramLog);
+    }
+    if (addressLog !== '') {
+        $("#addressText").text(addressLog);
+    }
+    if (phoneLog !== '') {
+        $("#phoneText").text(phoneLog);
+    }
+    if (emailLog !== '') {
+        $("#emailText").text(emailLog);
+    }
+    if (emailLog == '' && phoneLog == '' && addressLog == '' && facebookLog == '' && instagramLog == '' && birthdayLog == '') {
+        alert ("is Empty!");
+    }     
+
+
+
+    // $("#birthdayText").text(birthdayLog);
+    // $("#facebookInfo").html("Facebook: <a alt='" + nameLog + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
+    // // $("#facebookText").text(facebookLog);
     $("#friendCardName").text(nameLog);
-    $("#instagramText").text(instagramLog);
-    $("#phoneText").text(phoneLog);
-    $("#emailText").text(emailLog);
-    $("#addressText").text(addressLog);
+    // $("#instagramText").text(instagramLog);
+    // $("#phoneText").text(phoneLog);
+    // $("#emailText").text(emailLog);
+    // $("#addressText").text(addressLog);
     $(this).addClass("active");
     yourBirthday();
 
@@ -180,10 +220,6 @@ $("#searchFriendsLink").on("click", function() {
     $("#searchFriends").show();
     $("#listOfFriends").hide();
 });
-$(".editFriendInfo").on("click", function() {
-    
-
-});
 $("#saveInfo").on("click", function() {
     if (editInfoBtn) { //if the edit button is clicked
         //phoneInfo
@@ -217,7 +253,7 @@ $("#saveInfo").on("click", function() {
         //facebookInfo 
         if(friendsArray[friendNumberInList].facebook == "{{userid}}") {
             $("#facebookInput").val("");
-            $("#facebookInput").attr("placeholder", "{{userid}");
+            $("#facebookInput").attr("placeholder", "{{userid}}");
         } else {
             $("#facebookInput").val(friendsArray[friendNumberInList].facebook);
         }
@@ -225,7 +261,7 @@ $("#saveInfo").on("click", function() {
         //instagram info
         if(friendsArray[friendNumberInList].instagram == "{{userid}}") {
             $("#instagramInput").val("");
-            $("#instagramInput").attr("placeholder", "{{userid}");
+            $("#instagramInput").attr("placeholder", "{{userid}}");
         } else {
             $("#instagramInput").val(friendsArray[friendNumberInList].instagram);
         }
@@ -248,25 +284,53 @@ $("#saveInfo").on("click", function() {
         instagramText = $("#instagramInput").val();
         facebookText = $("#facebookInput").val();
         friendName = $(".friendItem.active").text();
-        if (birthdayText !== '' || facebookText !== '') {
+        if (birthdayText !== '') {
             $("#birthdayText").text(birthdayText);
+        }
+        if (facebookText !== '') {
             $("#facebookInfo").html("Facebook: <a alt='" + friendName + "on Facebook' href='https://facebook.com/" + facebookText + "'>https://facebook.com/" + facebookText + "</a>");
+        }
+        if (instagramText !== '') {
             $("#instagramText").text(instagramText);
+        }
+        if (addressText !== '') {
             $("#addressText").text(addressText);
+        }
+        if (phoneText !== '') {
             $("#phoneText").text(phoneText);
-            $("#emailText").text(phoneText);
-            facebookInfo = facebookText;
+        }
+        if (emailText !== '') {
+            $("#emailText").text(emailText);
+        }
+        facebookInfo = facebookText;
+        if (emailText == '' && phoneText == '' && addressText == '' && facebookText == '' && instagramText == '' && birthdayText == '') {
+            alert("is Empty!"); 
         } else {
-            alert ("is Empty!");
+            //Create the object
+            friendsArray[friendNumberInList] = {friendNameIs: friendName, email: emailText, phone: phoneText, address: addressText, birthday: birthdayText, facebook: facebookText, instagram: instagramText}
+            //Save the object locally
+            localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
+            //Save to Firebase
+            usersRef = ref.child(friendNumberInList);
+
+            usersRef.set({
+                friendNumber: friendNumberInList,
+                friendNameIs: friendName,
+                email: emailText,
+                phone: phoneText,
+                address: addressText,
+                birthday: birthdayText,
+                facebook: facebookText,
+                instagram: instagramText
+            });
         }
         $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
         $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo").show();
         $(this).text("Saved");
         setTimeout(function() {
             $('#saveInfo').text("Edit Info");
-        }, 500);
-        friendsArray[friendNumberInList] = {friendNameIs: friendName, email: emailText, phone: phoneText, address: addressText, birthday: birthdayText, facebook: facebookText, instagram: instagramText}
-        localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
+        }, 500); 
+            
         $("#friendsList li").removeClass("disabled");
         editInfoBtn = true;
     }
