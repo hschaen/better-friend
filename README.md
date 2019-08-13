@@ -11,12 +11,23 @@ APIs
 3. Groupon
 4. Horoscope
 
+Backend
+1. Firebase
+
 Features
 1. Add your friends to a list
 2. Add properties to each friend
 3. Calendar
 4. Top Friends
 5. Gift stuff (tickets, money, etc)
+6. Feed
+    - friends social media updates
+    - upcoming events
+    - deals/groupons
+7. Alerts
+8. Interact with content
+
+
 
 
 Properties:
@@ -42,7 +53,6 @@ Information You Get
 7. Important Life Events
 
 Tasks/Priorities
-- Add Friend
-- Add Friend Properties
-- Search Friend
-- See Friend Properties
+- Auto Alphabetize (symbols, numbers, letters)
+- Favorites
+- Store Info in Firebase

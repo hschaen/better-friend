@@ -11,6 +11,7 @@ var newFriendListItem = '';
 var searchText = '';
 var dataFriendNumber = '';
 var friendContainer = '';
+var isBirthday = '';
 var birthdayText = '';
 var facebookText = '';
 var facebookInfo = '';
@@ -24,6 +25,7 @@ var friendArray = [];
 var friendsArray = [];
 var friendFullInfo = {};
 var editInfoBtn = true;
+var bdayAlert = true;
 var today = 0;
 var dd = "";
 var mm = "";
@@ -33,10 +35,13 @@ function yourBirthday() {
     dd = String(today.getDate()).padStart(2, '0');
     mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     yyyy = today.getFullYear();
-
-    today = mm + '/' + dd + '/' + yyyy;
-    if (today === birthdayLog) {
-        console.log("Happy Birthday");
+    today = mm + '/' + dd;
+    isBirthday = birthdayLog.substring(0,5);
+    if (today === isBirthday) {
+        if(bdayAlert === true) {
+            alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
+            bdayAlert = false;
+        }
     } else {
         console.log("not your bday, sry.");
     }
@@ -54,11 +59,13 @@ function friendLookUp() {
     instagramLog = friendsArray[fNum].instagram;
     birthdayLog = friendsArray[fNum].birthday;
     facebookLog = friendsArray[fNum].facebook;
+    emailLog = friendsArray[fNum].facebook;
     nameLog = friendsArray[fNum].friendNameIs;
     $("#birthdayText").text(birthdayLog);
     $("#facebookText").text(facebookLog);
     $("#instagramText").text(instagramLog);
     $("#phoneText").text(phoneLog);
+    $("#emailText").text(emailLog);
     $("#addressText").text(addressLog);
     $("#friendCardName").text(friendArray[fNum]);
     yourBirthday();
@@ -81,7 +88,7 @@ $("#addFriendBtn").on("click", function(e) {
         friendArray.push(friendName);
         console.log(friendArray);
         newFriendNumber = friendArray.length;
-        friendsArray.push({friendNameIs:friendName, birthday: "MM/DD/YYYY", facebook: "{{userid}}", instagram: "{{userid}", phone: "XXX-XXX-XXXX", address: "Street, City, State, Zip"});
+        friendsArray.push({friendNameIs:friendName, email: "name@domain.com", birthday: "MM/DD/YYYY", facebook: "{{userid}}", instagram: "{{userid}", phone: "XXX-XXX-XXXX", address: "Street, City, State, Zip"});
         localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $('#friendsName').val('');
         $('#noFriendsList').hide();
@@ -96,13 +103,16 @@ $(document).on("click", ".friendItem", function() {
     facebookLog = friendsArray[friendNumberInList].facebook;
     addressLog = friendsArray[friendNumberInList].address;
     phoneLog = friendsArray[friendNumberInList].phone;
+    emailLog = friendsArray[friendNumberInList].email;
     instagramLog = friendsArray[friendNumberInList].instagram;
     nameLog = friendsArray[friendNumberInList].friendNameIs;
     $("#birthdayText").text(birthdayLog);
-    $("#facebookText").text(facebookLog);
+    $("#facebookInfo").html("Facebook: <a alt='" + nameLog + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
+    // $("#facebookText").text(facebookLog);
     $("#friendCardName").text(nameLog);
-   $("#instagramText").text(instagramLog);
+    $("#instagramText").text(instagramLog);
     $("#phoneText").text(phoneLog);
+    $("#emailText").text(emailLog);
     $("#addressText").text(addressLog);
     $(this).addClass("active");
     yourBirthday();
@@ -183,6 +193,13 @@ $("#saveInfo").on("click", function() {
         } else {
             $("#phoneInput").val(friendsArray[friendNumberInList].phone);
         }
+        //emailInfo
+        if(friendsArray[friendNumberInList].email == "name@domain.com") {
+            $("#emailInput").val("");
+            $("#emailInput").attr("placeholder", emailLog);
+        } else {
+            $("#emailInput").val(friendsArray[friendNumberInList].email);
+        }
         //addressInfo
         if(friendsArray[friendNumberInList].address == "Street, City, State, Zip") {
             $("#addressInput").val("");
@@ -213,8 +230,8 @@ $("#saveInfo").on("click", function() {
             $("#instagramInput").val(friendsArray[friendNumberInList].instagram);
         }
         // layout adjustments on button click
-        $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm").show()
-        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo").hide();
+        $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm").show()
+        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo").hide();
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -226,27 +243,29 @@ $("#saveInfo").on("click", function() {
         console.log("save info activated");
         birthdayText = $("#birthdayInput").val();
         addressText = $("#addressInput").val();
+        emailText = $("#emailInput").val();
         phoneText = $("#phoneInput").val();
         instagramText = $("#instagramInput").val();
         facebookText = $("#facebookInput").val();
         friendName = $(".friendItem.active").text();
         if (birthdayText !== '' || facebookText !== '') {
             $("#birthdayText").text(birthdayText);
-            $("#facebookText").text(facebookText);
+            $("#facebookInfo").html("Facebook: <a alt='" + friendName + "on Facebook' href='https://facebook.com/" + facebookText + "'>https://facebook.com/" + facebookText + "</a>");
             $("#instagramText").text(instagramText);
             $("#addressText").text(addressText);
             $("#phoneText").text(phoneText);
+            $("#emailText").text(phoneText);
             facebookInfo = facebookText;
         } else {
             alert ("is Empty!");
         }
-        $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm").hide();
-        $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo").show();
+        $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
+        $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo").show();
         $(this).text("Saved");
         setTimeout(function() {
             $('#saveInfo').text("Edit Info");
         }, 500);
-        friendsArray[friendNumberInList] = {friendNameIs: friendName, phone: phoneText, address: addressText, birthday: birthdayText, facebook: facebookText, instagram: instagramText}
+        friendsArray[friendNumberInList] = {friendNameIs: friendName, email: emailText, phone: phoneText, address: addressText, birthday: birthdayText, facebook: facebookText, instagram: instagramText}
         localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
         $("#friendsList li").removeClass("disabled");
         editInfoBtn = true;
@@ -254,7 +273,7 @@ $("#saveInfo").on("click", function() {
 });
 
 $(document).ready(function() {
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm").hide();
     if(localStorage.getItem("friendInfo") === null) { //check to see if there is anything in the local storage
         return false;
     } else {
