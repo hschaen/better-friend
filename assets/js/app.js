@@ -1,21 +1,3 @@
-// Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
-    authDomain: "better-friend-app.firebaseapp.com",
-    databaseURL: "https://better-friend-app.firebaseio.com",
-    projectId: "better-friend-app",
-    storageBucket: "better-friend-app.appspot.com",
-    messagingSenderId: "826334661400",
-    appId: "1:826334661400:web:2c7de318313607c2"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-var database = firebase.database();
-var ref = database.ref("server/saving-data/fireblog");
-var auth = firebase.auth();
-var provider = new firebase.auth.FacebookAuthProvider();
-
 var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 0;
@@ -48,30 +30,38 @@ var today = 0;
 var dd = "";
 var mm = "";
 var yyyy = 0;
+var userCheck = firebase.auth().currentUser;
+function userCheckThis() {
+    // FirebaseUI config.
+    var userCheck = firebase.auth().currentUser;
+    if (typeof firebase.auth().currentUser == "null") {
+        var uiConfig = {
+        signInSuccessUrl: 'https://127.0.0.1:5500/better-friend/index.html',
+        signInOptions: [
+            // Leave the lines as is for the providers you want to offer your users.
+            // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+            // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+            firebase.auth.EmailAuthProvider.PROVIDER_ID
+            // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+            // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+        ],
+        // tosUrl and privacyPolicyUrl accept either url string or a callback
+        // function.
+        // Terms of service url/callback.
+        tosUrl: 'https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY',
+            // Privacy policy url/callback.
+            privacyPolicyUrl: function() {
+            window.location.assign('https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY');
+            }
+        };
 
-function fbSignIn() {
-    // provider.setCustomParameters({
-    //     'display' : 'popup'
-    // });
-    firebase.auth().signInWithRedirect(provider);
-    firebase.auth().getRedirectResult().then(function(result) {
-        if (result.credential) {
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            var token = result.credential.accessToken;
-          // ...
-        }
-        // The signed-in user info.
-        var user = result.user;
-    }).catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-    });
+        // Initialize the FirebaseUI Widget using Firebase.
+        var ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
+    }
 }
 function yourBirthday() {
     today = new Date();
@@ -363,8 +353,25 @@ $("#saveInfo").on("click", function() {
         editInfoBtn = true;
     }
 });
+$("#signOut").on("click", function() {
+    signOut();
+    
+});
+function signOut() {
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        console.log("signed out");
+        $("#app-container").hide();
 
+      }).catch(function(error) {
+    // An error happened.
+      });
+}
 $(document).ready(function() {
+    
+    if(firebase.auth().currentUser == "undefined") {
+        $("#app-container").hide();
+    }
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm").hide();
     if(localStorage.getItem("friendInfo") === null) { //check to see if there is anything in the local storage
         return false;
@@ -381,6 +388,8 @@ $(document).ready(function() {
             }
         }
     }
-fbSignIn();
-
 });
+userCheckThis();
+
+
+
