@@ -1,8 +1,35 @@
+console.log("initializing firebase");
+// Your web app's Firebase configuration
+var firebaseConfig = {
+    apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
+    authDomain: "better-friend-app.firebaseapp.com",
+    databaseURL: "https://better-friend-app.firebaseio.com",
+    projectId: "better-friend-app",
+    storageBucket: "better-friend-app.appspot.com",
+    messagingSenderId: "826334661400",
+    appId: "1:826334661400:web:2c7de318313607c2"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+var database = firebase.database();
+var ref = database.ref("/connections");
+var connectionRef = database.ref("/connections");
+var connectedRef = database.ref(".info/connected");
+
+// var auth = firebase.auth();
+// var provider = new firebase.auth.FacebookAuthProvider();
+// // provider.addScope('user_birthday, email, user_events, user_friends');
+// provider.setCustomParameters({
+//     'display': 'popup'
+//   });
 var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 0;
 var newFriendNumber = 0;
 var fNum = 0;
+var friendInfoNumber = 0;
+var userNameArrayOrder = 0;
 var numberInList = "";
 var friendName = '';
 var friendNameIs = '';
@@ -20,9 +47,14 @@ var facebookLog = '';
 var nameLog = '';
 var bd1 = '';
 var friendsNameText = '';
+var userKey = '';
 var setFriendFullInfo = {};
 var friendArray = [];
 var friendsArray = [];
+var con = [];
+var keyArray = [];
+var userNameArray = [];
+var passwordArray = [];
 var friendFullInfo = {};
 var editInfoBtn = true;
 var bdayAlert = true;
@@ -30,38 +62,63 @@ var today = 0;
 var dd = "";
 var mm = "";
 var yyyy = 0;
-var userCheck = firebase.auth().currentUser;
-function userCheckThis() {
-    // FirebaseUI config.
-    var userCheck = firebase.auth().currentUser;
-    if (typeof firebase.auth().currentUser == "null") {
-        var uiConfig = {
-        signInSuccessUrl: 'https://127.0.0.1:5500/better-friend/index.html',
-        signInOptions: [
-            // Leave the lines as is for the providers you want to offer your users.
-            // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-            // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-            // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-            firebase.auth.EmailAuthProvider.PROVIDER_ID
-            // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-            // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-        ],
-        // tosUrl and privacyPolicyUrl accept either url string or a callback
-        // function.
-        // Terms of service url/callback.
-        tosUrl: 'https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY',
-            // Privacy policy url/callback.
-            privacyPolicyUrl: function() {
-            window.location.assign('https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY');
-            }
-        };
+var userCheck;
+var uiConfig;
+var ui;
+var userID = "";
+var userInfo = [];
+var friendInfoArray = [];
+var friendInfoText = '';
+var signIn = true;
+var userName = '';
+var password = '';
+var password2 = '';
+var sv = '';
 
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
-    }
+
+function logIn() {
+    uiConfig = {
+    signInSuccessUrl: 'http://127.0.0.1:5500/better-friend/index.html',
+    signInOptions: [
+        // Leave the lines as is for the providers you want to offer your users.
+        // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID
+        // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+        // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
+    ],
+    // tosUrl and privacyPolicyUrl accept either url string or a callback
+    // function.
+    // Terms of service url/callback.
+    tosUrl: 'https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY',
+        // Privacy policy url/callback.
+        privacyPolicyUrl: function() {
+        window.location.assign('https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY');
+        }
+    };
+    // Initialize the FirebaseUI Widget using Firebase.
+    ui = new firebaseui.auth.AuthUI(firebase.auth());
+    // The start method will wait until the DOM is loaded.
+    ui.start('#firebaseui-auth-container', uiConfig);
+}
+function storeUserinfo() {
+    userInfo = JSON.parse(firebase.auth().currentUser.uid);
+    // userID = firebase.auth().currentUser.uid;
+    console.log(userInfo);
+}
+function signOut() {
+    firebase.auth().signOut().then(function() {
+        // Sign-out successful.
+        console.log("signed out");
+        $("#app-container").hide();
+
+
+      }).catch(function(error) {
+    // An error happened.
+    console.log("error");
+      });
 }
 function yourBirthday() {
     today = new Date();
@@ -353,26 +410,77 @@ $("#saveInfo").on("click", function() {
         editInfoBtn = true;
     }
 });
-$("#signOut").on("click", function() {
-    signOut();
-    
+$("#createAccount").on("click", function() {
+    $("#pw2, #sign-in-link-text").show();
+    $("#create-account-link-text").hide();
+    $("#signInHeader").text("Create an Account");
+    $("#signInSubmit").text("Create Account");
+    signIn = false;
 });
-function signOut() {
-    firebase.auth().signOut().then(function() {
-        // Sign-out successful.
-        console.log("signed out");
-        $("#app-container").hide();
+$("#signIntoAccount").on("click", function() {
+    $("#create-account-link-text ").show();
+    $("#pw2, #sign-in-link-text").hide();
+    $("#signInHeader").text("Sign In");
+    $("#signInSubmit").text("Sign In");
+    $("#signInForm input").val("");
+    signIn = true;
+});
+$("#signInSubmit").on("click", function(event) {
+    event.preventDefault();
+    userName = $("#signInInputEmail1").val().trim();
+    password = $("#signInInputPassword1").val().trim();
+    password2 = $("#signInInputPassword2").val().trim();
+    if (signIn == true) {
+        if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '') {
+            console.log("empty af!");
+            return false;
+        }
+        if(password != '') {
+            if(userNameArray.includes(userName)) {
+                userNameArrayOrder = userNameArray.indexOf(userName);
+                if(password == passwordArray[userNameArrayOrder]) {
+                    $('#app-container').show();
+                    $('#loading-screen').hide();
+                    userKey = keyArray[userNameArrayOrder];
+                    console.log("Signing In");
+                } else {
+                    console.log("PW doesn't match");
+                }
 
-      }).catch(function(error) {
-    // An error happened.
-      });
-}
+            } else {
+                console.log("Username doesn't exist");
+            }
+        }
+        
+        // if (userName == "" ) { 
+           // if email is in the list of registered users, continue
+            // if () {
+           // if password matches stored password for specified user, continue
+
+        //     }
+        // } else {
+        //     console.log("Passwords don't match");
+        //     return false;
+        // }
+    } else {
+        if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '' || $("#signInInputPassword2").val() == '') {
+            console.log("empty af!");
+        }
+        if (password === password2) {
+            database.ref().push({
+                username: userName,
+                password: password
+            });
+        } else {
+            console.log("Passwords don't match");
+            return false;
+        }
+        console.log("Creating Account");
+    }
+});
 $(document).ready(function() {
     
-    if(firebase.auth().currentUser == "undefined") {
-        $("#app-container").hide();
-    }
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text").hide();
     if(localStorage.getItem("friendInfo") === null) { //check to see if there is anything in the local storage
         return false;
     } else {
@@ -389,7 +497,66 @@ $(document).ready(function() {
         }
     }
 });
-userCheckThis();
+$('#fbSignIn').on("click", function() {
+    logIn();
+    storeUserinfo();
+});
+$("#signOut").on("click", function() {
+    signOut();
+});
+database.ref().on("value", function(snapshot) {
+    friendInfoText = snapshot.val();
+    // console.log(friendInfoText.server["saving-data"].fireblog[friendNumberInList].address);
+    console.log(snapshot.child);
+    friendInfoArray = snapshot;
+}, function(errorObject) {
+    console.log("Read failed: " + errorObject.code);
+});
+
+// connectedRef.ref().on("value", function(snap) {
+//     if(snap.val()) {
+//         con = connectionRef.push(true);
+//         con.onDisconnect().remove();
+//     }
+// })
+connectionRef.on("value", function(snap) {
+    console.log(snap.numChildren());
+});
+database.ref().once('value', function(snapshot) {
+    snapshot.forEach(function(childSnapshot) {
+      var childKey = childSnapshot.key;
+      var childData = childSnapshot.val();
+      keyArray.push(childKey);
+      userNameArray.push(childData.username);
+      passwordArray.push(childData.password);
+     console.log(childKey);
+     console.log(childData);
+    });
+  });
+database.ref().on("child_added", function(snapshot) {
+    // storing the snapshot.val() in a variable for convenience
+    sv = snapshot.val();
+    // Console.loging the last user's data
+    console.log(sv.username);
+    console.log(sv.password);
+    var sv1 = Object.keys(sv);
+    var sv2 = sv1[1];
+    console.log(sv2);
+    
+    // Change the HTML to reflect
+    // $("#name-display").text(sv.name);
+    // $("#email-display").text(sv.email);
+    // $("#age-display").text(sv.age);
+    // $("#comment-display").text(sv.comment);
+    // Handle the errors
+  }, function(errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
 
 
-
+  //To Do:
+  // Add friends and all data to logged in user
+  // Do not add a new account if email address exists
+  // Retrieve info from Firebase based on who is logged in
+  // Store and Retrieve from various devices to same account/different accounts
+  
