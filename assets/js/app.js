@@ -11,9 +11,9 @@ var firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
+// var mydb = firebase.database('better-friend-app/user-data');
 var database = firebase.database();
-var ref = database.ref("/connections");
+var ref = database.ref("/user-data");
 var connectionRef = database.ref("/connections");
 var connectedRef = database.ref(".info/connected");
 
@@ -55,10 +55,12 @@ var con = [];
 var keyArray = [];
 var userNameArray = [];
 var passwordArray = [];
+var array1 = [];
 var friendFullInfo = {};
 var editInfoBtn = true;
 var bdayAlert = true;
 var today = 0;
+var userNameInArray = 0;
 var dd = "";
 var mm = "";
 var yyyy = 0;
@@ -69,13 +71,18 @@ var userID = "";
 var userInfo = [];
 var friendInfoArray = [];
 var friendInfoText = '';
-var signIn = true;
+var signIn = false;
+var signingIn = true;
 var userName = '';
 var password = '';
 var password2 = '';
 var sv = '';
-
-
+var childKey = '';
+var childData = '';
+var sv1 = {};
+var sv2 = '';
+var x = '';
+var userNamePW = '';
 function logIn() {
     uiConfig = {
     signInSuccessUrl: 'http://127.0.0.1:5500/better-friend/index.html',
@@ -113,6 +120,12 @@ function signOut() {
         // Sign-out successful.
         console.log("signed out");
         $("#app-container").hide();
+        $("#loading-screen").show();
+        signIn = false;
+        ref.child(userName).update({
+            signedIn: false
+        });
+        localStorage.setItem("loggedIn", false);
 
 
       }).catch(function(error) {
@@ -160,6 +173,22 @@ function friendLookUp() {
     $("#friendCardName").text(friendArray[fNum]);
     yourBirthday();
 
+}
+function showSignIn() {
+    $("#create-account-link-text ").show();
+    $("#signInInputEmail1, #pw2, #sign-in-link-text").hide();
+    $("#signInHeader").text("Sign In");
+    $("#signInSubmit").text("Sign In");
+    $("#signInForm input").val("");
+    signingIn = true;
+}
+function showCreateAccount() {
+    $("#signInInputEmail1, #pw2, #sign-in-link-text").show();
+    $("#create-account-link-text").hide();
+    $("#signInHeader").text("Create an Account");
+    $("#signInSubmit").text("Create Account");
+    signingIn = false;
+    array1.length = 0;
 }
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
@@ -386,9 +415,9 @@ $("#saveInfo").on("click", function() {
             //Save the object locally
             localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
             //Save to Firebase
-            usersRef = ref.child(friendNumberInList);
+            // usersRef = ref.child(userKey);
 
-            usersRef.set({
+            ref.child(userName + "/friend/" + friendName).update({
                 friendNumber: friendNumberInList,
                 friendNameIs: friendName,
                 email: emailText,
@@ -411,66 +440,56 @@ $("#saveInfo").on("click", function() {
     }
 });
 $("#createAccount").on("click", function() {
-    $("#pw2, #sign-in-link-text").show();
-    $("#create-account-link-text").hide();
-    $("#signInHeader").text("Create an Account");
-    $("#signInSubmit").text("Create Account");
-    signIn = false;
+    showCreateAccount();
 });
 $("#signIntoAccount").on("click", function() {
-    $("#create-account-link-text ").show();
-    $("#pw2, #sign-in-link-text").hide();
-    $("#signInHeader").text("Sign In");
-    $("#signInSubmit").text("Sign In");
-    $("#signInForm input").val("");
-    signIn = true;
+    showSignIn();
 });
 $("#signInSubmit").on("click", function(event) {
     event.preventDefault();
-    userName = $("#signInInputEmail1").val().trim();
+    userName =  $("#userNameField").val().trim();
+    emailAddress = $("#signInInputEmail1").val().trim();
     password = $("#signInInputPassword1").val().trim();
     password2 = $("#signInInputPassword2").val().trim();
-    if (signIn == true) {
-        if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '') {
+    if (signingIn == true) {
+        if(password == '' || userName == '') {
             console.log("empty af!");
             return false;
         }
         if(password != '') {
-            if(userNameArray.includes(userName)) {
-                userNameArrayOrder = userNameArray.indexOf(userName);
-                if(password == passwordArray[userNameArrayOrder]) {
+            if(array1.includes(userName)) {
+                console.log("phase1: " + userName);
+                if(password == userNamePW) {
+                    console.log("phase2: " + password + " " + userNamePW);
                     $('#app-container').show();
                     $('#loading-screen').hide();
-                    userKey = keyArray[userNameArrayOrder];
                     console.log("Signing In");
+                    ref.child(userName).update({
+                        signedIn: true
+                    });
+                    localStorage.setItem("loggedIn", true);
+                    signIn = true;
+                    $("#userNameField, #signInInputPassword1 ").val('');
                 } else {
+                    console.log("phase2: " + password + " " + userNamePW);
                     console.log("PW doesn't match");
                 }
-
             } else {
                 console.log("Username doesn't exist");
             }
         }
-        
-        // if (userName == "" ) { 
-           // if email is in the list of registered users, continue
-            // if () {
-           // if password matches stored password for specified user, continue
-
-        //     }
-        // } else {
-        //     console.log("Passwords don't match");
-        //     return false;
-        // }
     } else {
         if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '' || $("#signInInputPassword2").val() == '') {
             console.log("empty af!");
         }
+
         if (password === password2) {
-            database.ref().push({
-                username: userName,
-                password: password
+            ref.child(userName).set({
+                    email: emailAddress,
+                    password: password,
+                    signedIn: false
             });
+            showSignIn();
         } else {
             console.log("Passwords don't match");
             return false;
@@ -480,7 +499,8 @@ $("#signInSubmit").on("click", function(event) {
 });
 $(document).ready(function() {
     
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1").hide();
+    localStorage.setItem("loggedIn", false);
     if(localStorage.getItem("friendInfo") === null) { //check to see if there is anything in the local storage
         return false;
     } else {
@@ -504,54 +524,58 @@ $('#fbSignIn').on("click", function() {
 $("#signOut").on("click", function() {
     signOut();
 });
-database.ref().on("value", function(snapshot) {
-    friendInfoText = snapshot.val();
-    // console.log(friendInfoText.server["saving-data"].fireblog[friendNumberInList].address);
-    console.log(snapshot.child);
-    friendInfoArray = snapshot;
-}, function(errorObject) {
-    console.log("Read failed: " + errorObject.code);
+// database.ref().on("value", function(snapshot) {
+//     friendInfoText = snapshot.val();
+//     console.log(snapshot.child);
+//     friendInfoArray = snapshot;
+// }, function(errorObject) {
+//     console.log("Read failed: " + errorObject.code);
+// });
+// connectionRef.on("value", function(snap) {
+//     console.log(snap.numChildren());
+// });
+// if(signIn) {
+//     ref.on('value', function(snapshot) {
+//         snapshot.forEach(function(childSnapshot) {
+//         childKey = childSnapshot.key;
+//         childData = childSnapshot.val();
+//         keyArray.push(childKey);
+//         userNameArray.push(childData.email);
+//         passwordArray.push(childData.password);
+//         console.log(childKey);
+//         console.log(childData);
+//         });
+//     });
+// }
+$("#userNameField").on("change", function() {
+    userName = $(this).val();
+    console.log("changed");
+    ref.on("value", function(snapshot) {
+        sv = snapshot.val();
+        sv1 = Object.keys(sv);
+        for (var k = 0; k < sv1.length; k++) {
+            array1.push(sv1[k]);
+        }        
+        userNameInArray = array1.indexOf(userName);
+        x = array1[userNameInArray];
+        sv2 = array1[userNameInArray];
+        if(signingIn) {
+            userNamePW = sv[x].password;
+        } else {
+        }
+        // Handle the errors
+    }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+    if (!signingIn) {
+        if (userNameInArray === -1) {
+            $("#yourUserName").text('Username is Available!');
+        } else {
+            $("#yourUserName").text('Username is Not Available!');
+        }
+    }
 });
 
-// connectedRef.ref().on("value", function(snap) {
-//     if(snap.val()) {
-//         con = connectionRef.push(true);
-//         con.onDisconnect().remove();
-//     }
-// })
-connectionRef.on("value", function(snap) {
-    console.log(snap.numChildren());
-});
-database.ref().once('value', function(snapshot) {
-    snapshot.forEach(function(childSnapshot) {
-      var childKey = childSnapshot.key;
-      var childData = childSnapshot.val();
-      keyArray.push(childKey);
-      userNameArray.push(childData.username);
-      passwordArray.push(childData.password);
-     console.log(childKey);
-     console.log(childData);
-    });
-  });
-database.ref().on("child_added", function(snapshot) {
-    // storing the snapshot.val() in a variable for convenience
-    sv = snapshot.val();
-    // Console.loging the last user's data
-    console.log(sv.username);
-    console.log(sv.password);
-    var sv1 = Object.keys(sv);
-    var sv2 = sv1[1];
-    console.log(sv2);
-    
-    // Change the HTML to reflect
-    // $("#name-display").text(sv.name);
-    // $("#email-display").text(sv.email);
-    // $("#age-display").text(sv.age);
-    // $("#comment-display").text(sv.comment);
-    // Handle the errors
-  }, function(errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-  });
 
 
   //To Do:
@@ -559,4 +583,3 @@ database.ref().on("child_added", function(snapshot) {
   // Do not add a new account if email address exists
   // Retrieve info from Firebase based on who is logged in
   // Store and Retrieve from various devices to same account/different accounts
-  
