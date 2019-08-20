@@ -207,6 +207,18 @@ function updateFriendInfo() {
         instagram: instagramText
     });
 }
+function addNewFriendInfo() {
+    ref.child(userName + "/friend/" + friendName).update({
+        friendNumber: friendNumberInList,
+        friendNameIs: friendName,
+        email: "name@domain.com",
+        phone: "XXX-XXX-XXXX",
+        address: "Street, City, State, Zip",
+        birthday: "MM/DD/YYYY",
+        facebook: "{{userID}}",
+        instagram: "{{userID}}"
+    });
+}
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     addFriendName = $('#friendsName').val().trim();
@@ -229,7 +241,7 @@ $("#addFriendBtn").on("click", function(e) {
         $('#friendsName').val('');
         $('#noFriendsList').hide();
         friendCount++;
-        updateFriendInfo();
+        addNewFriendInfo();
     }
 });
 $(document).on("click", ".friendItem", function() {
