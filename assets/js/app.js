@@ -170,7 +170,7 @@ function showFriendsInList() {
     } else {
         $('#noFriendsList').hide();
         for (var k = 0; k < getFriends.length; k++) { // otherwise show list of friends
-            $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + getFriends[k] + '</li>');
+            $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+' data-friendname="' + getFriends[k] + '"><a href="#" class="friendLink" id="' + getFriends[k] + '">' + getFriends[k] + '</a><button class="btn btn-danger btn-xs removeButton" id="' + getFriends[k] + '">Remove</button></li>');
             friendCount++;
         }
     }
@@ -243,24 +243,25 @@ $("#addFriendBtn").on("click", function(e) {
         return false; 
     } else {
         friendName = $("#friendsName").val();       
-        newFriendListItem = '<li class="list-group-item friendItem active" data-friendnumber='+friendCount+'>' + friendName + '</li>';
+        newFriendListItem = '<li class="list-group-item friendItem active" data-friendnumber='+friendCount+' data-friendname=' + friendName + '"><a href="#" class="friendLink" id="' + friendName + '">' + friendName + '</a><button class="btn btn-danger btn-xs removeButton" id="' + friendName + '">Remove</button></li>';
         $("#friendsList").append(newFriendListItem);
-        newFriendNumber = friendArray.length;
+        newFriendNumber = getFriends.length;
 
         $('#friendsName').val('');
         $('#noFriendsList').hide();
         friendCount++;
+        console.log(friendCount);
         addNewFriendInfo();
         $("#friendCardName").text(friendName);
         $("#listOfFriends").show();
         $("#friendInfo").show();
     }
 });
-$(document).on("click", ".friendItem", function() { //what happens when you click on a friend in your friend list
+$(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
     
     $('.friendItem').removeClass("active");
-    $(this).addClass("active");
-    friendNumberInList = $(this).attr("data-friendnumber");
+    $(this).parent().addClass("active");
+    friendNumberInList = $(this).parent().attr("data-friendnumber");
     $("#friendInfo").show();
     loadFriendInfo();
     
@@ -397,7 +398,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         phoneText = $("#phoneInput").val();
         instagramText = $("#instagramInput").val();
         facebookText = $("#facebookInput").val();
-        friendName = $(".friendItem.active").text();
+        friendName = $
         if (birthdayText !== '') {
             $("#birthdayText").text(birthdayText);
         }
@@ -493,6 +494,16 @@ $("#signInSubmit").on("click", function(event) { // handle what happens when you
 $("#signOut").on("click", function() {
     signOut();
 });
+$(document).on("click", ".removeButton", function() {
+    var removeBtnName = $(this).attr('id');
+    console.log(removeBtnName);
+    console.log("removing ");
+    console.log();
+    ref.child(userName + "/friend/" + $(this).attr("id")).remove();
+    $(this).closest('li').remove();
+    // setTimeout(showFriendsInList(), 2000);
+
+})
 $(document).ready(function() {
     
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1").hide();
@@ -537,7 +548,6 @@ function loadFriendInfo() {
   // Fix for loop being called everytime the username field changes
   // 
   // Do not add a new account if email address exists
-  // Remove Friends
   // Autocomplete Search Friends
   // Friends list must match friends array and be alphabetical
   // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.

@@ -1,0 +1,17 @@
+.friendLink {
+    overflow: hidden; 
+    display: inline-block; 
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    width: calc(91% - 48px);
+    padding: 10px 15px;
+}
+.friendItem a {
+    color: blue;
+}
+.friendItem.active a {
+    color: white;
+}
