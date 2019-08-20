@@ -143,30 +143,8 @@ function yourBirthday() {
         console.log("not your bday, sry.");
     }
 }
-// function addFriendNamesToArray() {
-//     // console.log("fired");
-//     for (var f = 0; f < getFriends.length; f++) {
-//         friendArray.push(friendsArray[f].friendNameIs);
-//     } 
-// }
 function friendLookUp() {
     $("#friendInfo").show();
-    // addressLog = friendsArray[fNum].address;
-    // phoneLog = friendsArray[fNum].phone;
-    // instagramLog = friendsArray[fNum].instagram;
-    // birthdayLog = friendsArray[fNum].birthday;
-    // facebookLog = friendsArray[fNum].facebook;
-    // emailLog = friendsArray[fNum].facebook;
-    // // nameLog = friendsArray[fNum].friendNameIs;
-    // $("#birthdayText").text(birthdayLog);
-    // $("#facebookText").text(facebookLog);
-    // $("#instagramText").text(instagramLog);
-    // $("#phoneText").text(phoneLog);
-    // $("#emailText").text(emailLog);
-    // $("#addressText").text(addressLog);
-    // $("#friendCardName").text(friendArray[fNum]);
-    // yourBirthday();
-
 }
 function showSignIn() {
     $("#create-account-link-text ").show();
@@ -233,11 +211,8 @@ $("#addFriendBtn").on("click", function(e) {
         friendName = $("#friendsName").val();       
         newFriendListItem = '<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendName + '</li>';
         $("#friendsList").append(newFriendListItem);
-        // friendArray.push(friendName);
-        // console.log(friendArray);
         newFriendNumber = friendArray.length;
-        // friendsArray.push({friendNameIs:friendName, email: "name@domain.com", birthday: "MM/DD/YYYY", facebook: "{{userid}}", instagram: "{{userid}}", phone: "XXX-XXX-XXXX", address: "Street, City, State, Zip"});
-        // localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
+
         $('#friendsName').val('');
         $('#noFriendsList').hide();
         friendCount++;
@@ -435,13 +410,6 @@ $("#saveInfo").on("click", function() {
         if (emailText == '' && phoneText == '' && addressText == '' && facebookText == '' && instagramText == '' && birthdayText == '') {
             alert("is Empty!"); 
         } else {
-            //Create the object
-            // friendsArray[friendNumberInList] = {friendNameIs: friendName, email: emailText, phone: phoneText, address: addressText, birthday: birthdayText, facebook: facebookText, instagram: instagramText}
-            // //Save the object locally
-            // localStorage.setItem("friendInfo", JSON.stringify(friendsArray));
-            //Save to Firebase
-            // usersRef = ref.child(userKey);
-
            updateFriendInfo();
         }
         $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
@@ -474,17 +442,12 @@ $("#signInSubmit").on("click", function(event) {
         }
         if(password != '') {
             if(array1.includes(userName)) {
-                // console.log("phase1: " + userName);
                 if(password == userNamePW) {
-                    // console.log("phase2: " + password + " " + userNamePW);
                     $('#app-container').show();
                     $('#loading-screen').hide();
-                    // console.log("Signing In");
                     ref.child(userName).update({
                         signedIn: true
                     });
-                    // localStorage.setItem("loggedIn", true);
-                    // signIn = true;
                     $("#userNameField, #signInInputPassword1 ").val('');
                     loadFriendInfo();
                     showFriendsInList();
@@ -527,12 +490,6 @@ $(document).ready(function() {
     
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1").hide();
     localStorage.setItem("loggedIn", false);
-    // if(localStorage.getItem("friendInfo") === null) { //check to see if there is anything in the local storage
-    //     return false;
-    // } else {
-        // friendsArray = JSON.parse(localStorage.getItem("friendInfo")); // pull whatever is stored in local storage into a variable and then populate the friendsArray
-        // addFriendNamesToArray();
-    // }
 });
 $("#userNameField").on("change", function() {
     userName = $(this).val();
@@ -564,23 +521,11 @@ $("#userNameField").on("change", function() {
 });
 function loadFriendInfo() {
     getFriends = Object.keys(sv[userName].friend);
-
-    // for (var q = 0; q < getFriends.length; q++) {
-    //     friendArray.push(getFriends[q]);
-    //     birthdayLog[q] = sv[userName]
-    // }
-    // 
-    // console.log(getFriends);
     var this1 = $(".friendItem.active").text();
-    // var this2 = $(".friendItem.active").attr("data-friendnumber")
-
     friendDeets = sv[userName].friend[this1];
 
 }
   //To Do:
   // Fix for loop being called everytime the username field changes
   // 
-  // Add friends and all data to logged in user
   // Do not add a new account if email address exists
-  // Retrieve info from Firebase based on who is logged in
-  // Store and Retrieve from various devices to same account/different accounts
