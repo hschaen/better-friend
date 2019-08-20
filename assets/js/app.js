@@ -540,3 +540,4 @@ function loadFriendInfo() {
   // Remove Friends
   // Autocomplete Search Friends
   // Friends list must match friends array and be alphabetical
+  // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
