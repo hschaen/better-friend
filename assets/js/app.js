@@ -145,6 +145,7 @@ function yourBirthday() {
 }
 function friendLookUp() {
     $("#friendInfo").show();
+    showFriendInfo();
 }
 function showSignIn() {
     $("#create-account-link-text ").show();
@@ -153,6 +154,7 @@ function showSignIn() {
     $("#signInSubmit").text("Sign In");
     $("#signInForm input").val("");
     signingIn = true;
+    
 }
 function showCreateAccount() {
     $("#signInInputEmail1, #pw2, #sign-in-link-text").show();
@@ -197,36 +199,7 @@ function addNewFriendInfo() {
         instagram: "{{userID}}"
     });
 }
-$("#addFriendBtn").on("click", function(e) {
-    e.preventDefault();
-    addFriendName = $('#friendsName').val().trim();
-    if (getFriends.indexOf(addFriendName) > -1) {
-        alert("already added!");
-        return false;
-    }
-    if (addFriendName === '') {
-        alert("Enter a name.");
-        return false; 
-    } else {
-        friendName = $("#friendsName").val();       
-        newFriendListItem = '<li class="list-group-item friendItem" data-friendnumber='+friendCount+'>' + friendName + '</li>';
-        $("#friendsList").append(newFriendListItem);
-        newFriendNumber = friendArray.length;
-
-        $('#friendsName').val('');
-        $('#noFriendsList').hide();
-        friendCount++;
-        addNewFriendInfo();
-    }
-});
-$(document).on("click", ".friendItem", function() {
-    
-    $('.friendItem').removeClass("active");
-    $(this).addClass("active");
-    friendNumberInList = $(this).attr("data-friendnumber");
-    $("#friendInfo").show();
-    loadFriendInfo();
-    
+function showFriendInfo() {
     facebookLog = friendDeets.facebook;
     addressLog = friendDeets.address;
     phoneLog = friendDeets.phone;
@@ -234,9 +207,6 @@ $(document).on("click", ".friendItem", function() {
     instagramLog = friendDeets.instagram;
     nameLog = friendDeets.friendNameIs;
     birthdayLog = friendDeets.birthday;
-    // friendNameIs = $(this).val();
-    // friendDeets = sv[userName].friend["Kris"];
-
     if (birthdayLog !== '') {
         $("#birthdayText").text(birthdayLog);
     }
@@ -259,21 +229,61 @@ $(document).on("click", ".friendItem", function() {
         alert ("is Empty!");
     }     
     $("#friendCardName").text(nameLog);
+}
+$("#addFriendBtn").on("click", function(e) {
+    e.preventDefault();
+    $(".friendItem.active").removeClass("active");
+    addFriendName = $('#friendsName').val().trim();
+    if (getFriends.indexOf(addFriendName) > -1) {
+        alert("already added!");
+        return false;
+    }
+    if (addFriendName === '') {
+        alert("Enter a name.");
+        return false; 
+    } else {
+        friendName = $("#friendsName").val();       
+        newFriendListItem = '<li class="list-group-item friendItem active" data-friendnumber='+friendCount+'>' + friendName + '</li>';
+        $("#friendsList").append(newFriendListItem);
+        newFriendNumber = friendArray.length;
+
+        $('#friendsName').val('');
+        $('#noFriendsList').hide();
+        friendCount++;
+        addNewFriendInfo();
+        $("#friendCardName").text(friendName);
+        $("#listOfFriends").show();
+        $("#friendInfo").show();
+    }
+});
+$(document).on("click", ".friendItem", function() { //what happens when you click on a friend in your friend list
+    
+    $('.friendItem').removeClass("active");
+    $(this).addClass("active");
+    friendNumberInList = $(this).attr("data-friendnumber");
+    $("#friendInfo").show();
+    loadFriendInfo();
+    
+    
+    // friendNameIs = $(this).val();
+    // friendDeets = sv[userName].friend["Kris"];
+
+    showFriendInfo();
     yourBirthday();
 
 });
-$("#searchFriendsBtn").on("click", function(e) {
+$("#searchFriendsBtn").on("click", function(e) { // what happens when you search for a friend
     e.preventDefault();
     $(".friendItem").removeClass("active");
     $("#listOfFriends, #friendInfo").hide();
     searchText = $("#searchFriendsText").val();
     console.log(searchText);
-    if (friendArray.length === 0) {
+    if (getFriends.length === 0) {
         alert('add some friends');
         return false;
     } 
-    for (var m = 0; m < friendArray.length; m++) {
-        if (friendArray[m] === searchText) {
+    for (var m = 0; m < getFriends.length; m++) {
+        if (getFriends[m] === searchText) {
             console.log("it's a match");
 
             $('.friendItem').removeClass("active");
@@ -281,14 +291,14 @@ $("#searchFriendsBtn").on("click", function(e) {
             $("#listOfFriends").show();
             $("[data-friendnumber='" + m + "'").addClass("active");
             $("#friendInfo").show();
-            fNum = m;
-            $('#friendCardName').text(friendArray[fNum]);
+            // fNum = m;
+            $('#friendCardName').text(getFriends[m]);
             friendLookUp();
             return true;
         }
     }
 });
-$("#addFriendsLink").on("click", function() {
+$("#addFriendsLink").on("click", function() { // you want to see the add friends page
     $("#addFriends, #friendInfo").show();
     $("#pageTitle").text("Add Friends");
     $(this).parent().addClass("active");
@@ -305,9 +315,9 @@ $("#addFriendsLink").on("click", function() {
 
 
 })
-$("#viewFriendsLink").on("click", function() {
+$("#viewFriendsLink").on("click", function() { // you want to just view your friends list
     $("#addFriends").hide();
-    $("listOfFriends").show();
+    $("#listOfFriends").show();
     $(this).parent().addClass("active");
     $("#addFriendsLink").parent().removeClass("active");
     $(".friendItem").removeClass("active");
@@ -315,7 +325,7 @@ $("#viewFriendsLink").on("click", function() {
     $("#friendInfo").hide();
     $("#searchFriends").hide();
 });
-$("#searchFriendsLink").on("click", function() {
+$("#searchFriendsLink").on("click", function() { // you want to search through your friends list
     $("#addFriends").hide();
     $(this).parent().addClass("active");
     $("#addFriendsLink").parent().removeClass("active");
@@ -324,7 +334,7 @@ $("#searchFriendsLink").on("click", function() {
     $("#searchFriends").show();
     $("#listOfFriends").hide();
 });
-$("#saveInfo").on("click", function() {
+$("#saveInfo").on("click", function() { // if you edited a friends' info, save it.
     if (editInfoBtn) { //if the edit button is clicked
         //phoneInfo
         if(friendDeets.phone == "XXX-XXX-XXXX") {
@@ -423,13 +433,13 @@ $("#saveInfo").on("click", function() {
         editInfoBtn = true;
     }
 });
-$("#createAccount").on("click", function() {
+$("#createAccount").on("click", function() { //show the create accoubt page
     showCreateAccount();
 });
-$("#signIntoAccount").on("click", function() {
+$("#signIntoAccount").on("click", function() { // show the sign into account page
     showSignIn();
 });
-$("#signInSubmit").on("click", function(event) {
+$("#signInSubmit").on("click", function(event) { // handle what happens when you click either Sign In or Create Account Button
     event.preventDefault();
     userName =  $("#userNameField").val().trim();
     emailAddress = $("#signInInputEmail1").val().trim();
@@ -479,17 +489,15 @@ $("#signInSubmit").on("click", function(event) {
         console.log("Creating Account");
     }
 });
-$('#fbSignIn').on("click", function() {
-    logIn();
-    storeUserinfo();
-});
+
 $("#signOut").on("click", function() {
     signOut();
 });
 $(document).ready(function() {
     
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1").hide();
-    localStorage.setItem("loggedIn", false);
+     
+    // localStorage.setItem("loggedIn", false);
 });
 $("#userNameField").on("change", function() {
     userName = $(this).val();
@@ -529,3 +537,6 @@ function loadFriendInfo() {
   // Fix for loop being called everytime the username field changes
   // 
   // Do not add a new account if email address exists
+  // Remove Friends
+  // Autocomplete Search Friends
+  // Friends list must match friends array and be alphabetical
