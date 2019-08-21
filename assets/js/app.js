@@ -176,6 +176,7 @@ function showFriendsInList() {
     }
 }
 function updateFriendInfo() {
+    friendName = $("#friendCardName").text();
     ref.child(userName + "/friend/" + friendName).update({
         friendNumber: friendNumberInList,
         friendNameIs: friendName,
