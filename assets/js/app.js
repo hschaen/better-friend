@@ -368,7 +368,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
             $("#birthdayInput").val(friendDeets.birthday);
         }
         //facebookInfo 
-        if(friendDeets.facebook == "{{userid}}") {
+        if(friendDeets.facebook == "{{userID}}") {
             $("#facebookInput").val("");
             $("#facebookInput").attr("placeholder", "{{userid}}");
         } else {
@@ -376,7 +376,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         }
         
         //instagram info
-        if(friendDeets.instagram == "{{userid}}") {
+        if(friendDeets.instagram == "{{userID}}") {
             $("#instagramInput").val("");
             $("#instagramInput").attr("placeholder", "{{userid}}");
         } else {
