@@ -509,6 +509,7 @@ $(document).ready(function() {
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1").hide();
      
     // localStorage.setItem("loggedIn", false);
+    
 });
 $("#userNameField").on("change", function() {
     userName = $(this).val();
@@ -540,7 +541,7 @@ $("#userNameField").on("change", function() {
 });
 function loadFriendInfo() {
     getFriends = Object.keys(sv[userName].friend);
-    var this1 = $(".friendItem.active").text();
+    var this1 = $(".friendItem.active a").text();
     friendDeets = sv[userName].friend[this1];
 
 }
