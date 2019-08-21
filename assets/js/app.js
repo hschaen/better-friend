@@ -252,6 +252,7 @@ $("#addFriendBtn").on("click", function(e) {
         friendCount++;
         console.log(friendCount);
         addNewFriendInfo();
+        loadFriendInfo();
         $("#friendCardName").text(friendName);
         $("#listOfFriends").show();
         $("#friendInfo").show();
@@ -398,7 +399,8 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         phoneText = $("#phoneInput").val();
         instagramText = $("#instagramInput").val();
         facebookText = $("#facebookInput").val();
-        friendName = $
+        friendName = $('#friendCardName').val();
+        
         if (birthdayText !== '') {
             $("#birthdayText").text(birthdayText);
         }
@@ -501,6 +503,8 @@ $(document).on("click", ".removeButton", function() {
     console.log();
     ref.child(userName + "/friend/" + $(this).attr("id")).remove();
     $(this).closest('li').remove();
+    $("#friendInfo").hide();
+    loadFriendInfo();
     // setTimeout(showFriendsInList(), 2000);
 
 })
