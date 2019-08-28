@@ -85,38 +85,6 @@ var userCheck;
 var uiConfig;
 var ui;
 
-//Firebase Login Function - Not In Use
-function logIn() {
-    uiConfig = {
-    signInSuccessUrl: 'http://127.0.0.1:5500/better-friend/index.html',
-    signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        firebase.auth.EmailAuthProvider.PROVIDER_ID
-        // firebase.auth.PhoneAuthProvider.PROVIDER_ID,
-        // firebaseui.auth.AnonymousAuthProvider.PROVIDER_ID
-    ],
-    // tosUrl and privacyPolicyUrl accept either url string or a callback
-    // function.
-    // Terms of service url/callback.
-    tosUrl: 'https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY',
-        // Privacy policy url/callback.
-        privacyPolicyUrl: function() {
-        window.location.assign('https://www.privacypolicytemplate.net/live.php?token=rrX3WIhxFTHXc1isGnRfTgisgXIeJ3ZY');
-        }
-    };
-    // Initialize the FirebaseUI Widget using Firebase.
-    ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig);
-}
-function storeUserinfo() {
-    userInfo = JSON.parse(firebase.auth().currentUser.uid);
-    // userID = firebase.auth().currentUser.uid;
-}
 // Sign Out Function
 function signOut() {
     firebase.auth().signOut().then(function() {
@@ -308,17 +276,16 @@ function addFriendToDB() {
 }
 // Search for Friend in Database and Display Results
 function searchFriendInDB() {
+    $("#searchMessage").hide();
     $(".friendItem").removeClass("active");
     $("#listOfFriends, #friendInfo").hide();
     searchText = $("#searchFriendsText").val();
-    console.log(searchText);
     if (getFriends.length === 0) {
         alert('add some friends');
         return false;
     } 
     for (var m = 0; m < getFriends.length; m++) {
         if (getFriends[m] === searchText) {
-            console.log("it's a match");
 
             $('.friendItem').removeClass("active");
 
@@ -329,6 +296,8 @@ function searchFriendInDB() {
             $('#friendCardName').text(getFriends[m]);
             friendLookUp();
             return true;
+        } else {
+            
         }
     }
 }
@@ -398,13 +367,18 @@ function reloadApp() {
 function backBtnLogic() {
     if(addFriendScreen) {
         $("#backBtn, #friendInfo").hide();
-        $("#listOfFriends, #addFriends").show();
+        $("#listOfFriends, #addFriends, #addFriend").show();
         $("#pageTitle").text("Add Friends");
     }
     if(searchFriendScreen) {
         $("#backBtn, #friendInfo, #listOfFriends").hide();
         $("#searchFriends").show();
-        $("#pageTitle").text("Add Friends");
+        $("#pageTitle").text("Search Friends");
+    }
+    if(viewFriendScreen) {
+        $("#backBtn, #friendInfo, #listOfFriends").hide();
+        $("#listOfFriends").show();
+        $("#pageTitle").text("View Friends");
     }
 }
 // Trigger Add Friend Function on button click
