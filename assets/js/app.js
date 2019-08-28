@@ -179,21 +179,27 @@ function updateFriendInfo() {
 
 // Add new friend to database
 function addNewFriendInfo() {
-    ref.child(userName + "/friend/" + friendName).update({
-        friendNumber: friendNumberInList,
-        friendNameIs: friendName,
-        email: "name@domain.com",
-        phone: "XXX-XXX-XXXX",
-        address: "Street, City, State, Zip",
-        birthday: "MM/DD/YYYY",
-        facebook: "{{userID}}",
-        instagram: "{{userID}}"
-    });
-    // Empty friend list so we can repopulate it with alphabetized list of friends
-    $("#friendsList").empty();
+    if(getFriends.length < 15) {
+        ref.child(userName + "/friend/" + friendName).update({
+            friendNumber: friendNumberInList,
+            friendNameIs: friendName,
+            email: "name@domain.com",
+            phone: "XXX-XXX-XXXX",
+            address: "Street, City, State, Zip",
+            birthday: "MM/DD/YYYY",
+            facebook: "{{userID}}",
+            instagram: "{{userID}}"
+        });
+        // Empty friend list so we can repopulate it with alphabetized list of friends
+        $("#friendsList").empty();
+    } else {
+        alert("You have the max number of friends (15). Try removing a friend before adding another.");
+        return false;
+    }
 }
 // Show info on screen about selected friend
 function showFriendInfo() {
+    loadFriendInfo();
     facebookLog = friendDeets.facebook;
     addressLog = friendDeets.address;
     phoneLog = friendDeets.phone;
@@ -247,31 +253,36 @@ function addFriendToDB() {
         alert("Enter a name.");
         return false; 
     } else {
-        //store friends name in var
-        friendName = $("#friendsName").val();
-        //create new list item       
-        newFriendListItem = '<li class="list-group-item friendItem active" data-friendnumber='+friendCount+' data-friendname=' + friendName + '"><a href="#" class="friendLink" id="' + friendName + '">' + friendName + '</a><button class="btn btn-danger btn-xs removeButton" id="' + friendName + '">Remove</button></li>';
-        //add new list item to list
-        $("#friendsList").append(newFriendListItem);
-        //store number of friends
-        // --- NEED TO UPDATE GETFRIENDS ARRAY WITH NEW FRIEND NAME --- //
-        newFriendNumber = getFriends.length;
+        if (getFriends.length < 15) {
+            //store friends name in var
+            friendName = $("#friendsName").val();
+            //create new list item       
+            newFriendListItem = '<li class="list-group-item friendItem active" data-friendnumber='+friendCount+' data-friendname=' + friendName + '"><a href="#" class="friendLink" id="' + friendName + '">' + friendName + '</a><button class="btn btn-danger btn-xs removeButton" id="' + friendName + '">Remove</button></li>';
+            //add new list item to list
+            $("#friendsList").append(newFriendListItem);
+            //store number of friends
+            // --- NEED TO UPDATE GETFRIENDS ARRAY WITH NEW FRIEND NAME --- //
+            newFriendNumber = getFriends.length;
 
-        //clear input field
-        $('#friendsName').val('');
-        //hide on screen message
-        $('#noFriendsList').hide();
-        //increase friend counter
-        friendCount++;
-        //add new friend info to database
-        addNewFriendInfo();
-        //pull friend info from database
-        loadFriendInfo();   
-        //display friends list on screen     
-        showFriendsInList();
-        $("#friendCardName").text(friendName);
-        $("#listOfFriends").show();
-        $("#friendInfo").show();
+            //clear input field
+            $('#friendsName').val('');
+            //hide on screen message
+            $('#noFriendsList').hide();
+            //increase friend counter
+            friendCount++;
+            //add new friend info to database
+            addNewFriendInfo();
+            //pull friend info from database
+            loadFriendInfo();   
+            //display friends list on screen     
+            showFriendsInList();
+            $("#friendCardName").text(friendName);
+            $("#listOfFriends").show();
+            $("#friendInfo").show();
+        } else {
+            alert("You have the max number of friends (15). Try removing a friend before adding another.");
+            return false;
+        }
     }
 }
 // Search for Friend in Database and Display Results
@@ -289,15 +300,11 @@ function searchFriendInDB() {
 
             $('.friendItem').removeClass("active");
 
-            $("#listOfFriends").show();
             $("[data-friendnumber='" + m + "'").addClass("active");
             $("#friendInfo").show();
-            // fNum = m;
-            $('#friendCardName').text(getFriends[m]);
             friendLookUp();
+            $('#friendCardName').text(getFriends[m]);
             return true;
-        } else {
-            
         }
     }
 }
@@ -354,7 +361,7 @@ function submitSignInInfo() {
 // Reload app
 function reloadApp() {
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1, #backBtn").hide();
-    $("#addFriends").show();
+    $("#addFriends, #addFriend, #listOfFriends").show();
     $("#my-nav li").removeClass("active");
     $("#addFriendsLink").closest("li").addClass("active");
     $("#pageTitle").text("Add Friends");
@@ -362,6 +369,17 @@ function reloadApp() {
     addFriendScreen = true;
     viewFriendScreen = false;
     searchFriendScreen = false;
+}
+function savedInfo() {
+    $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
+    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo").show();
+    $(this).text("Saved");
+    setTimeout(function() {
+        $('#saveInfo').text("Edit Info");
+    }, 500); 
+        
+    $("#friendsList li").removeClass("disabled");
+    editInfoBtn = true;
 }
 // Logic for back button
 function backBtnLogic() {
@@ -391,7 +409,7 @@ $("#searchFriendsBtn").on("click", function(e) { // what happens when you search
     searchFriendInDB();
 });
 $("#addFriendsLink").on("click", function() { // you want to see the add friends page
-    $("#addFriends, #friendInfo").show();
+    $("#addFriends, #addFriend, #friendInfo").show();
     $("#pageTitle").text("Add Friends");
     $("#my-nav li").removeClass("active");
     $(this).parent().addClass("active");
@@ -408,6 +426,7 @@ $("#addFriendsLink").on("click", function() { // you want to see the add friends
         $("#listOfFriends").hide();
     }
     $("#friendInfo, #searchFriends").hide();
+    savedInfo();
 });
 $("#viewFriendsLink").on("click", function() { // you want to just view your friends list
     $("#addFriends").hide();
@@ -421,6 +440,8 @@ $("#viewFriendsLink").on("click", function() { // you want to just view your fri
     addFriendScreen = false;
     viewFriendScreen = true;
     searchFriendScreen = false;
+    savedInfo();
+
 });
 $("#searchFriendsLink").on("click", function() { // you want to search through your friends list
     $("#addFriends").hide();
@@ -433,6 +454,8 @@ $("#searchFriendsLink").on("click", function() { // you want to search through y
     addFriendScreen = false;
     viewFriendScreen = false;
     searchFriendScreen = true;
+    savedInfo();
+
 });
 $("#saveInfo").on("click", function() { // if you edited a friends' info, save it.
     if (editInfoBtn) { //if the edit button is clicked
@@ -523,15 +546,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         } else {
         updateFriendInfo();
         }
-        $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
-        $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo").show();
-        $(this).text("Saved");
-        setTimeout(function() {
-            $('#saveInfo').text("Edit Info");
-        }, 500); 
-            
-        $("#friendsList li").removeClass("disabled");
-        editInfoBtn = true;
+        savedInfo();
     }
 });
 $("#createAccount").on("click", function() { //show the create accoubt page
