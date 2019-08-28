@@ -9,18 +9,10 @@ var firebaseConfig = {
     appId: "1:826334661400:web:2c7de318313607c2"
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
+var firebaseDB = firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 var ref = database.ref("/user-data");
-var friendNumber = 0;
-var friendNumberInList = 0;
-var friendCount = 0;
-var newFriendNumber = 0;
-var fNum = 0;
-var friendInfoNumber = 0;
-var userNameArrayOrder = 0;
-var numberInList = "";
+var numberInList = '';
 var friendName = '';
 var friendNameIs = '';
 var addFriendName = '';
@@ -39,7 +31,19 @@ var nameLog = '';
 var bd1 = '';
 var friendsNameText = '';
 var userKey = '';
-var setFriendFullInfo = {};
+var dd = '';
+var mm = '';
+var sv2 = '';
+var x = '';
+var userNamePW = '';
+var friendInfoText = '';
+var userName = '';
+var password = '';
+var password2 = '';
+var sv = '';
+var childKey = '';
+var childData = '';
+var userID = '';
 var friendArray = [];
 var friendsArray = [];
 var con = [];
@@ -47,34 +51,31 @@ var keyArray = [];
 var userNameArray = [];
 var passwordArray = [];
 var array1 = [];
+var userInfo = [];
+var friendInfoArray = [];
+var getFriends = [];
 var friendFullInfo = {};
+var sv1 = {};
+var setFriendFullInfo = {};
 var editInfoBtn = true;
 var bdayAlert = true;
+var addFriendScreen = true;
+var signIn = false;
+var signingIn = true;
+var friendNumber = 0;
+var friendNumberInList = 0;
+var friendCount = 0;
+var newFriendNumber = 0;
+var fNum = 0;
+var friendInfoNumber = 0;
+var userNameArrayOrder = 0;
 var today = 0;
 var userNameInArray = 0;
-var dd = "";
-var mm = "";
 var yyyy = 0;
 var userCheck;
 var uiConfig;
 var ui;
-var userID = "";
-var userInfo = [];
-var friendInfoArray = [];
-var friendInfoText = '';
-var signIn = false;
-var signingIn = true;
-var userName = '';
-var password = '';
-var password2 = '';
-var sv = '';
-var childKey = '';
-var childData = '';
-var sv1 = {};
-var sv2 = '';
-var x = '';
-var userNamePW = '';
-var getFriends = [];
+
 function logIn() {
     uiConfig = {
     signInSuccessUrl: 'http://127.0.0.1:5500/better-friend/index.html',
@@ -199,6 +200,8 @@ function addNewFriendInfo() {
         facebook: "{{userID}}",
         instagram: "{{userID}}"
     });
+    console.log("emptying...");
+    $("#friendsList").empty();
 }
 function showFriendInfo() {
     facebookLog = friendDeets.facebook;
@@ -231,6 +234,17 @@ function showFriendInfo() {
     }     
     $("#friendCardName").text(nameLog);
 }
+function loadFriendInfo() {
+    // This loads the list of friends from the db
+    // firebaseDB;
+    getFriends = Object.keys(sv[userName].friend);
+    // grab the name of the selected friend
+    var this1 = $(".friendItem.active a").text();
+    // store info about this friend in friendDeets
+    friendDeets = sv[userName].friend[this1];
+    console.log("friend info loaded");
+
+}
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
     $(".friendItem.active").removeClass("active");
@@ -252,28 +266,14 @@ $("#addFriendBtn").on("click", function(e) {
         $('#noFriendsList').hide();
         friendCount++;
         console.log(friendCount);
+        
         addNewFriendInfo();
-        loadFriendInfo();
+        loadFriendInfo();        
+        showFriendsInList();
         $("#friendCardName").text(friendName);
         $("#listOfFriends").show();
         $("#friendInfo").show();
     }
-});
-$(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
-    
-    $('.friendItem').removeClass("active");
-    $(this).parent().addClass("active");
-    friendNumberInList = $(this).parent().attr("data-friendnumber");
-    $("#friendInfo").show();
-    loadFriendInfo();
-    
-    
-    // friendNameIs = $(this).val();
-    // friendDeets = sv[userName].friend["Kris"];
-
-    showFriendInfo();
-    yourBirthday();
-
 });
 $("#searchFriendsBtn").on("click", function(e) { // what happens when you search for a friend
     e.preventDefault();
@@ -309,15 +309,17 @@ $("#addFriendsLink").on("click", function() { // you want to see the add friends
     $(".friendItem").removeClass("active");
 
     $("#pageTitle").text("Add Friends");
+    addFriendScreen = true;
+    viewFriendScreen = false;
+    searchFriendScreen = false;
+
     if (friendArray.length != 0) {
         $("#listOfFriends").show();
     } else {
         $("#listOfFriends").hide();
     }
     $("#friendInfo, #searchFriends").hide();
-
-
-})
+});
 $("#viewFriendsLink").on("click", function() { // you want to just view your friends list
     $("#addFriends").hide();
     $("#listOfFriends").show();
@@ -327,6 +329,9 @@ $("#viewFriendsLink").on("click", function() { // you want to just view your fri
     $("#pageTitle").text("View Friends");
     $("#friendInfo").hide();
     $("#searchFriends").hide();
+    addFriendScreen = false;
+    viewFriendScreen = true;
+    searchFriendScreen = false;
 });
 $("#searchFriendsLink").on("click", function() { // you want to search through your friends list
     $("#addFriends").hide();
@@ -336,6 +341,9 @@ $("#searchFriendsLink").on("click", function() { // you want to search through y
     $("#friendInfo").hide();
     $("#searchFriends").show();
     $("#listOfFriends").hide();
+    addFriendScreen = false;
+    viewFriendScreen = false;
+    searchFriendScreen = true;
 });
 $("#saveInfo").on("click", function() { // if you edited a friends' info, save it.
     if (editInfoBtn) { //if the edit button is clicked
@@ -497,6 +505,30 @@ $("#signInSubmit").on("click", function(event) { // handle what happens when you
 $("#signOut").on("click", function() {
     signOut();
 });
+$("#backBtn").on("click", function() {
+    if(addFriendScreen) {
+        $("#backBtn, #friendInfo").hide();
+        $("#listOfFriends, #addFriends").show();
+        $("#pageTitle").text("Add Friends");
+    }
+    if(searchFriendScreen) {
+        $("#backBtn, #friendInfo, #listOfFriends").hide();
+        $("#searchFriends").show();
+        $("#pageTitle").text("Add Friends");
+    }
+});
+$(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
+    $('.friendItem').removeClass("active");
+    $(this).parent().addClass("active");
+    friendNumberInList = $(this).parent().attr("data-friendnumber");
+    console.log(friendNumberInList);
+    $("#friendInfo, #backBtn").show();
+    $("#addFriend, #listOfFriends").hide();
+    $("#pageTitle").text("Friend Info");
+    loadFriendInfo();
+    showFriendInfo();
+    yourBirthday();
+});
 $(document).on("click", ".removeButton", function() {
     var removeBtnName = $(this).attr('id');
     console.log(removeBtnName);
@@ -508,13 +540,6 @@ $(document).on("click", ".removeButton", function() {
     loadFriendInfo();
     // setTimeout(showFriendsInList(), 2000);
 
-})
-$(document).ready(function() {
-    
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1").hide();
-     
-    // localStorage.setItem("loggedIn", false);
-    
 });
 $("#userNameField").on("change", function() {
     userName = $(this).val();
@@ -544,12 +569,14 @@ $("#userNameField").on("change", function() {
         }
     }
 });
-function loadFriendInfo() {
-    getFriends = Object.keys(sv[userName].friend);
-    var this1 = $(".friendItem.active a").text();
-    friendDeets = sv[userName].friend[this1];
+$(document).ready(function() {
+    
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1, #backBtn").hide();
+    addFriendScreen = true;
+    
+});
+firebaseDB;
 
-}
   //To Do:
   // Fix for loop being called everytime the username field changes
   // 
@@ -557,3 +584,6 @@ function loadFriendInfo() {
   // Autocomplete Search Friends
   // Friends list must match friends array and be alphabetical
   // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
+
+  //update each current friend in list with a friendnumber whenever the friend list populates
+  // also update data attribute on parent li to match friendnumber
