@@ -137,6 +137,7 @@ function signOut() {
     // An error happened.
     console.log("error");
       });
+      reloadApp();
 }
 //If today is your friends birthday, do something
 function yourBirthday() {
@@ -381,6 +382,18 @@ function submitSignInInfo() {
         console.log("Creating Account");
     }
 }
+// Reload app
+function reloadApp() {
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #signInInputEmail1, #backBtn").hide();
+    $("#addFriends").show();
+    $("#my-nav li").removeClass("active");
+    $("#addFriendsLink").closest("li").addClass("active");
+    $("#pageTitle").text("Add Friends");
+
+    addFriendScreen = true;
+    viewFriendScreen = false;
+    searchFriendScreen = false;
+}
 // Logic for back button
 function backBtnLogic() {
     if(addFriendScreen) {
@@ -406,8 +419,8 @@ $("#searchFriendsBtn").on("click", function(e) { // what happens when you search
 $("#addFriendsLink").on("click", function() { // you want to see the add friends page
     $("#addFriends, #friendInfo").show();
     $("#pageTitle").text("Add Friends");
+    $("#my-nav li").removeClass("active");
     $(this).parent().addClass("active");
-    $("#viewFriendsLink").parent().removeClass("active");
     $(".friendItem").removeClass("active");
 
     $("#pageTitle").text("Add Friends");
@@ -425,8 +438,8 @@ $("#addFriendsLink").on("click", function() { // you want to see the add friends
 $("#viewFriendsLink").on("click", function() { // you want to just view your friends list
     $("#addFriends").hide();
     $("#listOfFriends").show();
+    $("#my-nav li").removeClass("active");
     $(this).parent().addClass("active");
-    $("#addFriendsLink").parent().removeClass("active");
     $(".friendItem").removeClass("active");
     $("#pageTitle").text("View Friends");
     $("#friendInfo").hide();
@@ -437,8 +450,8 @@ $("#viewFriendsLink").on("click", function() { // you want to just view your fri
 });
 $("#searchFriendsLink").on("click", function() { // you want to search through your friends list
     $("#addFriends").hide();
+    $("#my-nav li").removeClass("active");
     $(this).parent().addClass("active");
-    $("#addFriendsLink").parent().removeClass("active");
     $("#pageTitle").text("Search Friends");
     $("#friendInfo").hide();
     $("#searchFriends").show();
