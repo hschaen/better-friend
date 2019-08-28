@@ -12,6 +12,9 @@ var firebaseConfig = {
 var firebaseDB = firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 var ref = database.ref("/user-data");
+
+// Init global vars
+// Strings
 var numberInList = '';
 var friendName = '';
 var friendNameIs = '';
@@ -33,7 +36,6 @@ var friendsNameText = '';
 var userKey = '';
 var dd = '';
 var mm = '';
-var sv2 = '';
 var x = '';
 var userNamePW = '';
 var friendInfoText = '';
@@ -44,6 +46,7 @@ var sv = '';
 var childKey = '';
 var childData = '';
 var userID = '';
+//Arrays
 var friendArray = [];
 var friendsArray = [];
 var con = [];
@@ -54,14 +57,19 @@ var array1 = [];
 var userInfo = [];
 var friendInfoArray = [];
 var getFriends = [];
+//Objects
 var friendFullInfo = {};
 var sv1 = {};
 var setFriendFullInfo = {};
+//Booleans
 var editInfoBtn = true;
 var bdayAlert = true;
 var addFriendScreen = true;
 var signIn = false;
 var signingIn = true;
+var searchFriendScreen = false;
+var viewFriendScreen = false;
+//Integers
 var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 0;
@@ -72,10 +80,12 @@ var userNameArrayOrder = 0;
 var today = 0;
 var userNameInArray = 0;
 var yyyy = 0;
+//Misc
 var userCheck;
 var uiConfig;
 var ui;
 
+//Firebase Login Function - Not In Use
 function logIn() {
     uiConfig = {
     signInSuccessUrl: 'http://127.0.0.1:5500/better-friend/index.html',
@@ -106,8 +116,8 @@ function logIn() {
 function storeUserinfo() {
     userInfo = JSON.parse(firebase.auth().currentUser.uid);
     // userID = firebase.auth().currentUser.uid;
-    console.log(userInfo);
 }
+// Sign Out Function
 function signOut() {
     firebase.auth().signOut().then(function() {
         // Sign-out successful.
@@ -128,6 +138,7 @@ function signOut() {
     console.log("error");
       });
 }
+//If today is your friends birthday, do something
 function yourBirthday() {
     today = new Date();
     dd = String(today.getDate()).padStart(2, '0');
@@ -144,10 +155,12 @@ function yourBirthday() {
         console.log("not your bday, sry.");
     }
 }
+// Show Friend Information on the Screen
 function friendLookUp() {
     $("#friendInfo").show();
     showFriendInfo();
 }
+// Show Sign In Form
 function showSignIn() {
     $("#create-account-link-text ").show();
     $("#signInInputEmail1, #pw2, #sign-in-link-text").hide();
@@ -157,14 +170,17 @@ function showSignIn() {
     signingIn = true;
     
 }
+// Show Create Account Form
 function showCreateAccount() {
     $("#signInInputEmail1, #pw2, #sign-in-link-text").show();
     $("#create-account-link-text").hide();
     $("#signInHeader").text("Create an Account");
     $("#signInSubmit").text("Create Account");
     signingIn = false;
+    //empty Array1 so we can fill it with usernames from database
     array1.length = 0;
 }
+// List friends from database on the screen
 function showFriendsInList() {
     if(getFriends.length == 0) { //if there are no objects in the arrray, show message
         $('#noFriendsList').show();
@@ -172,10 +188,12 @@ function showFriendsInList() {
         $('#noFriendsList').hide();
         for (var k = 0; k < getFriends.length; k++) { // otherwise show list of friends
             $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+' data-friendname="' + getFriends[k] + '"><a href="#" class="friendLink" id="' + getFriends[k] + '">' + getFriends[k] + '</a><button class="btn btn-danger btn-xs removeButton" id="' + getFriends[k] + '">Remove</button></li>');
+            // Increase friend counter so we can give each friend a unique data-friendnumber
             friendCount++;
         }
     }
 }
+// Update friend data in the database
 function updateFriendInfo() {
     friendName = $("#friendCardName").text();
     ref.child(userName + "/friend/" + friendName).update({
@@ -189,6 +207,8 @@ function updateFriendInfo() {
         instagram: instagramText
     });
 }
+
+// Add new friend to database
 function addNewFriendInfo() {
     ref.child(userName + "/friend/" + friendName).update({
         friendNumber: friendNumberInList,
@@ -200,9 +220,10 @@ function addNewFriendInfo() {
         facebook: "{{userID}}",
         instagram: "{{userID}}"
     });
-    console.log("emptying...");
+    // Empty friend list so we can repopulate it with alphabetized list of friends
     $("#friendsList").empty();
 }
+// Show info on screen about selected friend
 function showFriendInfo() {
     facebookLog = friendDeets.facebook;
     addressLog = friendDeets.address;
@@ -234,49 +255,58 @@ function showFriendInfo() {
     }     
     $("#friendCardName").text(nameLog);
 }
+// This loads the list of friends from the db
 function loadFriendInfo() {
-    // This loads the list of friends from the db
-    // firebaseDB;
     getFriends = Object.keys(sv[userName].friend);
     // grab the name of the selected friend
     var this1 = $(".friendItem.active a").text();
     // store info about this friend in friendDeets
     friendDeets = sv[userName].friend[this1];
     console.log("friend info loaded");
-
 }
-$("#addFriendBtn").on("click", function(e) {
-    e.preventDefault();
+// Add new friend to database and display on screen
+function addFriendToDB() {
     $(".friendItem.active").removeClass("active");
     addFriendName = $('#friendsName').val().trim();
+    //if friend name already exists in database throw error
     if (getFriends.indexOf(addFriendName) > -1) {
         alert("already added!");
         return false;
     }
+    //if no name in input field throw error
     if (addFriendName === '') {
         alert("Enter a name.");
         return false; 
     } else {
-        friendName = $("#friendsName").val();       
+        //store friends name in var
+        friendName = $("#friendsName").val();
+        //create new list item       
         newFriendListItem = '<li class="list-group-item friendItem active" data-friendnumber='+friendCount+' data-friendname=' + friendName + '"><a href="#" class="friendLink" id="' + friendName + '">' + friendName + '</a><button class="btn btn-danger btn-xs removeButton" id="' + friendName + '">Remove</button></li>';
+        //add new list item to list
         $("#friendsList").append(newFriendListItem);
+        //store number of friends
+        // --- NEED TO UPDATE GETFRIENDS ARRAY WITH NEW FRIEND NAME --- //
         newFriendNumber = getFriends.length;
 
+        //clear input field
         $('#friendsName').val('');
+        //hide on screen message
         $('#noFriendsList').hide();
+        //increase friend counter
         friendCount++;
-        console.log(friendCount);
-        
+        //add new friend info to database
         addNewFriendInfo();
-        loadFriendInfo();        
+        //pull friend info from database
+        loadFriendInfo();   
+        //display friends list on screen     
         showFriendsInList();
         $("#friendCardName").text(friendName);
         $("#listOfFriends").show();
         $("#friendInfo").show();
     }
-});
-$("#searchFriendsBtn").on("click", function(e) { // what happens when you search for a friend
-    e.preventDefault();
+}
+// Search for Friend in Database and Display Results
+function searchFriendInDB() {
     $(".friendItem").removeClass("active");
     $("#listOfFriends, #friendInfo").hide();
     searchText = $("#searchFriendsText").val();
@@ -300,6 +330,78 @@ $("#searchFriendsBtn").on("click", function(e) { // what happens when you search
             return true;
         }
     }
+}
+// Submit signin info
+function submitSignInInfo() {
+    userName =  $("#userNameField").val().trim();
+    emailAddress = $("#signInInputEmail1").val().trim();
+    password = $("#signInInputPassword1").val().trim();
+    password2 = $("#signInInputPassword2").val().trim();
+    if (signingIn == true) {
+        if(password == '' || userName == '') {
+            console.log("empty af!");
+            return false;
+        }
+        if(password != '') {
+            if(array1.includes(userName)) {
+                if(password == userNamePW) {
+                    $('#app-container').show();
+                    $('#loading-screen').hide();
+                    ref.child(userName).update({
+                        signedIn: true
+                    });
+                    $("#userNameField, #signInInputPassword1 ").val('');
+                    loadFriendInfo();
+                    showFriendsInList();
+
+                } else {
+                    console.log("phase2: " + password + " " + userNamePW);
+                    console.log("PW doesn't match");
+                }
+            } else {
+                console.log("Username doesn't exist");
+            }
+        }
+    } else {
+        if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '' || $("#signInInputPassword2").val() == '') {
+            console.log("empty af!");
+        }
+
+        if (password === password2) {
+            ref.child(userName).set({
+                    email: emailAddress,
+                    password: password,
+                    signedIn: false
+            });
+            showSignIn();
+        } else {
+            console.log("Passwords don't match");
+            return false;
+        }
+        console.log("Creating Account");
+    }
+}
+// Logic for back button
+function backBtnLogic() {
+    if(addFriendScreen) {
+        $("#backBtn, #friendInfo").hide();
+        $("#listOfFriends, #addFriends").show();
+        $("#pageTitle").text("Add Friends");
+    }
+    if(searchFriendScreen) {
+        $("#backBtn, #friendInfo, #listOfFriends").hide();
+        $("#searchFriends").show();
+        $("#pageTitle").text("Add Friends");
+    }
+}
+// Trigger Add Friend Function on button click
+$("#addFriendBtn").on("click", function(e) {
+    e.preventDefault();
+    addFriendToDB();
+});
+$("#searchFriendsBtn").on("click", function(e) { // what happens when you search for a friend
+    e.preventDefault();
+    searchFriendInDB();
 });
 $("#addFriendsLink").on("click", function() { // you want to see the add friends page
     $("#addFriends, #friendInfo").show();
@@ -432,7 +534,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         if (emailText == '' && phoneText == '' && addressText == '' && facebookText == '' && instagramText == '' && birthdayText == '') {
             alert("is Empty!"); 
         } else {
-           updateFriendInfo();
+        updateFriendInfo();
         }
         $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
         $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo").show();
@@ -453,69 +555,14 @@ $("#signIntoAccount").on("click", function() { // show the sign into account pag
 });
 $("#signInSubmit").on("click", function(event) { // handle what happens when you click either Sign In or Create Account Button
     event.preventDefault();
-    userName =  $("#userNameField").val().trim();
-    emailAddress = $("#signInInputEmail1").val().trim();
-    password = $("#signInInputPassword1").val().trim();
-    password2 = $("#signInInputPassword2").val().trim();
-    if (signingIn == true) {
-        if(password == '' || userName == '') {
-            console.log("empty af!");
-            return false;
-        }
-        if(password != '') {
-            if(array1.includes(userName)) {
-                if(password == userNamePW) {
-                    $('#app-container').show();
-                    $('#loading-screen').hide();
-                    ref.child(userName).update({
-                        signedIn: true
-                    });
-                    $("#userNameField, #signInInputPassword1 ").val('');
-                    loadFriendInfo();
-                    showFriendsInList();
-
-                } else {
-                    console.log("phase2: " + password + " " + userNamePW);
-                    console.log("PW doesn't match");
-                }
-            } else {
-                console.log("Username doesn't exist");
-            }
-        }
-    } else {
-        if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '' || $("#signInInputPassword2").val() == '') {
-            console.log("empty af!");
-        }
-
-        if (password === password2) {
-            ref.child(userName).set({
-                    email: emailAddress,
-                    password: password,
-                    signedIn: false
-            });
-            showSignIn();
-        } else {
-            console.log("Passwords don't match");
-            return false;
-        }
-        console.log("Creating Account");
-    }
+    submitSignInInfo();
 });
 
 $("#signOut").on("click", function() {
     signOut();
 });
 $("#backBtn").on("click", function() {
-    if(addFriendScreen) {
-        $("#backBtn, #friendInfo").hide();
-        $("#listOfFriends, #addFriends").show();
-        $("#pageTitle").text("Add Friends");
-    }
-    if(searchFriendScreen) {
-        $("#backBtn, #friendInfo, #listOfFriends").hide();
-        $("#searchFriends").show();
-        $("#pageTitle").text("Add Friends");
-    }
+   backBtnLogic();
 });
 $(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
     $('.friendItem').removeClass("active");
@@ -531,15 +578,10 @@ $(document).on("click", ".friendLink", function() { //what happens when you clic
 });
 $(document).on("click", ".removeButton", function() {
     var removeBtnName = $(this).attr('id');
-    console.log(removeBtnName);
-    console.log("removing ");
-    console.log();
     ref.child(userName + "/friend/" + $(this).attr("id")).remove();
     $(this).closest('li').remove();
     $("#friendInfo").hide();
     loadFriendInfo();
-    // setTimeout(showFriendsInList(), 2000);
-
 });
 $("#userNameField").on("change", function() {
     userName = $(this).val();
@@ -552,7 +594,6 @@ $("#userNameField").on("change", function() {
         }        
         userNameInArray = array1.indexOf(userName);
         x = array1[userNameInArray];
-        sv2 = array1[userNameInArray];
         if(signingIn) {
             userNamePW = sv[x].password;
         } else {
