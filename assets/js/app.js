@@ -115,6 +115,15 @@ function yourBirthday() {
     yyyy = today.getFullYear();
     today = mm + '/' + dd;
     isBirthday = birthdayLog.substring(0,5);
+    // get all friends from firebase
+    console.log(getFriends);
+    // get all friends birthdays
+    for (var z = 0; z < getFriends.length; z++) {
+    // if friends birthday is today
+    if (getFriends[z].birthday === today) {
+    // notify which friends birrthday  is today
+        console.log("It's " + getFriends[z].name + "'s Birthday Today.");
+    }
     if (today === isBirthday) {
         if(bdayAlert === true) {
             alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
