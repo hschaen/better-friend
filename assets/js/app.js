@@ -46,6 +46,7 @@ var sv = '';
 var childKey = '';
 var childData = '';
 var userID = '';
+var friendsBday = '';
 //Arrays
 var friendArray = [];
 var friendsArray = [];
@@ -57,6 +58,7 @@ var array1 = [];
 var userInfo = [];
 var friendInfoArray = [];
 var getFriends = [];
+var friendListItems = [];
 //Objects
 var friendFullInfo = {};
 var sv1 = {};
@@ -118,12 +120,6 @@ function yourBirthday() {
     // get all friends from firebase
     console.log(getFriends);
     // get all friends birthdays
-    for (var z = 0; z < getFriends.length; z++) {
-    // if friends birthday is today
-    if (getFriends[z].birthday === today) {
-    // notify which friends birrthday  is today
-        console.log("It's " + getFriends[z].name + "'s Birthday Today.");
-    }
     if (today === isBirthday) {
         if(bdayAlert === true) {
             alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
@@ -131,6 +127,17 @@ function yourBirthday() {
         }
     } else {
         console.log("not your bday, sry.");
+    }
+}
+//Check for birthdays
+function checkForBirthdays() {
+    yourBirthday();
+    console.log("checking for bdays");
+    for (var u = 0; u < getFriends.length; u++) {
+        friendsBday = sv[userName].friend[getFriends[u]].birthday;
+        if (friendsBday.substring(0,5) === today) {
+            alert("Happy Bday to " + getFriends[u] + " !");
+        }
     }
 }
 // Show Friend Information on the Screen
@@ -247,6 +254,10 @@ function loadFriendInfo() {
     // store info about this friend in friendDeets
     friendDeets = sv[userName].friend[this1];
     console.log("friend info loaded");
+    
+
+    checkForBirthdays();
+
 }
 // Add new friend to database and display on screen
 function addFriendToDB() {
