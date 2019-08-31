@@ -280,8 +280,6 @@ function addFriendToDB() {
             //hide on screen message
             $('#noFriendsList').hide();
             //increase friend counter
-            friendCount++;
-            //add new friend info to database
             addNewFriendInfo();
             //pull friend info from database
             loadFriendInfo();   
@@ -589,9 +587,7 @@ $(document).on("click", ".friendLink", function() { //what happens when you clic
     showFriendInfo();
 });
 $(document).on("click", ".removeButton", function() {
-    var removeBtnName = $(this).attr('id');
     ref.child(userName + "/friend/" + $(this).attr("id")).remove();
-    // $(this).closest('li').remove();
     $("#friendsList").empty();
     friendCount = 1;
     $("#friendInfo").hide();
