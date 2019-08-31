@@ -248,11 +248,13 @@ function showFriendInfo() {
 }
 // This loads the list of friends from the db
 function loadFriendInfo() {
-    getFriends = Object.keys(sv[userName].friend);
-    // grab the name of the selected friend
-    var this1 = $(".friendItem.active a").text();
-    // store info about this friend in friendDeets
-    friendDeets = sv[userName].friend[this1];
+    if(typeof (sv[userName].friend) != "undefined") {
+        getFriends = Object.keys(sv[userName].friend);
+        // grab the name of the selected friend
+        var this1 = $(".friendItem.active a").text();
+        // store info about this friend in friendDeets
+        friendDeets = sv[userName].friend[this1];
+    }
 }
 // Add new friend to database and display on screen
 function addFriendToDB() {
@@ -664,7 +666,6 @@ firebaseDB;
   //To Do:
   // Fix for loop being called everytime the username field changes
   // 
-  // Do not add a new account if email address exists
   // Autocomplete Search Friends
   // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
 
