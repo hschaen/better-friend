@@ -60,9 +60,7 @@ var friendInfoArray = [];
 var getFriends = [];
 var friendListItems = [];
 //Objects
-var friendFullInfo = {};
 var sv1 = {};
-var setFriendFullInfo = {};
 //Booleans
 var editInfoBtn = true;
 var bdayAlert = true;
@@ -75,17 +73,11 @@ var viewFriendScreen = false;
 var friendNumber = 0;
 var friendNumberInList = 0;
 var friendCount = 1;
-var newFriendNumber = 0;
-var fNum = 0;
-var friendInfoNumber = 0;
-var userNameArrayOrder = 0;
 var today = 0;
 var userNameInArray = 0;
 var yyyy = 0;
-//Misc
-var userCheck;
-var uiConfig;
-var ui;
+
+
 
 // Sign Out Function
 function signOut() {
@@ -282,8 +274,6 @@ function addFriendToDB() {
             //add new list item to list
             $("#friendsList").append(newFriendListItem);
             //store number of friends
-            // --- NEED TO UPDATE GETFRIENDS ARRAY WITH NEW FRIEND NAME --- //
-            newFriendNumber = getFriends.length;
 
             //clear input field
             $('#friendsName').val('');
