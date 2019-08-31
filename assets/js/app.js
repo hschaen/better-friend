@@ -77,9 +77,6 @@ var today = 0;
 var userNameInArray = 0;
 var yyyy = 0;
 
-var svEmails = [];
-var userEmail = '';
-var userNameEmail = '';
 
 
 // Sign Out Function
@@ -130,7 +127,7 @@ function checkForBirthdays() {
         for (var u = 0; u < getFriends.length; u++) {
             friendsBday = sv[userName].friend[getFriends[u]].birthday;
             if (friendsBday.substring(0,5) === today) {
-                alert("Happy Bday to " + getFriends[u] + "!");
+                alert("Happy Bday to " + getFriends[u] + " !");
             }
         }
         bdayAlert = false;
@@ -144,7 +141,7 @@ function friendLookUp() {
 // Show Sign In Form
 function showSignIn() {
     $("#create-account-link-text ").show();
-    $("#emailField, #pw2, #sign-in-link-text").hide();
+    $("#signInInputEmail1, #pw2, #sign-in-link-text, #emailField").hide();
     $("#signInHeader").text("Sign In");
     $("#signInSubmit").text("Sign In");
     $("#signInForm input").val("");
@@ -248,7 +245,7 @@ function showFriendInfo() {
 }
 // This loads the list of friends from the db
 function loadFriendInfo() {
-    if(typeof (sv[userName].friend) != "undefined") {
+    if (typeof (sv[userName].friend) != "undefined") {
         getFriends = Object.keys(sv[userName].friend);
         // grab the name of the selected friend
         var this1 = $(".friendItem.active a").text();
@@ -374,7 +371,7 @@ function submitSignInInfo() {
 }
 // Reload app
 function reloadApp() {
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #pw2, #sign-in-link-text, #backBtn").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn").hide();
     $("#addFriends, #addFriend, #listOfFriends").show();
     $("#my-nav li").removeClass("active");
     $("#addFriendsLink").closest("li").addClass("active");
@@ -598,35 +595,7 @@ $(document).on("click", ".removeButton", function() {
     $("#friendInfo").hide();
     loadFriendInfo();
     showFriendsInList();
-})
-
-$("#signInInputEmail1").on("change", function() {
-    svEmails.length = 0;
-    userEmail = $(this).val();
-    console.log("changed");
-    ref.on("value", function(snapshot) {
-        sv = snapshot.val();
-        sv1 = Object.keys(sv);
-        for (var k = 0; k < sv1.length; k++) {
-            array1.push(sv1[k]);
-            for (var s = 0; s < array1.length; s++) {
-                svEmails.push(sv[array1[s]].email);
-            } 
-        } 
-        if (svEmails.indexOf(userEmail) === -1) {
-            $("#emailHelp").text("We'll never share your email with anyone else.");
-        } else {
-            $("#emailHelp").text('Email is already associated with another account!');
-        }
-        // Handle the errors
-    }, function(errorObject) {
-        console.log("Errors handled: " + errorObject.code);
-    });
-    // if (!signingIn) {
-    
-    // }
 });
-
 $("#userNameField").on("change", function() {
     userName = $(this).val();
     console.log("changed");
@@ -635,7 +604,6 @@ $("#userNameField").on("change", function() {
         sv1 = Object.keys(sv);
         for (var k = 0; k < sv1.length; k++) {
             array1.push(sv1[k]);
-            
         }        
         userNameInArray = array1.indexOf(userName);
         x = array1[userNameInArray];
@@ -666,8 +634,11 @@ firebaseDB;
   //To Do:
   // Fix for loop being called everytime the username field changes
   // 
+  // Do not add a new account if email address exists
   // Autocomplete Search Friends
   // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
 
+  //update each current friend in list with a friendnumber whenever the friend list populates
+  // also update data attribute on parent li to match friendnumber
   // birthday alert should be a flag on each friend
   // create notifications panel
