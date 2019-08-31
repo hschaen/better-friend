@@ -74,7 +74,7 @@ var viewFriendScreen = false;
 //Integers
 var friendNumber = 0;
 var friendNumberInList = 0;
-var friendCount = 0;
+var friendCount = 1;
 var newFriendNumber = 0;
 var fNum = 0;
 var friendInfoNumber = 0;
@@ -95,6 +95,7 @@ function signOut() {
         $("#app-container").hide();
         $("#loading-screen").show();
         signIn = false;
+        bdayAlert = true;
         ref.child(userName).update({
             signedIn: false
         });
@@ -125,19 +126,19 @@ function yourBirthday() {
             alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
             bdayAlert = false;
         }
-    } else {
-        console.log("not your bday, sry.");
     }
 }
 //Check for birthdays
 function checkForBirthdays() {
-    yourBirthday();
-    console.log("checking for bdays");
-    for (var u = 0; u < getFriends.length; u++) {
-        friendsBday = sv[userName].friend[getFriends[u]].birthday;
-        if (friendsBday.substring(0,5) === today) {
-            alert("Happy Bday to " + getFriends[u] + " !");
+    if (bdayAlert) {
+        yourBirthday();
+        for (var u = 0; u < getFriends.length; u++) {
+            friendsBday = sv[userName].friend[getFriends[u]].birthday;
+            if (friendsBday.substring(0,5) === today) {
+                alert("Happy Bday to " + getFriends[u] + " !");
+            }
         }
+        bdayAlert = false;
     }
 }
 // Show Friend Information on the Screen
@@ -171,7 +172,12 @@ function showFriendsInList() {
         $('#noFriendsList').show();
     } else {
         $('#noFriendsList').hide();
+    checkForBirthdays();
+
         for (var k = 0; k < getFriends.length; k++) { // otherwise show list of friends
+            ref.child(userName + "/friend/" + getFriends[k]).update({
+                friendNumber: friendCount
+            });
             $("#friendsList").append('<li class="list-group-item friendItem" data-friendnumber='+friendCount+' data-friendname="' + getFriends[k] + '"><a href="#" class="friendLink" id="' + getFriends[k] + '">' + getFriends[k] + '</a><button class="btn btn-danger btn-xs removeButton" id="' + getFriends[k] + '">Remove</button></li>');
             // Increase friend counter so we can give each friend a unique data-friendnumber
             friendCount++;
@@ -182,7 +188,6 @@ function showFriendsInList() {
 function updateFriendInfo() {
     friendName = $("#friendCardName").text();
     ref.child(userName + "/friend/" + friendName).update({
-        friendNumber: friendNumberInList,
         friendNameIs: friendName,
         email: emailText,
         phone: phoneText,
@@ -197,7 +202,7 @@ function updateFriendInfo() {
 function addNewFriendInfo() {
     if(getFriends.length < 15) {
         ref.child(userName + "/friend/" + friendName).update({
-            friendNumber: friendNumberInList,
+            friendNumber: friendCount,
             friendNameIs: friendName,
             email: "name@domain.com",
             phone: "XXX-XXX-XXXX",
@@ -253,11 +258,6 @@ function loadFriendInfo() {
     var this1 = $(".friendItem.active a").text();
     // store info about this friend in friendDeets
     friendDeets = sv[userName].friend[this1];
-    console.log("friend info loaded");
-    
-
-    checkForBirthdays();
-
 }
 // Add new friend to database and display on screen
 function addFriendToDB() {
@@ -273,6 +273,7 @@ function addFriendToDB() {
         alert("Enter a name.");
         return false; 
     } else {
+        friendCount = 1;
         if (getFriends.length < 15) {
             //store friends name in var
             friendName = $("#friendsName").val();
@@ -596,14 +597,16 @@ $(document).on("click", ".friendLink", function() { //what happens when you clic
     $("#pageTitle").text("Friend Info");
     loadFriendInfo();
     showFriendInfo();
-    yourBirthday();
 });
 $(document).on("click", ".removeButton", function() {
     var removeBtnName = $(this).attr('id');
     ref.child(userName + "/friend/" + $(this).attr("id")).remove();
-    $(this).closest('li').remove();
+    // $(this).closest('li').remove();
+    $("#friendsList").empty();
+    friendCount = 1;
     $("#friendInfo").hide();
     loadFriendInfo();
+    showFriendsInList();
 });
 $("#userNameField").on("change", function() {
     userName = $(this).val();
@@ -645,8 +648,9 @@ firebaseDB;
   // 
   // Do not add a new account if email address exists
   // Autocomplete Search Friends
-  // Friends list must match friends array and be alphabetical
   // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
 
   //update each current friend in list with a friendnumber whenever the friend list populates
   // also update data attribute on parent li to match friendnumber
+  // birthday alert should be a flag on each friend
+  // create notifications panel
