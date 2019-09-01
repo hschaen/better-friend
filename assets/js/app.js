@@ -105,7 +105,11 @@ function horoscopeFun() {
     }
     hScopeApi = "https://widgets.fabulously40.com/horoscope.json?sign=" + sunSign.toLowerCase();
 
-    $.ajax(hScopeApi, function(data) {
+    $.ajax({
+        url: hScopeApi,
+        method: 'GET',
+        dataType: 'jsonp'
+    }).then(function(data) {
         var xyo = JSON.parse(data);
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
