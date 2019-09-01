@@ -13,6 +13,27 @@ var firebaseDB = firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 var ref = database.ref("/user-data");
 
+//horoscope api
+var sunSign = 'pisces';
+// switch(birthday) {
+//     case ""
+// }
+var hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign + "/tomorrow";
+function horoscopeFun() {
+    $.ajax({
+        url: hScopeApi,
+        method: 'GET'
+    }).then(function(response) {
+            var xyo = JSON.parse(response);
+            $("#hScopeText").text(xyo.horoscope);
+            $("#horoscope").show();
+            $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+
+            
+    });
+}
+
+
 // Init global vars
 // Strings
 var numberInList = '';
@@ -371,7 +392,7 @@ function submitSignInInfo() {
 }
 // Reload app
 function reloadApp() {
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope").hide();
     $("#addFriends, #addFriend, #listOfFriends").show();
     $("#my-nav li").removeClass("active");
     $("#addFriendsLink").closest("li").addClass("active");
@@ -515,7 +536,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         }
         // layout adjustments on button click
         $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm").show()
-        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo").hide();
+        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope").hide();
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -577,17 +598,25 @@ $("#signOut").on("click", function() {
 $("#backBtn").on("click", function() {
    backBtnLogic();
 });
+
 $(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
     $('.friendItem').removeClass("active");
     $(this).parent().addClass("active");
     friendNumberInList = $(this).parent().attr("data-friendnumber");
-    console.log(friendNumberInList);
     $("#friendInfo, #backBtn").show();
     $("#addFriend, #listOfFriends").hide();
     $("#pageTitle").text("Friend Info");
     loadFriendInfo();
     showFriendInfo();
 });
+$("#viewHScope").on("click", function() {
+    horoscopeFun();
+});
+$("#hScopeBack").on("click", function() {
+    $("#horoscope").hide();
+    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").show();
+    
+})
 $(document).on("click", ".removeButton", function() {
     ref.child(userName + "/friend/" + $(this).attr("id")).remove();
     $("#friendsList").empty();
@@ -625,7 +654,7 @@ $("#userNameField").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope").hide();
     addFriendScreen = true;
     
 });
