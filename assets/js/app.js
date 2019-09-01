@@ -103,18 +103,35 @@ function horoscopeFun() {
             }
             break;
     }
-    hScopeApi = "https://horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
+    var hScopeApi = "//horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
+    var hScope = '';
     $.ajax({
-        url:hScopeApi,
-        method: 'GET'
-    }).then(function(response) {
-            var xyo = JSON.parse(response);
-            $("#hScopeText").text(xyo.horoscope);
-            $("#sunSign").text(sunSign);
-            $("#horoscope").show();
-            $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
-            $('#saveInfo').attr("disabled", true);
-        });
+        url: hScopeApi,
+        method: 'GET',
+        dataType: 'jsonp',
+        xhrFields: {
+            withCredentials: true
+        },
+        success: function(response) {
+            // var xyo = JSON.parse(response);
+            hScope = response.data.horoscope;
+            console.log(hScope);
+    },
+    error: function (xhr, status) {
+
+    }
+});
+    // hScopeApi = "https://horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
+    // axios.get(hScopeApi, {
+    //     withCredentials: true,
+    // }).then(function(response) {
+    //         var xyo = JSON.parse(response);
+    //         $("#hScopeText").text(xyo.horoscope);
+    //         $("#sunSign").text(sunSign);
+    //         $("#horoscope").show();
+    //         $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+    //         $('#saveInfo').attr("disabled", true);
+    //     });
 }
 // Init global vars
 // Strings
