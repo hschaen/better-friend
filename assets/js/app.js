@@ -15,6 +15,7 @@ var ref = database.ref("/user-data");
 
 //horoscope api
 var sunSign = '';
+var xyo = {};
 var hScopeApi = '';
 function horoscopeFun() {
     switch(birthdayLog.substring(0,2)) {
@@ -103,35 +104,22 @@ function horoscopeFun() {
             }
             break;
     }
-    var hScopeApi = "//horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
-    var hScope = '';
-    $.ajax({
-        url: hScopeApi,
-        method: 'GET',
-        dataType: 'application/json',
-        xhrFields: {
-            withCredentials: true
-        },
-        success: function(response) {
-            // var xyo = JSON.parse(response);
-            hScope = response.data.horoscope;
-            console.log(hScope);
-    },
-    error: function (xhr, status) {
+    var hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/"+ sunSign.toLowerCase() + "/today";
+    jQuery.support.cors = true;
 
-    }
-});
-    // hScopeApi = "https://horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
-    // axios.get(hScopeApi, {
-    //     withCredentials: true,
-    // }).then(function(response) {
-    //         var xyo = JSON.parse(response);
-    //         $("#hScopeText").text(xyo.horoscope);
-    //         $("#sunSign").text(sunSign);
-    //         $("#horoscope").show();
-    //         $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
-    //         $('#saveInfo').attr("disabled", true);
-    //     });
+    jQuery.ajaxPrefilter(function(options) {
+        if (options.crossDomain && jQuery.support.cors) {
+            options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+        }
+    });
+    $.get(hScopeApi).then(function(response) {
+        xyo = JSON.parse(response);
+        $("#hScopeText").text(xyo.horoscope);
+        $("#sunSign").text(sunSign);
+        $("#horoscope").show();
+        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+        $('#saveInfo').attr("disabled", true);
+    });
 }
 // Init global vars
 // Strings
