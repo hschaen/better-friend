@@ -756,4 +756,5 @@ firebaseDB;
   // need to replace horoscope URL
   // back link needs to be disabled while editing a friend. Otherwise, disable editing when back link is clicked.
   // reload all friend info when info is saved (update snapshot)
+  // friend/horoscope back button needs to hide horoscope div
   // do more stuff...
