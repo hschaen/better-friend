@@ -104,15 +104,41 @@ function horoscopeFun() {
             break;
     }
     hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
-    $.get(hScopeApi, function(data) {
-        var xyo = JSON.parse(data);
+
+    // $.get(hScopeApi, function(data) {
+    //     var xyo = JSON.parse(data);
+    //     $("#hScopeText").text(xyo.horoscope);
+    //     $("#sunSign").text(sunSign);
+    //     $("#horoscope").show();
+    //     $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+    //     $('#saveInfo').attr("disabled", true);
+    // });
+    jQuery.ajax({
+        url: '//hschaen.github.io/better-friend/hScope.php',
+        method: 'GET'
+    }).then(function(response){
+        var xyo = JSON.parse(response);
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
         $("#horoscope").show();
         $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
         $('#saveInfo').attr("disabled", true);
     });
+
+    createCookie("hScopeURL", hScopeApi, "10");
 }
+function createCookie(name, value, days) {
+    var expires;
+    if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      expires = "; expires=" + date.toGMTString();
+    }
+    else {
+      expires = "";
+    }
+    document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
+  }
 // Init global vars
 // Strings
 var numberInList = '';
