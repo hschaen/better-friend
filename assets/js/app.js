@@ -108,7 +108,7 @@ function horoscopeFun() {
     $.ajax({
         url: hScopeApi,
         method: 'GET',
-        dataType: 'jsonp',
+        dataType: 'json',
         xhrFields: {
             withCredentials: true
         },
