@@ -767,3 +767,4 @@ firebaseDB;
   // edit button reveals blank placeholder text on edit for some users
   // format phone number on edit friend form
   // validate email on edit friend form
+  // do more stuff...
