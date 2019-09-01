@@ -14,10 +14,7 @@ var database = firebase.database();
 var ref = database.ref("/user-data");
 
 //horoscope api
-
 var sunSign = '';
-
-
 var hScopeApi = '';
 function horoscopeFun() {
     switch(birthdayLog.substring(0,2)) {
@@ -107,24 +104,15 @@ function horoscopeFun() {
             break;
     }
     hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
-    // console.log(sunSign);
-    $.ajax({
-        url: hScopeApi,
-        method: 'GET'
-    }).then(function(response) {
-            var xyo = JSON.parse(response);
-            $("#hScopeText").text(xyo.horoscope);
-            $("#sunSign").text(sunSign);
-            $("#horoscope").show();
-            $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
-            $('#saveInfo').attr("disabled", true);
-
-
-            
+    $.get(hScopeApi, function(data) {
+        var xyo = JSON.parse(data);
+        $("#hScopeText").text(xyo.horoscope);
+        $("#sunSign").text(sunSign);
+        $("#horoscope").show();
+        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+        $('#saveInfo').attr("disabled", true);
     });
 }
-
-
 // Init global vars
 // Strings
 var numberInList = '';
@@ -189,8 +177,6 @@ var today = 0;
 var userNameInArray = 0;
 var yyyy = 0;
 
-
-
 // Sign Out Function
 function signOut() {
     firebase.auth().signOut().then(function() {
@@ -208,11 +194,11 @@ function signOut() {
         $('#friendInfo').hide();
         $('#my-nav').removeClass('show');
 
-      }).catch(function(error) {
-    // An error happened.
-    console.log("error");
-      });
-      reloadApp();
+    }).catch(function(error) {
+        // An error happened.
+        console.log("error");
+    });
+    reloadApp();
 }
 //If today is your friends birthday, do something
 function yourBirthday() {
