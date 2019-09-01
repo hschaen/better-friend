@@ -103,13 +103,8 @@ function horoscopeFun() {
             }
             break;
     }
-    hScopeApi = "https://widgets.fabulously40.com/horoscope.json?sign=" + sunSign.toLowerCase();
-
-    $.ajax({
-        url: hScopeApi,
-        method: 'GET',
-        dataType: 'jsonp'
-    }).then(function(data) {
+    hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
+    $.get(hScopeApi, function(data) {
         var xyo = JSON.parse(data);
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
@@ -117,33 +112,7 @@ function horoscopeFun() {
         $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
         $('#saveInfo').attr("disabled", true);
     });
-    // // createCookie("hScopeURL", hScopeApi, "10");
-    // // jQuery.ajax({
-    // //     url: '//sdblackchamber.org/hScope.php',
-    // //     method: 'GET'
-    // // }).then(function(response){
-    //     var xyo = JSON.parse("sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow/");
-    //     $("#hScopeText").text(xyo.horoscope);
-    //     $("#sunSign").text(sunSign);
-    //     $("#horoscope").show();
-    //     $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
-    //     $('#saveInfo').attr("disabled", true);
-    // });
-
-    
 }
-function createCookie(name, value, days) {
-    var expires;
-    if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toGMTString();
-    }
-    else {
-      expires = "";
-    }
-    document.cookie = escape(name) + "=" + escape(value) + expires + "; path=/";
-  }
 // Init global vars
 // Strings
 var numberInList = '';
@@ -244,7 +213,7 @@ function yourBirthday() {
     // get all friends birthdays
     if (today === isBirthday) {
         if(bdayAlert === true) {
-            alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
+            // alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
             bdayAlert = false;
         }
     }
@@ -784,4 +753,7 @@ firebaseDB;
   // edit button reveals blank placeholder text on edit for some users
   // format phone number on edit friend form
   // validate email on edit friend form
+  // need to replace horoscope URL
+  // back link needs to be disabled while editing a friend. Otherwise, disable editing when back link is clicked.
+  // reload all friend info when info is saved (update snapshot)
   // do more stuff...
