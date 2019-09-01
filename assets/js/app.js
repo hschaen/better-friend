@@ -107,14 +107,24 @@ function horoscopeFun() {
     $.ajax({
         url:hScopeApi,
         method: 'GET'
-     }).then(function(data) {
-        var xyo = JSON.parse(data);
-        $("#hScopeText").text(xyo.horoscope);
-        $("#sunSign").text(sunSign);
-        $("#horoscope").show();
-        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
-        $('#saveInfo').attr("disabled", true);
-    });
+        // This is the important part
+        xhrFields: {
+            withCredentials: true
+        },
+        // This is the important part
+        data: data,
+        success: function (data) {
+            var xyo = JSON.parse(data);
+            $("#hScopeText").text(xyo.horoscope);
+            $("#sunSign").text(sunSign);
+            $("#horoscope").show();
+            $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+            $('#saveInfo').attr("disabled", true);
+        },
+        error: function (xhr, status) {
+            // handle errors
+        }
+     })
 }
 // Init global vars
 // Strings
