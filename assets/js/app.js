@@ -106,25 +106,15 @@ function horoscopeFun() {
     hScopeApi = "https://horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
     $.ajax({
         url:hScopeApi,
-        method: 'GET',
-        // This is the important part
-        xhrFields: {
-            withCredentials: true
-        },
-        // This is the important part
-        data: data,
-        success: function (data) {
-            var xyo = JSON.parse(data);
+        method: 'GET'
+    }).then(function(response) {
+            var xyo = JSON.parse(response);
             $("#hScopeText").text(xyo.horoscope);
             $("#sunSign").text(sunSign);
             $("#horoscope").show();
             $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
             $('#saveInfo').attr("disabled", true);
-        },
-        error: function (xhr, status) {
-            // handle errors
-        }
-     })
+        });
 }
 // Init global vars
 // Strings
