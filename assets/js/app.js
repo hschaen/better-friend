@@ -106,7 +106,7 @@ function horoscopeFun() {
     hScopeApi = "https://horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
     $.ajax({
         url:hScopeApi,
-        method: 'GET'
+        method: 'GET',
         // This is the important part
         xhrFields: {
             withCredentials: true
