@@ -103,8 +103,11 @@ function horoscopeFun() {
             }
             break;
     }
-    hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
-    $.get(hScopeApi, function(data) {
+    hScopeApi = "https://horoscope-api.herokuapp.com/horoscope/today/" + sunSign.toLowerCase();
+    $.ajax({
+        url:hScopeApi,
+        method: 'GET'
+     }).then(function(data) {
         var xyo = JSON.parse(data);
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
