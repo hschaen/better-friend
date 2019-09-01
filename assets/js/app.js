@@ -106,7 +106,7 @@ function horoscopeFun() {
             }
             break;
     }
-    hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
+    hScopeApi = "https://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
     // console.log(sunSign);
     $.ajax({
         url: hScopeApi,
