@@ -103,29 +103,30 @@ function horoscopeFun() {
             }
             break;
     }
-    hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
+    hScopeApi = "https://widgets.fabulously40.com/horoscope.json?sign=" + sunSign.toLowerCase();
 
-    // $.get(hScopeApi, function(data) {
-    //     var xyo = JSON.parse(data);
-    //     $("#hScopeText").text(xyo.horoscope);
-    //     $("#sunSign").text(sunSign);
-    //     $("#horoscope").show();
-    //     $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
-    //     $('#saveInfo').attr("disabled", true);
-    // });
-    jQuery.ajax({
-        url: '//hschaen.github.io/better-friend/hScope.php',
-        method: 'GET'
-    }).then(function(response){
-        var xyo = JSON.parse(response);
+    $.ajax(hScopeApi, function(data) {
+        var xyo = JSON.parse(data);
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
         $("#horoscope").show();
         $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
         $('#saveInfo').attr("disabled", true);
     });
+    // // createCookie("hScopeURL", hScopeApi, "10");
+    // // jQuery.ajax({
+    // //     url: '//sdblackchamber.org/hScope.php',
+    // //     method: 'GET'
+    // // }).then(function(response){
+    //     var xyo = JSON.parse("sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow/");
+    //     $("#hScopeText").text(xyo.horoscope);
+    //     $("#sunSign").text(sunSign);
+    //     $("#horoscope").show();
+    //     $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+    //     $('#saveInfo').attr("disabled", true);
+    // });
 
-    createCookie("hScopeURL", hScopeApi, "10");
+    
 }
 function createCookie(name, value, days) {
     var expires;
