@@ -14,20 +14,111 @@ var database = firebase.database();
 var ref = database.ref("/user-data");
 
 //horoscope api
-var sunSign = 'pisces';
-// switch(birthday) {
-//     case ""
-// }
-var hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign + "/tomorrow";
+
+var sunSign = '';
+
+
+var hScopeApi = '';
 function horoscopeFun() {
+    switch(birthdayLog.substring(0,2)) {
+        case "01":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 19) {
+                sunSign = "Capricorn";
+            } else {
+                sunSign = "Aquarius";
+            }
+            break;
+        case "02":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 18) {
+                sunSign = "Aquarius";
+            } else {
+                sunSign = "Pisces";
+            }
+            break;
+        case "03":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 20) {
+                sunSign = "Pisces";
+            } else {
+                sunSign = "Aries";
+            }
+            break;
+        case "04":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 19) {
+                sunSign = "Aries";
+            } else {
+                sunSign = "Taurus";
+            }
+            break;
+        case "05":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 20) {
+                sunSign = "Taurus";
+            } else {
+                sunSign = "Gemini";
+            }
+            break;
+        case "06":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 20) {
+                sunSign = "Gemini";
+            } else {
+                sunSign = "Cancer";
+            }
+            break;
+        case "07":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 22) {
+                sunSign = "Cancer";
+            } else {
+                sunSign = "Leo";
+            }
+            break;
+        case "08":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 22) {
+                sunSign = "Leo";
+            } else {
+                sunSign = "Virgo";
+            }
+            break;
+        case "09":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 22) {
+                sunSign = "Virgo";
+            } else {
+                sunSign = "Libra";
+            }
+            break;
+        case "10":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 22) {
+                sunSign = "Libra";
+            } else {
+                sunSign = "Scorpio";
+            }
+            break;
+        case "11":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 21) {
+                sunSign = "Scorpio";
+            } else {
+                sunSign = "Sagittarius";
+            }
+            break;
+        case "12":
+            if(parseInt($("#birthdayText").text().substring(3,5)) <= 21) {
+                sunSign = "Sagittarius";
+            } else {
+                sunSign = "Capricorn";
+            }
+            break;
+    }
+    hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/" + sunSign.toLowerCase() + "/tomorrow";
+    // console.log(sunSign);
     $.ajax({
         url: hScopeApi,
         method: 'GET'
     }).then(function(response) {
             var xyo = JSON.parse(response);
             $("#hScopeText").text(xyo.horoscope);
+            $("#sunSign").text(sunSign);
             $("#horoscope").show();
             $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+            $('#saveInfo').attr("disabled", true);
+
 
             
     });
@@ -404,7 +495,7 @@ function reloadApp() {
 }
 function savedInfo() {
     $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
-    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo").show();
+    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #hScopeLink").show();
     $(this).text("Saved");
     setTimeout(function() {
         $('#saveInfo').text("Edit Info");
@@ -536,7 +627,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         }
         // layout adjustments on button click
         $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm").show()
-        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope").hide();
+        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink").hide();
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -615,6 +706,8 @@ $("#viewHScope").on("click", function() {
 $("#hScopeBack").on("click", function() {
     $("#horoscope").hide();
     $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").show();
+    $('#saveInfo').attr("disabled", false);
+
     
 })
 $(document).on("click", ".removeButton", function() {
@@ -671,3 +764,6 @@ firebaseDB;
   // also update data attribute on parent li to match friendnumber
   // birthday alert should be a flag on each friend
   // create notifications panel
+  // edit button reveals blank placeholder text on edit for some users
+  // format phone number on edit friend form
+  // validate email on edit friend form
