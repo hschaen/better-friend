@@ -155,6 +155,8 @@ var childKey = '';
 var childData = '';
 var userID = '';
 var friendsBday = '';
+var userEmail = '';
+var userNameEmail = '';
 //Arrays
 var friendArray = [];
 var friendsArray = [];
@@ -167,6 +169,8 @@ var userInfo = [];
 var friendInfoArray = [];
 var getFriends = [];
 var friendListItems = [];
+var svEmails = [];
+
 //Objects
 var sv1 = {};
 //Booleans
@@ -177,6 +181,7 @@ var signIn = false;
 var signingIn = true;
 var searchFriendScreen = false;
 var viewFriendScreen = false;
+var blockSignIn = true;
 //Integers
 var friendNumber = 0;
 var friendNumberInList = 0;
@@ -247,7 +252,7 @@ function friendLookUp() {
 // Show Sign In Form
 function showSignIn() {
     $("#create-account-link-text ").show();
-    $("#signInInputEmail1, #pw2, #sign-in-link-text, #emailField").hide();
+    $("#signInInputEmail1, #pw2, #sign-in-link-text, #emailField, #yourUserName, #yourPassword").hide();
     $("#signInHeader").text("Sign In");
     $("#signInSubmit").text("Sign In");
     $("#signInForm input").val("");
@@ -256,7 +261,7 @@ function showSignIn() {
 }
 // Show Create Account Form
 function showCreateAccount() {
-    $("#emailField, #pw2, #sign-in-link-text").show();
+    $("#emailField, #pw2, #sign-in-link-text, #yourUserName, #yourPassword").show();
     $("#create-account-link-text").hide();
     $("#signInHeader").text("Create an Account");
     $("#signInSubmit").text("Create Account");
@@ -427,53 +432,70 @@ function searchFriendInDB() {
 }
 // Submit signin info
 function submitSignInInfo() {
-    userName =  $("#userNameField").val().trim();
-    emailAddress = $("#signInInputEmail1").val().trim();
-    password = $("#signInInputPassword1").val().trim();
-    password2 = $("#signInInputPassword2").val().trim();
-    if (signingIn == true) {
-        if(password == '' || userName == '') {
-            console.log("empty af!");
-            return false;
-        }
-        if(password != '') {
-            if(array1.includes(userName)) {
-                if(password == userNamePW) {
-                    $('#app-container').show();
-                    $('#loading-screen').hide();
-                    ref.child(userName).update({
-                        signedIn: true
-                    });
-                    $("#userNameField, #signInInputPassword1 ").val('');
-                    loadFriendInfo();
-                    showFriendsInList();
-
-                } else {
-                    console.log("phase2: " + password + " " + userNamePW);
-                    console.log("PW doesn't match");
-                }
-            } else {
-                console.log("Username doesn't exist");
-            }
-        }
+    if(blockSignIn) {
+        return false;
     } else {
-        if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '' || $("#signInInputPassword2").val() == '') {
-            console.log("empty af!");
-        }
 
-        if (password === password2) {
-            ref.child(userName).set({
-                    email: emailAddress,
-                    password: password,
-                    signedIn: false
-            });
-            showSignIn();
+        userName =  $("#userNameField").val().trim();
+        emailAddress = $("#signInInputEmail1").val().trim();
+        password = $("#signInInputPassword1").val().trim();
+        password2 = $("#signInInputPassword2").val().trim();
+        if (signingIn == true) {
+            if(password == '' || userName == '') {
+                console.log("empty af!");
+                return false;
+            }
+            if(password != '') {
+                if(array1.includes(userName)) {
+                    if(password == userNamePW) {
+                        $('#app-container').show();
+                        $('#loading-screen').hide();
+                        ref.child(userName).update({
+                            signedIn: true
+                        });
+                        $("#userNameField, #signInInputPassword1 ").val('');
+                        loadFriendInfo();
+                        showFriendsInList();
+
+                    } else {
+                        console.log("phase2: " + password + " " + userNamePW);
+                        console.log("PW doesn't match");
+                    }
+                } else {
+                    console.log("Username doesn't exist");
+                }
+            }
         } else {
-            console.log("Passwords don't match");
-            return false;
+            if($("#signInInputPassword1").val() == '' || $("#signInInputEmail1").val() == '' || $("#signInInputPassword2").val() == '') {
+                console.log("empty af!");
+            }
+
+            if (password === password2) {
+                ref.child(userName).set({
+                        email: emailAddress,
+                        password: password,
+                        signedIn: false
+                });
+                showSignIn();
+            } else {
+                console.log("Passwords don't match");
+                return false;
+            }
+            console.log("Creating Account");
         }
-        console.log("Creating Account");
-    }
+    } 
+}
+//
+function blankFieldCheck() {
+    if ($('#signInInputEmail1').val() === '' ||
+        $('#userNameField').val() === '' ||
+        $('#signInInputPassword1').val() === '' ||
+        $('#signInInputPassword2').val() === ''
+        ) {
+            $('#signInSubmit').attr("disabled", true);
+        } else {
+            $('#signInSubmit').attr("disabled", false);
+        }
 }
 // Reload app
 function reloadApp() {
@@ -716,9 +738,29 @@ $(document).on("click", ".removeButton", function() {
     loadFriendInfo();
     showFriendsInList();
 });
+$("#signInInputPassword1").on("change", function() {
+    if (!signingIn) {
+        blankFieldCheck();
+    } else {
+        if($('#userNameField').val() === '' || 
+        $("#signInInputPassword1").val() === '') {
+            $('#signInSubmit').attr("disabled", true);
+            blockSignIn = true;
+
+        } else {
+            $('#signInSubmit').attr("disabled", false);
+            blockSignIn = false;
+
+        }
+    }
+});
+$("#signInInputPassword2").on("change", function() {
+    if (!signingIn) {
+        blankFieldCheck();
+    } 
+});
 $("#userNameField").on("change", function() {
     userName = $(this).val();
-    console.log("changed");
     ref.on("value", function(snapshot) {
         sv = snapshot.val();
         sv1 = Object.keys(sv);
@@ -738,14 +780,60 @@ $("#userNameField").on("change", function() {
     if (!signingIn) {
         if (userNameInArray === -1) {
             $("#yourUserName").text('Username is Available!');
+            blockSignIn = false;
+
         } else {
             $("#yourUserName").text('Username is Not Available!');
+            blockSignIn = true;
+
+        }
+        blankFieldCheck();
+    }
+    if (signingIn) {
+        if($('#userNameField').val() === '' || 
+        $("#signInInputPassword1").val() === '') {
+            $('#signInSubmit').attr("disabled", true);
+            blockSignIn = true;
+        } else {
+            $('#signInSubmit').attr("disabled", false);
+            blockSignIn = false;
+
         }
     }
 });
+$("#signInInputEmail1").on("change", function() {
+    svEmails.length = 0;
+    userEmail = $(this).val();
+    console.log("changed");
+    ref.on("value", function(snapshot) {
+        sv = snapshot.val();
+        sv1 = Object.keys(sv);
+        for (var k = 0; k < sv1.length; k++) {
+            array1.push(sv1[k]);
+            for (var s = 0; s < array1.length; s++) {
+                svEmails.push(sv[array1[s]].email);
+            } 
+        } 
+        if (svEmails.indexOf(userEmail) === -1) {
+            $("#emailHelp").text("We'll never share your email with anyone else.");
+            blockSignIn = false;
+
+        } else {
+            $("#emailHelp").text('Email is already associated with another account!');
+            blockSignIn = true;
+        }
+        // Handle the errors
+    }, function(errorObject) {
+        console.log("Errors handled: " + errorObject.code);
+    });
+    
+    if (!signingIn) {
+        blankFieldCheck();
+    } 
+});
 $(document).ready(function() {
     
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword").hide();
     addFriendScreen = true;
     
 });
@@ -758,7 +846,7 @@ firebaseDB;
   // Autocomplete Search Friends
   // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
 
-  //update each current friend in list with a friendnumber whenever the friend list populates
+  // update each current friend in list with a friendnumber whenever the friend list populates
   // also update data attribute on parent li to match friendnumber
   // birthday alert should be a flag on each friend
   // create notifications panel
@@ -769,4 +857,11 @@ firebaseDB;
   // back link needs to be disabled while editing a friend. Otherwise, disable editing when back link is clicked.
   // reload all friend info when info is saved (update snapshot)
   // friend/horoscope back button needs to hide horoscope div
+  // show upcoming birthdays
+  // show list of bdays
+  // show address on map
+  // get directions to address
+  // happy hour specials / other events around friends address
+  // turn phone # into a link
+  // add loading text when horoscope is clicked
   // do more stuff...
