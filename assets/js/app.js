@@ -595,7 +595,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
             $("#addressInput").val("");
             $("#addressInput").attr("placeholder", $('#addressText').text());
         } else {
-            $("#addressInput").val(friendDeets.birthday);
+            $("#addressInput").val(friendDeets.address);
         }
         //birthdayInfo
         if(friendDeets.birthday == "MM/DD/YYYY" || friendDeets.birthday == '') {
