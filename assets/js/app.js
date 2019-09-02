@@ -577,35 +577,35 @@ $("#searchFriendsLink").on("click", function() { // you want to search through y
 $("#saveInfo").on("click", function() { // if you edited a friends' info, save it.
     if (editInfoBtn) { //if the edit button is clicked
         //phoneInfo
-        if(friendDeets.phone == "XXX-XXX-XXXX") {
-            $("#phoneInput").val("");
-            $("#phoneInput").attr("placeholder", phoneLog);
+        if(friendDeets.phone == "XXX-XXX-XXXX" || friendDeets.phone == '') {
+            // $("#phoneInput").val("");
+            $("#phoneInput").attr("placeholder", $("#phoneText").text());
         } else {
             $("#phoneInput").val(friendDeets.phone);
         }
         //emailInfo
-        if(friendDeets.email == "name@domain.com") {
+        if(friendDeets.email == "name@domain.com" || friendDeets.email == '') {
             $("#emailInput").val("");
-            $("#emailInput").attr("placeholder", emailLog);
+            $("#emailInput").attr("placeholder", $('#emailText').text());
         } else {
             $("#emailInput").val(friendDeets.email);
         }
         //addressInfo
-        if(friendDeets.address == "Street, City, State, Zip") {
+        if(friendDeets.address == "Street, City, State, Zip" || friendDeets.address == '') {
             $("#addressInput").val("");
-            $("#addressInput").attr("placeholder", addressLog);
+            $("#addressInput").attr("placeholder", $('#addressText').text());
         } else {
             $("#addressInput").val(friendDeets.birthday);
         }
         //birthdayInfo
-        if(friendDeets.birthday == "MM/DD/YYYY") {
+        if(friendDeets.birthday == "MM/DD/YYYY" || friendDeets.birthday == '') {
             $("#birthdayInput").val("");
-            $("#birthdayInput").attr("placeholder", birthdayLog);
+            $("#birthdayInput").attr("placeholder", $('#birthdayText').text());
         } else {
             $("#birthdayInput").val(friendDeets.birthday);
         }
         //facebookInfo 
-        if(friendDeets.facebook == "{{userID}}") {
+        if(friendDeets.facebook == "{{userID}}" || friendDeets.facebook == '') {
             $("#facebookInput").val("");
             $("#facebookInput").attr("placeholder", "{{userid}}");
         } else {
@@ -613,7 +613,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         }
         
         //instagram info
-        if(friendDeets.instagram == "{{userID}}") {
+        if(friendDeets.instagram == "{{userID}}" || friendDeets.instagram == '') {
             $("#instagramInput").val("");
             $("#instagramInput").attr("placeholder", "{{userid}}");
         } else {
@@ -625,8 +625,10 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
+
         // change edit btn text to save button text
         $(this).text("Save Info");
+        $('#backBtn').hide();
         //change btn state
         editInfoBtn = false;
     } else {
@@ -664,6 +666,8 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         updateFriendInfo();
         }
         savedInfo();
+        $('#backBtn').show();
+
     }
 });
 $("#createAccount").on("click", function() { //show the create accoubt page
