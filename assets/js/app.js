@@ -206,7 +206,8 @@ function signOut() {
         $('#friendsList').empty();
         $('#friendInfo').hide();
         $('#my-nav').removeClass('show');
-
+        $('#signInSubmit').attr("disabled", true);
+        blockSignIn = true;
     }).catch(function(error) {
         // An error happened.
         console.log("error");
@@ -835,6 +836,7 @@ $(document).ready(function() {
     
     $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword").hide();
     addFriendScreen = true;
+    $('#signInSubmit').attr("disabled", true);
     
 });
 firebaseDB;
