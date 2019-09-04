@@ -104,7 +104,8 @@ function horoscopeFun() {
             }
             break;
     }
-    var hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/"+ sunSign.toLowerCase() + "/today";
+    // var hScopeApi = "http://sandipbgt.com/theastrologer/api/horoscope/"+ sunSign.toLowerCase() + "/today";
+    var hScopeApi = "http://horoscope-api.herokuapp.com/horoscope/today/"+ sunSign.toLowerCase();
     jQuery.support.cors = true;
 
     jQuery.ajaxPrefilter(function(options) {
@@ -113,7 +114,8 @@ function horoscopeFun() {
         }
     });
     $.get(hScopeApi).then(function(response) {
-        xyo = JSON.parse(response);
+        // xyo = JSON.parse(response);
+        xyo = response;
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
         $("#horoscope").show();
@@ -182,6 +184,7 @@ var signingIn = true;
 var searchFriendScreen = false;
 var viewFriendScreen = false;
 var blockSignIn = true;
+var blockSignInUN = true;
 //Integers
 var friendNumber = 0;
 var friendNumberInList = 0;
@@ -433,7 +436,7 @@ function searchFriendInDB() {
 }
 // Submit signin info
 function submitSignInInfo() {
-    if(blockSignIn) {
+    if(blockSignIn || blockSignInUN) {
         return false;
     } else {
 
@@ -781,11 +784,11 @@ $("#userNameField").on("change", function() {
     if (!signingIn) {
         if (userNameInArray === -1) {
             $("#yourUserName").text('Username is Available!');
-            blockSignIn = false;
+            blockSignInUN = false;
 
         } else {
             $("#yourUserName").text('Username is Not Available!');
-            blockSignIn = true;
+            blockSignInUN = true;
 
         }
         blankFieldCheck();
@@ -794,10 +797,7 @@ $("#userNameField").on("change", function() {
         if($('#userNameField').val() === '' || 
         $("#signInInputPassword1").val() === '') {
             $('#signInSubmit').attr("disabled", true);
-            blockSignIn = true;
-        } else {
-            $('#signInSubmit').attr("disabled", false);
-            blockSignIn = false;
+            blockSignInUN = false;
 
         }
     }
