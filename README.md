@@ -53,8 +53,6 @@ Information You Get
 7. Important Life Events
 
 Tasks/Priorities
-- Favorites
-- To Do:
   - Fix for loop being called everytime the username field changes
 
   - Do not add a new account if email address exists
