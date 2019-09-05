@@ -239,15 +239,24 @@ function initMap() {
     coords = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
     
     var mapOptions = {
-        zoom: 15,
+        zoom: 12,
         center: new google.maps.LatLng(parseFloat(lat), parseFloat(long))
     };
     map = new google.maps.Map(document.getElementById('map'),
     mapOptions);
+
+    var marker = new google.maps.Marker({
+        position: coords,
+        map: map,
+        title: 'Hello World!'
+    });
+
     
+  }
+function HH() {
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(
-        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 500, type: ['bar']},
+        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 500, type: ['restaurant']},
         function(results, status, pagination) {
           if (status !== 'OK') return;
   
@@ -257,7 +266,7 @@ function initMap() {
             pagination.nextPage();
           };
         });
-  }
+}
   
   function createMarkers(places) {
       
@@ -285,11 +294,13 @@ function initMap() {
 
       var placeContent1 = (place.rating) ? "rating: " + place.rating : "";
       var placeContent2 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
-      
-      li.textContent = place.name + "(" + placeContent1 + placeContent2 + ")";
-      placesList.appendChild(li);
-      console.log(place);
-      bounds.extend(place.geometry.location);
+      if (!place.rating && !place.price_level) {
+
+      } else {
+          li.textContent = place.name + " (" + placeContent1 + placeContent2 + ")";
+          placesList.appendChild(li);
+        bounds.extend(place.geometry.location);
+      }
     }
     map.fitBounds(bounds);
   }
@@ -652,7 +663,9 @@ function backBtnLogic() {
 $("#addressMoreLink").on("click", function() {
     $("#email, #birthday, #address, #phone, #facebook, #instagram").hide();
     $("#addressMore").show();
-    $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
+    document.getElementById("map").style.display = "block";
+    initMap();
+    // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
 });
 // Trigger Add Friend Function on button click
 $("#addFriendBtn").on("click", function(e) {
@@ -826,8 +839,7 @@ $("#backBtn").on("click", function() {
    backBtnLogic();
 });
 $('#mapPlaceHH').on("click", function() {
-    document.getElementById("map").style.display = "block";
-    initMap();
+   HH(); 
 });
 $(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
     $('.friendItem').removeClass("active");
