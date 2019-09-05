@@ -155,6 +155,7 @@
                             <!-- Address Info -->
                             <div id="address">
                                 <p id="addressInfo">Address: <span id="addressText"></span></p>
+                                <a id="addressMoreLink" href="#">View This Location</a>
                                 <form class="form-inline" id="addressForm">
                                     <div class="form-group">
                                         <label for="addressInput">Address:</label>
@@ -162,6 +163,11 @@
                                         
                                     </div>
                                 </form>
+                            </div>
+                            <div id="addressMore">
+                                <iframe width="320" height="280" frameborder="0" style="border:0" src="" id="mapPlaceIFrame" allowfullscreen></iframe>
+                                <a href="#" id="mapPlaceDirections">Get Directions</a>
+                                <a href="#" id="mapPlaceHH">Happy Hour Near Here</a>
                             </div>
                             <!-- Horoscope Info-->
                             <div id='horoscope'>
@@ -224,6 +230,8 @@
 <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE&libraries=places"></script>
 
 <script src="assets/js/app.js"></script>
 <!-- <script src="assets/js/getHoroscopes.js"></script> -->
