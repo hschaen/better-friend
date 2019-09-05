@@ -230,7 +230,7 @@ function initMap() {
     coords = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
     
     var mapOptions = {
-        zoom: 12,
+        zoom: 10,
         center: new google.maps.LatLng(parseFloat(lat), parseFloat(long))
     };
     map = new google.maps.Map(document.getElementById('map'),
@@ -244,13 +244,12 @@ function initMap() {
     });
     marker.addListener('click', function() {
         infowindow.open(map, marker);
-      });
-
-  }
+    });
+}
 function HH() {
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(
-        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 500, type: ['restaurant']},
+        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 1000, type: ['restaurant']},
         function(results, status, pagination) {
           if (status !== 'OK') return;
   
