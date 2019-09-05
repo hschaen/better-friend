@@ -162,8 +162,6 @@ var userNameEmail = '';
 var mapURL = '';
 var mapAddress = '';
 var mapKey = '';
-var long = '';
-var lat = '';
 var place_id = '';
 //Arrays
 var friendArray = [];
@@ -198,6 +196,15 @@ var friendCount = 1;
 var today = 0;
 var userNameInArray = 0;
 var yyyy = 0;
+var long = 0;
+var lat = 0;
+
+var map;
+var service;
+var infowindow;
+var coords;
+var locAy;
+var priceLevel;
 
 // Convert address to lat/long coords
 function getMapCoords() {
@@ -209,11 +216,91 @@ function getMapCoords() {
         url: mapURL,
         method: 'GET'
     }).then(function(response) {
-        long = response.results[0].geometry.location.lat;
-        lat = response.results[0].geometry.location.lng;
+        long = response.results[0].geometry.location.lng;
+        lat = response.results[0].geometry.location.lat;
         place_id = response.results[0].place_id;
+        locAy = response.results[0].geometry.location;
+        console.log(long);
+        console.log(lat);
+        console.log(place_id);
     });
+}
+// function HH() {
+//     setTimeout(function() {
+//     console.log("here we go");
+//     map = initMap();
+//     lat = lat;
+//     long = long;
+//     console.log(lat + " " + long);
+// },500);
+// }
+function initMap() {
     
+    coords = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
+    
+    var mapOptions = {
+        zoom: 15,
+        center: new google.maps.LatLng(parseFloat(lat), parseFloat(long))
+    };
+    map = new google.maps.Map(document.getElementById('map'),
+    mapOptions);
+    
+    service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(
+        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 500, type: ['bar']},
+        function(results, status, pagination) {
+          if (status !== 'OK') return;
+  
+          createMarkers(results);
+          moreButton.disabled = !pagination.hasNextPage;
+          getNextPage = pagination.hasNextPage && function() {
+            pagination.nextPage();
+          };
+        });
+  }
+  
+  function createMarkers(places) {
+      
+    var bounds = new google.maps.LatLngBounds();
+    var placesList = document.getElementById('places');
+  
+    for (var i = 0, place; place = places[i]; i++) {
+        
+      var image = {
+        url: place.icon,
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+  
+      var marker = new google.maps.Marker({
+        map: map,
+        icon: image,
+        title: place.name,
+        position: place.geometry.location
+      });
+  
+      var li = document.createElement('li');
+
+      var placeContent1 = (place.rating) ? "rating: " + place.rating : "";
+      var placeContent2 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
+      
+      li.textContent = place.name + "(" + placeContent1 + placeContent2 + ")";
+      placesList.appendChild(li);
+      console.log(place);
+      bounds.extend(place.geometry.location);
+    }
+    map.fitBounds(bounds);
+  }
+function callback(results, status) {
+    console.log("calledback");
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      var place = results[i];
+      createMarker(results[i]);
+    }
+  }
 }
 // Sign Out Function
 function signOut() {
@@ -738,7 +825,10 @@ $("#signOut").on("click", function() {
 $("#backBtn").on("click", function() {
    backBtnLogic();
 });
-
+$('#mapPlaceHH').on("click", function() {
+    document.getElementById("map").style.display = "block";
+    initMap();
+});
 $(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
     $('.friendItem').removeClass("active");
     $(this).parent().addClass("active");
