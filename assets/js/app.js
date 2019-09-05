@@ -209,7 +209,15 @@ var priceLevel;
 
 // Convert address to lat/long coords
 function getMapCoords() {
-    if (!hasCoords) {
+    // if(sv[userName].friend[friendDeets.friendNameIs].longtitude && sv[userName].friend[friendDeets.friendNameIs].latitude) {
+    //     if(sv[userName].friend[friendDeets.friendNameIs].latitude !== '' && sv[userName].friend[friendDeets.friendNameIs].longitude !== '' ) {
+    //         console.log('hasCoords');
+    //         hasCoords = true;
+    //     }
+    // }
+    // if (!hasCoords) {
+    //     console.log('No hasCoords');
+
         mapKey = "AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE";
         mapAddress = friendDeets.address;
         mapURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + mapAddress + "&key=" + mapKey;
@@ -227,8 +235,10 @@ function getMapCoords() {
             });
             
         });
-    }
-    hasCoords = true;
+    //     hasCoords = true;
+    //     console.log('now hasCoords');
+
+    // }
 }
 function initMap() {
     lat = sv[userName].friend[friendDeets.friendNameIs].latitude;
@@ -311,6 +321,16 @@ function callback(results, status) {
       createMarker(results[i]);
     }
   }
+}
+function viewFriendsLink() {
+    $("#my-nav li, .friendItem").removeClass("active");
+    $('#viewFriendsLink').parent().addClass("active");
+    $("#pageTitle").text("View Friends");
+    $("#listOfFriends").show();
+    $("#friendInfo, #backBtn, #searchFriends, #addFriends").hide();
+    addFriendScreen = false;
+    viewFriendScreen = true;
+    searchFriendScreen = false;
 }
 // Sign Out Function
 function signOut() {
@@ -631,13 +651,12 @@ function reloadApp() {
     searchFriendScreen = false;
 }
 function savedInfo() {
-    $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm").hide();
-    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #hScopeLink").show();
+    $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm, #friendInfo").hide();
+    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #hScopeLink, #addressMoreLink, #listOfFriends").show();
     $(this).text("Saved");
     setTimeout(function() {
         $('#saveInfo').text("Edit Info");
     }, 500); 
-        
     $("#friendsList li").removeClass("disabled");
     editInfoBtn = true;
 }
@@ -660,14 +679,14 @@ function backBtnLogic() {
     }
 }
 $("#addressMoreLink").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram").hide();
+    $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").hide();
     $("#addressMore").show();
     document.getElementById("map").style.display = "block";
     initMap();
     // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
 });
 $("#addressBack").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram").show();
+    $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").show();
     $("#addressMore").hide();
     $("#places").empty();
     document.getElementById("map").style.display = "none";
@@ -702,17 +721,7 @@ $("#addFriendsLink").on("click", function() { // you want to see the add friends
     savedInfo();
 });
 $("#viewFriendsLink").on("click", function() { // you want to just view your friends list
-    $("#addFriends").hide();
-    $("#listOfFriends").show();
-    $("#my-nav li").removeClass("active");
-    $(this).parent().addClass("active");
-    $(".friendItem").removeClass("active");
-    $("#pageTitle").text("View Friends");
-    $("#friendInfo").hide();
-    $("#searchFriends").hide();
-    addFriendScreen = false;
-    viewFriendScreen = true;
-    searchFriendScreen = false;
+    viewFriendsLink();
     savedInfo();
 
 });
@@ -777,7 +786,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         }
         // layout adjustments on button click
         $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm").show()
-        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink").hide();
+        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink, #addressMoreLink").hide();
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -822,8 +831,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         updateFriendInfo();
         }
         savedInfo();
-        $('#backBtn').show();
-
+        viewFriendsLink();
     }
 });
 $("#createAccount").on("click", function() { //show the create accoubt page
