@@ -225,15 +225,6 @@ function getMapCoords() {
         console.log(place_id);
     });
 }
-// function HH() {
-//     setTimeout(function() {
-//     console.log("here we go");
-//     map = initMap();
-//     lat = lat;
-//     long = long;
-//     console.log(lat + " " + long);
-// },500);
-// }
 function initMap() {
     
     coords = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
@@ -244,14 +235,17 @@ function initMap() {
     };
     map = new google.maps.Map(document.getElementById('map'),
     mapOptions);
-
+    var infowindow = new google.maps.InfoWindow({
+        content: $("#friendCardName").text() + "'s House"
+      });
     var marker = new google.maps.Marker({
         position: coords,
-        map: map,
-        title: 'Hello World!'
+        map: map
     });
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+      });
 
-    
   }
 function HH() {
     service = new google.maps.places.PlacesService(map);
@@ -261,10 +255,10 @@ function HH() {
           if (status !== 'OK') return;
   
           createMarkers(results);
-          moreButton.disabled = !pagination.hasNextPage;
-          getNextPage = pagination.hasNextPage && function() {
-            pagination.nextPage();
-          };
+        //   moreButton.disabled = !pagination.hasNextPage;
+        //   getNextPage = pagination.hasNextPage && function() {
+        //     pagination.nextPage();
+        //   };
         });
 }
   
@@ -666,6 +660,12 @@ $("#addressMoreLink").on("click", function() {
     document.getElementById("map").style.display = "block";
     initMap();
     // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
+});
+$("#addressBack").on("click", function() {
+    $("#email, #birthday, #address, #phone, #facebook, #instagram").show();
+    $("#addressMore").hide();
+    $("#places").empty();
+    document.getElementById("map").style.display = "none";
 });
 // Trigger Add Friend Function on button click
 $("#addFriendBtn").on("click", function(e) {
