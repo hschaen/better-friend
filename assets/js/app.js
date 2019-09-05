@@ -159,6 +159,11 @@ var userID = '';
 var friendsBday = '';
 var userEmail = '';
 var userNameEmail = '';
+var mapURL = '';
+var mapAddress = '';
+var mapKey = '';
+var long = '';
+var lat = '';
 //Arrays
 var friendArray = [];
 var friendsArray = [];
@@ -193,6 +198,21 @@ var today = 0;
 var userNameInArray = 0;
 var yyyy = 0;
 
+// Convert address to lat/long coords
+function getMapCoords() {
+    mapKey = "AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE";
+    // mapAddress = friendDeets.address;
+    mapAddress = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
+    mapURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + mapAddress + "&key=" + mapKey;
+    $.ajax({
+        url: mapURL,
+        method: 'GET'
+    }).then(function(response) {
+        long = response.results[0].geometry.location.lat;
+        lat = response.results[0].geometry.location.lng;
+    });
+    
+}
 // Sign Out Function
 function signOut() {
     firebase.auth().signOut().then(function() {
@@ -225,8 +245,6 @@ function yourBirthday() {
     yyyy = today.getFullYear();
     today = mm + '/' + dd;
     isBirthday = birthdayLog.substring(0,5);
-    // get all friends from firebase
-    console.log(getFriends);
     // get all friends birthdays
     if (today === isBirthday) {
         if(bdayAlert === true) {
@@ -723,6 +741,7 @@ $(document).on("click", ".friendLink", function() { //what happens when you clic
     $("#pageTitle").text("Friend Info");
     loadFriendInfo();
     showFriendInfo();
+    getMapCoords();
 });
 $("#viewHScope").on("click", function() {
     horoscopeFun();
@@ -840,30 +859,3 @@ $(document).ready(function() {
     
 });
 firebaseDB;
-
-  //To Do:
-  // Fix for loop being called everytime the username field changes
-  // 
-  // Do not add a new account if email address exists
-  // Autocomplete Search Friends
-  // store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
-
-  // update each current friend in list with a friendnumber whenever the friend list populates
-  // also update data attribute on parent li to match friendnumber
-  // birthday alert should be a flag on each friend
-  // create notifications panel
-  // edit button reveals blank placeholder text on edit for some users
-  // format phone number on edit friend form
-  // validate email on edit friend form
-  // need to replace horoscope URL
-  // back link needs to be disabled while editing a friend. Otherwise, disable editing when back link is clicked.
-  // reload all friend info when info is saved (update snapshot)
-  // friend/horoscope back button needs to hide horoscope div
-  // show upcoming birthdays
-  // show list of bdays
-  // show address on map
-  // get directions to address
-  // happy hour specials / other events around friends address
-  // turn phone # into a link
-  // add loading text when horoscope is clicked
-  // do more stuff...
