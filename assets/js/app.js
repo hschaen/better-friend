@@ -189,6 +189,7 @@ var searchFriendScreen = false;
 var viewFriendScreen = false;
 var blockSignIn = true;
 var blockSignInUN = true;
+var hasCoords = false;
 //Integers
 var friendNumber = 0;
 var friendNumberInList = 0;
@@ -208,25 +209,30 @@ var priceLevel;
 
 // Convert address to lat/long coords
 function getMapCoords() {
-    mapKey = "AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE";
-    mapAddress = friendDeets.address;
-    // mapAddress = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
-    mapURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + mapAddress + "&key=" + mapKey;
-    $.ajax({
-        url: mapURL,
-        method: 'GET'
-    }).then(function(response) {
-        long = response.results[0].geometry.location.lng;
-        lat = response.results[0].geometry.location.lat;
-        place_id = response.results[0].place_id;
-        locAy = response.results[0].geometry.location;
-        console.log(long);
-        console.log(lat);
-        console.log(place_id);
-    });
+    if (!hasCoords) {
+        mapKey = "AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE";
+        mapAddress = friendDeets.address;
+        mapURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + mapAddress + "&key=" + mapKey;
+        $.ajax({
+            url: mapURL,
+            method: 'GET'
+        }).then(function(response) {
+            long = response.results[0].geometry.location.lng;
+            lat = response.results[0].geometry.location.lat;
+            // place_id = response.results[0].place_id;
+            // locAy = response.results[0].geometry.location;
+            ref.child(userName + "/friend/" + friendDeets.friendNameIs).update({
+                latitude: lat,
+                longitude: long
+            });
+            
+        });
+    }
+    hasCoords = true;
 }
 function initMap() {
-    
+    lat = sv[userName].friend[friendDeets.friendNameIs].latitude;
+    long = sv[userName].friend[friendDeets.friendNameIs].longitude;
     coords = new google.maps.LatLng(parseFloat(lat), parseFloat(long));
     
     var mapOptions = {
