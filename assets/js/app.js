@@ -164,6 +164,7 @@ var mapAddress = '';
 var mapKey = '';
 var long = '';
 var lat = '';
+var place_id = '';
 //Arrays
 var friendArray = [];
 var friendsArray = [];
@@ -201,8 +202,8 @@ var yyyy = 0;
 // Convert address to lat/long coords
 function getMapCoords() {
     mapKey = "AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE";
-    // mapAddress = friendDeets.address;
-    mapAddress = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
+    mapAddress = friendDeets.address;
+    // mapAddress = "1600+Amphitheatre+Parkway,+Mountain+View,+CA";
     mapURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + mapAddress + "&key=" + mapKey;
     $.ajax({
         url: mapURL,
@@ -210,6 +211,7 @@ function getMapCoords() {
     }).then(function(response) {
         long = response.results[0].geometry.location.lat;
         lat = response.results[0].geometry.location.lng;
+        place_id = response.results[0].place_id;
     });
     
 }
@@ -560,6 +562,11 @@ function backBtnLogic() {
         $("#pageTitle").text("View Friends");
     }
 }
+$("#addressMoreLink").on("click", function() {
+    $("#email, #birthday, #address, #phone, #facebook, #instagram").hide();
+    $("#addressMore").show();
+    $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
+});
 // Trigger Add Friend Function on button click
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
@@ -853,7 +860,7 @@ $("#signInInputEmail1").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword").hide();
+    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword").hide();
     addFriendScreen = true;
     $('#signInSubmit').attr("disabled", true);
     
