@@ -119,7 +119,7 @@ function horoscopeFun() {
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
         $("#horoscope").show();
-        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").hide();
+        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #backBtn").hide();
         $('#saveInfo').attr("disabled", true);
     });
 }
@@ -176,7 +176,7 @@ var friendInfoArray = [];
 var getFriends = [];
 var friendListItems = [];
 var svEmails = [];
-
+var placePhone = [];
 //Objects
 var sv1 = {};
 //Booleans
@@ -199,6 +199,8 @@ var userNameInArray = 0;
 var yyyy = 0;
 var long = 0;
 var lat = 0;
+var countPlaces = 0;
+
 
 var map;
 var service;
@@ -206,6 +208,11 @@ var infowindow;
 var coords;
 var locAy;
 var priceLevel;
+var placeDetail;
+var placeContent1 = '';
+var placeContent2 = '';
+var placeContent3 = '';
+var formatted_phone_number = '';
 
 // Convert address to lat/long coords
 function getMapCoords() {
@@ -274,45 +281,59 @@ function HH() {
         //   getNextPage = pagination.hasNextPage && function() {
         //     pagination.nextPage();
         //   };
+        
         });
+    
+
 }
   
   function createMarkers(places) {
-      
+      countPlaces = 0;
     var bounds = new google.maps.LatLngBounds();
     var placesList = document.getElementById('places');
   
     for (var i = 0, place; place = places[i]; i++) {
+       
+        var request = {
+            placeId: place.place_id,
+            fields: ['name', 'rating', 'formatted_phone_number', 'url', 'price_level', 'geometry']
+        };
+        console.log(request);
+        service = new google.maps.places.PlacesService(map);
+        service.getDetails(request, callback2);
         
-      var image = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
+        
+        var image = {
+            url: place.icon,
+            size: new google.maps.Size(71, 71),
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+        };
   
-      var marker = new google.maps.Marker({
-        map: map,
-        icon: image,
-        title: place.name,
-        position: place.geometry.location
-      });
-  
-      var li = document.createElement('li');
+        var marker = new google.maps.Marker({
+            map: map,
+            icon: image,
+            title: place.name,
+            position: place.geometry.location
+        });
+        console.log(place); 
+        var li = document.createElement('li');
+        placeContent1 = "phone: <span class='placePhone"+[i]+"'></span>";
+        placeContent2 = (place.rating) ? " rating: " + place.rating : "";
+        placeContent3 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
+        
+        if (!place.rating && !place.price_level) {
 
-      var placeContent1 = (place.rating) ? "rating: " + place.rating : "";
-      var placeContent2 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
-      if (!place.rating && !place.price_level) {
-
-      } else {
-          li.textContent = place.name + " (" + placeContent1 + placeContent2 + ")";
-          placesList.appendChild(li);
-        bounds.extend(place.geometry.location);
-      }
+        } else {
+            li.innerHTML = place.name + " (" + placeContent1 + placeContent2 + placeContent3 + ")";
+            placesList.appendChild(li);
+            bounds.extend(place.geometry.location);
+        }
     }
     map.fitBounds(bounds);
-  }
+}
+// Creates the markers on the map
 function callback(results, status) {
     console.log("calledback");
   if (status == google.maps.places.PlacesServiceStatus.OK) {
@@ -321,6 +342,20 @@ function callback(results, status) {
       createMarker(results[i]);
     }
   }
+}
+function callback2(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+
+        // for(var j = 0; j < $('#places li'); j++) {
+            $('.placePhone' + countPlaces).text(results.formatted_phone_number);
+        // }
+        countPlaces++;
+        
+    
+
+        
+    }
+
 }
 function viewFriendsLink() {
     $("#my-nav li, .friendItem").removeClass("active");
@@ -870,7 +905,7 @@ $("#viewHScope").on("click", function() {
 });
 $("#hScopeBack").on("click", function() {
     $("#horoscope").hide();
-    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram").show();
+    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #backBtn").show();
     $('#saveInfo').attr("disabled", false);
 
     
