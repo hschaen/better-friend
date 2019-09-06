@@ -177,6 +177,7 @@ var getFriends = [];
 var friendListItems = [];
 var svEmails = [];
 var placePhone = [];
+var array2 = [];
 //Objects
 var sv1 = {};
 //Booleans
@@ -190,6 +191,7 @@ var viewFriendScreen = false;
 var blockSignIn = true;
 var blockSignInUN = true;
 var hasCoords = false;
+var placeDeets = false;
 //Integers
 var friendNumber = 0;
 var friendNumberInList = 0;
@@ -622,7 +624,10 @@ function submitSignInInfo() {
                 return false;
             }
             if(password != '') {
-                if(array1.includes(userName)) {
+                for (var i = 0; i < array1.length; i++) {
+                    array2.push(array1[i].toLowerCase());
+                }
+                if(array2.includes(userName.toLowerCase())) {
                     if(password == userNamePW) {
                         $('#app-container').show();
                         $('#loading-screen').hide();
@@ -722,10 +727,16 @@ $("#addressMoreLink").on("click", function() {
 });
 //Click the back button on the address window
 $("#addressBack").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").show();
-    $("#addressMore").hide();
-    $("#places").empty();
-    document.getElementById("map").style.display = "none";
+    if (placeDeets) {
+        $("#placeInfo").hide();
+        $("#places").show();
+        placeDeets = false;
+    } else {
+        $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").show();
+        $("#addressMore").hide();
+        $("#places").empty();
+        document.getElementById("map").style.display = "none";
+    }
 });
 //
 $(document).on("click", ".placeNearBy", function() {
@@ -734,6 +745,7 @@ $(document).on("click", ".placeNearBy", function() {
     $('.placeNearBy').removeClass("active");
     $(this).addClass("active");
     getLocDeets();
+    placeDeets = true;
 });
 // Trigger Add Friend Function on button click
 $("#addFriendBtn").on("click", function(e) {

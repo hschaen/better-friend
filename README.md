@@ -54,34 +54,30 @@ Information You Get
 
 Tasks/Priorities
   - Fix for loop being called everytime the username field changes
-
-  - Do not add a new account if email address exists
+  - store lat/long data in firebase each time address is updated
   - Autocomplete Search Friends
   - store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
   - search bug - whoever is found shows data for last selected friend
 
-  - update each current friend in list with a friendnumber whenever the friend list populates
-  - also update data attribute on parent li to match friendnumber
   - birthday alert should be a flag on each friend
   - create notifications panel
   - edit button reveals blank placeholder text on edit for some users
   - format phone number on edit friend form
   - validate email on edit friend form
-  - need to replace horoscope URL
-  - back link needs to be disabled while editing a friend. Otherwise, disable editing when back link is clicked.
+
   - reload all friend info when info is saved (update snapshot)
   - friend/horoscope back button needs to hide horoscope div
   - show upcoming birthdays
   - show list of bdays
-  - show address on map
+
   - get directions to address
   - happy hour specials / other events around friends address
   - turn phone # into a link
   - add loading text when horoscope is clicked
   - anniversaries
   - different squads / levels of friends
-  - crm to connectt o outlook
-  - last time yopu hung out
+  - crm to connect to outlook
+  - last time you hung out
   - what events you attend
   - reminder for x# of days
   - friend resource management
