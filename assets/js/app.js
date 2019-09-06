@@ -725,7 +725,7 @@ function backBtnLogic() {
     }
 }
 $("#addressMoreLink").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes #backBtn").hide();
+    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #backBtn").hide();
     $("#addressMore").show();
     document.getElementById("map").style.display = "block";
     initMap();
@@ -738,7 +738,7 @@ $("#addressBack").on("click", function() {
         $("#places").show();
         placeDeets = false;
     } else {
-        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes #backBtn").show();
+        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #backBtn").show();
         $("#addressMore").hide();
         $("#places").empty();
         document.getElementById("map").style.display = "none";

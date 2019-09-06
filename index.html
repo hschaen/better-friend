@@ -128,49 +128,100 @@
                 <div class="card">
                     <h5 class="card-header"><span class="float-left mt-2" id="friendCardName">John Doe</span><button id="saveInfo" class="btn btn-primary float-right editFriendInfo">Edit Info</button></h5>
                     <div class="card-body">
-                        <h5 class="card-title">Info</h5>
+                        <h5 class="card-title">Info | <a href="#" id="friendEvents">Events</a> | <a href="#" id="friendFeed">Feed</a> | <a href="#" id="friendIdeas">Ideas</a></h5>
                         <div class="card-text">
-                            <!-- Phone Info -->
-                            <div id="phone">
-                                <p id="phoneInfo">Phone #: <span id="phoneText">(XXX) XXX-XXXX</span></p>
-                                <form class="form-inline" id="phoneForm">
-                                    <div class="form-group">
-                                        <label for="phoneInput">Phone:</label>
-                                        <input id="phoneInput" class="form-control" type="phone" name="phoneInput">
-                                        
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- Email Info -->
-                            <div id="email">
-                                    <p id="emailInfo">Email: <span id="emailText">name@domain.com</span></p>
-                                    <form class="form-inline" id="emailForm">
+                            <div id="friendInfoData">
+                                <!-- Phone Info -->
+                                <div id="phone">
+                                    <p id="phoneInfo">Phone #: <span id="phoneText">(XXX) XXX-XXXX</span></p>
+                                    <form class="form-inline" id="phoneForm">
                                         <div class="form-group">
-                                            <label for="emailInput">Email:</label>
-                                            <input id="emailInput" class="form-control" type="email" name="emailInput">
+                                            <label for="phoneInput">Phone:</label>
+                                            <input id="phoneInput" class="form-control" type="phone" name="phoneInput">
                                             
                                         </div>
                                     </form>
                                 </div>
-                            <!-- Address Info -->
-                            <div id="address">
-                                <p id="addressInfo">Address: <span id="addressText"></span><br/>
-                                    <small><a id="addressMoreLink" href="#">View This Location</a></small></p>
-                                
-                                <form class="form-inline" id="addressForm">
-                                    <div class="form-group">
-                                        <label for="addressInput">Address:</label>
-                                        <input id="addressInput" class="form-control" type="text" name="addressInput">
-                                        
+                                <!-- Email Info -->
+                                <div id="email">
+                                        <p id="emailInfo">Email: <span id="emailText">name@domain.com</span></p>
+                                        <form class="form-inline" id="emailForm">
+                                            <div class="form-group">
+                                                <label for="emailInput">Email:</label>
+                                                <input id="emailInput" class="form-control" type="email" name="emailInput">
+                                                
+                                            </div>
+                                        </form>
                                     </div>
-                                </form>
+                                <!-- Address Info -->
+                                <div id="address">
+                                    <p id="addressInfo">Address: <span id="addressText"></span><br/>
+                                        <small><a id="addressMoreLink" href="#">View This Location</a></small></p>
+                                    
+                                    <form class="form-inline" id="addressForm">
+                                        <div class="form-group">
+                                            <label for="addressInput">Address:</label>
+                                            <input id="addressInput" class="form-control" type="text" name="addressInput">
+                                            
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <!-- Birthday Info -->
+                                <div id="birthday">
+                                    <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span><br/>
+                                        <small id="hScopeLink"><a href="#" id="viewHScope">View Horoscope</a></small>                                
+                                    </p>
+                                    <form class="form-inline" id="birthdayForm">
+                                        <div class="form-group">
+                                            <label for="birthdayInput">Birthday:</label>
+                                            <input id="birthdayInput" class="form-control" type="text" name="birthdayInput">
+                                            
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Facebook Info -->
+                                <div id="facebook">
+                                    <p id="facebookInfo">Facebook: https://fb.me/<span id="facebookText">{{facebook ID}}</span></p>
+                                    <form class="form-inline" id="facebookForm">
+                                        <div class="form-group">
+                                            <label for="facebookInput">Facebook ID:</label>
+                                            <input id="facebookInput" class="form-control" type="text" name="facebookInput">
+                                            
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Instagram Info -->
+                                <div id="instagram">
+                                    <p id="instagramInfo">Instagram: https://instagram.com/<span id="instagramText">{{instagram ID}}</span></p>
+                                    <form class="form-inline" id="instagramForm">
+                                        <div class="form-group">
+                                            <label for="instagramInput">Instagram ID:</label>
+                                            <input id="instagramInput" class="form-control" type="text" name="instagramInput">
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Notes -->
+                                <div id="notes">
+                                    <div id="notesTextDiv">
+                                        <p>Notes: <span id="notesText"></span></p>
+                                    </div>
+                    
+                                    <form class="form-inline" id="notesForm">
+                                        <div class="form-group">
+                                            <label for="notesInput">Notes</label>
+                                            <textarea id="notesInput" class="form-control"" name="notesInput" cols="50" rows="4"></textarea>
+                                        </div>
+                                    </form>
+                                    
+                                </div> 
                             </div>
+                            <!-- Location Details-->
                             <div id="addressMore">
                                 <!-- <iframe width="320" height="280" frameborder="0" style="border:0" src="" id="mapPlaceIFrame" allowfullscreen></iframe> -->
                                 <a href="#" id="addressBack">&lt; back</a>
                                 <div id="map" style="width:100%; height:300px; display: none;"></div>
-                                <!-- <a href="#" id="mapPlaceDirections">Get Directions</a> -->
-                                <p>[<a href="#" id="mapPlaceHH">Restaurants</a>]</p>
+                                <p><a href="#" id="mapPlaceHH">Restaurants</a> | <a href="#" id="mapPlaceDirections">Directions</a></p>
                                 <div>
                                     <ul id="places">
                                         
@@ -207,54 +258,6 @@
                                 <!-- Sun Sign Header-->
                                 <h3 id="sunSign"></h3>
                                 <p id="hScopeText"></p>
-                            </div>
-                            <!-- Birthday Info -->
-                            <div id="birthday">
-                                <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span><br/>
-                                    <small id="hScopeLink"><a href="#" id="viewHScope">View Horoscope</a></small>                                
-                                </p>
-                                <form class="form-inline" id="birthdayForm">
-                                    <div class="form-group">
-                                        <label for="birthdayInput">Birthday:</label>
-                                        <input id="birthdayInput" class="form-control" type="text" name="birthdayInput">
-                                        
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- Facebook Info -->
-                            <div id="facebook">
-                                <p id="facebookInfo">Facebook: https://fb.me/<span id="facebookText">{{facebook ID}}</span></p>
-                                <form class="form-inline" id="facebookForm">
-                                    <div class="form-group">
-                                        <label for="facebookInput">Facebook ID:</label>
-                                        <input id="facebookInput" class="form-control" type="text" name="facebookInput">
-                                        
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- Instagram Info -->
-                            <div id="instagram">
-                                <p id="instagramInfo">Instagram: https://instagram.com/<span id="instagramText">{{instagram ID}}</span></p>
-                                <form class="form-inline" id="instagramForm">
-                                    <div class="form-group">
-                                        <label for="instagramInput">Instagram ID:</label>
-                                        <input id="instagramInput" class="form-control" type="text" name="instagramInput">
-                                    </div>
-                                </form>
-                            </div>
-                            <!-- Notes -->
-                            <div id="notes">
-                                <div id="notesTextDiv">
-                                    <p>Notes: <span id="notesText"></span></p>
-                                </div>
-                                <div id="notesFormDiv">
-                                    <form class="form-inline" id="notesForm">
-                                        <div class="form-group">
-                                            <label for="notesInput">Notes</label>
-                                            <textarea id="notesInput" class="form-control"" name="notesInput" cols="50" rows="4"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
                             </div>
                         </div>
                     </div>
