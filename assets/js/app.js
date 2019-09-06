@@ -214,6 +214,7 @@ var placeDetail;
 var placeContent1 = '';
 var placeContent2 = '';
 var placeContent3 = '';
+var friendInfoAddl = false;
 var formatted_phone_number = '';
 
 // Convert address to lat/long coords
