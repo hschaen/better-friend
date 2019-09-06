@@ -877,6 +877,9 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         // layout adjustments on button click
         $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm, form#notesForm, form#workNameForm").show()
         $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink, #addressMoreLink, #notesTextDiv, #workNameInfo").hide();
+ 
+l$(this).text("Show more info");
+friendInfoAddl = false;
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
