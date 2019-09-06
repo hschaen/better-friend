@@ -119,7 +119,7 @@ function horoscopeFun() {
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
         $("#horoscope").show();
-        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #backBtn").hide();
+        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #backBtn").hide();
         $('#saveInfo').attr("disabled", true);
     });
 }
@@ -475,7 +475,8 @@ function updateFriendInfo() {
         address: addressText,
         birthday: birthdayText,
         facebook: facebookText,
-        instagram: instagramText
+        instagram: instagramText,
+        notes: notesText
     });
 }
 
@@ -490,7 +491,8 @@ function addNewFriendInfo() {
             address: "Street, City, State, Zip",
             birthday: "MM/DD/YYYY",
             facebook: "{{userID}}",
-            instagram: "{{userID}}"
+            instagram: "{{userID}}",
+            notes: ""
         });
         // Empty friend list so we can repopulate it with alphabetized list of friends
         $("#friendsList").empty();
@@ -509,6 +511,7 @@ function showFriendInfo() {
     instagramLog = friendDeets.instagram;
     nameLog = friendDeets.friendNameIs;
     birthdayLog = friendDeets.birthday;
+    notesLog = friendDeets.notes
     if (birthdayLog !== '') {
         $("#birthdayText").text(birthdayLog);
     }
@@ -527,7 +530,10 @@ function showFriendInfo() {
     if (emailLog !== '') {
         $("#emailText").text(emailLog);
     }
-    if (emailLog == '' && phoneLog == '' && addressLog == '' && facebookLog == '' && instagramLog == '' && birthdayLog == '') {
+    if (notesLog !== '') {
+        $("#notesText").text(notesLog);
+    }
+    if (emailLog == '' && phoneLog == '' && addressLog == '' && facebookLog == '' && instagramLog == '' && birthdayLog == '' && notesLog == '') {
         alert ("is Empty!");
     }     
     $("#friendCardName").text(nameLog);
@@ -578,7 +584,7 @@ function addFriendToDB() {
             showFriendsInList();
             $("#friendCardName").text(friendName);
             $("#listOfFriends").show();
-            $("#friendInfo").show();
+            // $("#friendInfo").show();
         } else {
             alert("You have the max number of friends (15). Try removing a friend before adding another.");
             return false;
@@ -624,10 +630,10 @@ function submitSignInInfo() {
                 return false;
             }
             if(password != '') {
-                for (var i = 0; i < array1.length; i++) {
-                    array2.push(array1[i].toLowerCase());
-                }
-                if(array2.includes(userName.toLowerCase())) {
+                // for (var i = 0; i < array1.length; i++) {
+                //     array2.push(array1[i].toLowerCase());
+                // }
+                if(array1.includes(userName)) {
                     if(password == userNamePW) {
                         $('#app-container').show();
                         $('#loading-screen').hide();
@@ -680,7 +686,7 @@ function blankFieldCheck() {
 }
 // Reload app
 function reloadApp() {
-    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope").hide();
+    $("#searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #notesForm").hide();
     $("#addFriends, #addFriend, #listOfFriends").show();
     $("#my-nav li").removeClass("active");
     $("#addFriendsLink").closest("li").addClass("active");
@@ -691,8 +697,8 @@ function reloadApp() {
     searchFriendScreen = false;
 }
 function savedInfo() {
-    $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm, #friendInfo").hide();
-    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #hScopeLink, #addressMoreLink, #listOfFriends").show();
+    $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm, #notesForm, #friendInfo").hide();
+    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #notesTextDiv, #hScopeLink, #addressMoreLink, #listOfFriends").show();
     $(this).text("Saved");
     setTimeout(function() {
         $('#saveInfo').text("Edit Info");
@@ -719,7 +725,7 @@ function backBtnLogic() {
     }
 }
 $("#addressMoreLink").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").hide();
+    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes #backBtn").hide();
     $("#addressMore").show();
     document.getElementById("map").style.display = "block";
     initMap();
@@ -732,7 +738,7 @@ $("#addressBack").on("click", function() {
         $("#places").show();
         placeDeets = false;
     } else {
-        $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").show();
+        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes #backBtn").show();
         $("#addressMore").hide();
         $("#places").empty();
         document.getElementById("map").style.display = "none";
@@ -840,9 +846,17 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         } else {
             $("#instagramInput").val(friendDeets.instagram);
         }
+        //Notes info
+        if(friendDeets.notes == "" || friendDeets.notes == " ") {
+            $("#notesInput").val("");
+            // $("#notesInput").attr("placeholder", "{{userid}}");
+        } else {
+            $("#notesInput").val(friendDeets.notes);
+        }
+
         // layout adjustments on button click
-        $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm").show()
-        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink, #addressMoreLink").hide();
+        $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm, form#notesForm").show()
+        $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink, #addressMoreLink, #notesTextDiv").hide();
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -861,6 +875,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         instagramText = $("#instagramInput").val();
         facebookText = $("#facebookInput").val();
         friendName = $('#friendCardName').val();
+        notesText = $('#notesInput').val();
         
         if (birthdayText !== '') {
             $("#birthdayText").text(birthdayText);
@@ -880,8 +895,11 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         if (emailText !== '') {
             $("#emailText").text(emailText);
         }
+        if (notesText !== '') {
+            $("#notesText").text(notesText);
+        }
         facebookInfo = facebookText;
-        if (emailText == '' && phoneText == '' && addressText == '' && facebookText == '' && instagramText == '' && birthdayText == '') {
+        if (emailText == '' && phoneText == '' && addressText == '' && facebookText == '' && instagramText == '' && birthdayText == '' && notesText == '') {
             alert("is Empty!"); 
         } else {
         updateFriendInfo();
@@ -926,7 +944,7 @@ $("#viewHScope").on("click", function() {
 });
 $("#hScopeBack").on("click", function() {
     $("#horoscope").hide();
-    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #backBtn").show();
+    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #backBtn").show();
     $('#saveInfo').attr("disabled", false);
 
     
@@ -1031,7 +1049,7 @@ $("#signInInputEmail1").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword").hide();
+    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, form#notesForm").hide();
     addFriendScreen = true;
     $('#signInSubmit').attr("disabled", true);
     

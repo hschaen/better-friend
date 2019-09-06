@@ -154,8 +154,9 @@
                                 </div>
                             <!-- Address Info -->
                             <div id="address">
-                                <p id="addressInfo">Address: <span id="addressText"></span></p>
-                                <a id="addressMoreLink" href="#">View This Location</a>
+                                <p id="addressInfo">Address: <span id="addressText"></span><br/>
+                                    <small><a id="addressMoreLink" href="#">View This Location</a></small></p>
+                                
                                 <form class="form-inline" id="addressForm">
                                     <div class="form-group">
                                         <label for="addressInput">Address:</label>
@@ -169,7 +170,7 @@
                                 <a href="#" id="addressBack">&lt; back</a>
                                 <div id="map" style="width:100%; height:300px; display: none;"></div>
                                 <!-- <a href="#" id="mapPlaceDirections">Get Directions</a> -->
-                                <a href="#" id="mapPlaceHH">Happy Hour Near Here</a>
+                                <p>[<a href="#" id="mapPlaceHH">Restaurants</a>]</p>
                                 <div>
                                     <ul id="places">
                                         
@@ -201,16 +202,17 @@
                                 </div>
                             </div>
                             <!-- Horoscope Info-->
-                            <div id='horoscope'>
-                                <p><a id='hScopeBack' href='#'>&lt; back</a></p>
+                            <div id="horoscope">
+                                <p><a id="hScopeBack" href="#">&lt; back</a></p>
                                 <!-- Sun Sign Header-->
                                 <h3 id="sunSign"></h3>
                                 <p id="hScopeText"></p>
                             </div>
                             <!-- Birthday Info -->
                             <div id="birthday">
-                                <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span></p>
-                                <p id="hScopeLink"><a href="#" id="viewHScope">View Horoscope</a></p>
+                                <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span><br/>
+                                    <small id="hScopeLink"><a href="#" id="viewHScope">View Horoscope</a></small>                                
+                                </p>
                                 <form class="form-inline" id="birthdayForm">
                                     <div class="form-group">
                                         <label for="birthdayInput">Birthday:</label>
@@ -239,6 +241,20 @@
                                         <input id="instagramInput" class="form-control" type="text" name="instagramInput">
                                     </div>
                                 </form>
+                            </div>
+                            <!-- Notes -->
+                            <div id="notes">
+                                <div id="notesTextDiv">
+                                    <p>Notes: <span id="notesText"></span></p>
+                                </div>
+                                <div id="notesFormDiv">
+                                    <form class="form-inline" id="notesForm">
+                                        <div class="form-group">
+                                            <label for="notesInput">Notes</label>
+                                            <textarea id="notesInput" class="form-control"" name="notesInput" cols="50" rows="4"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
