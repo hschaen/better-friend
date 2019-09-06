@@ -288,19 +288,12 @@ function HH() {
 }
   
   function createMarkers(places) {
-      countPlaces = 0;
+    //   countPlaces = 0;
     var bounds = new google.maps.LatLngBounds();
     var placesList = document.getElementById('places');
   
     for (var i = 0, place; place = places[i]; i++) {
        
-        var request = {
-            placeId: place.place_id,
-            fields: ['name', 'rating', 'formatted_phone_number', 'url', 'price_level', 'geometry']
-        };
-        console.log(request);
-        service = new google.maps.places.PlacesService(map);
-        service.getDetails(request, callback2);
         
         
         var image = {
@@ -319,17 +312,17 @@ function HH() {
         });
         console.log(place); 
         var li = document.createElement('li');
-        placeContent1 = "phone: <span class='placePhone"+[i]+"'></span>";
-        placeContent2 = (place.rating) ? " rating: " + place.rating : "";
-        placeContent3 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
+        // placeContent1 = "phone: <span class='placePhone"+[i]+"'></span>";
+        // placeContent2 = (place.rating) ? " rating: " + place.rating : "";
+        // placeContent3 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
         
-        if (!place.rating && !place.price_level) {
+        // if (!place.rating && !place.price_level) {
 
-        } else {
-            li.innerHTML = place.name + " (" + placeContent1 + placeContent2 + placeContent3 + ")";
+        // } else {
+            li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a>";
             placesList.appendChild(li);
             bounds.extend(place.geometry.location);
-        }
+        // }
     }
     map.fitBounds(bounds);
 }
@@ -343,19 +336,26 @@ function callback(results, status) {
     }
   }
 }
+function getLocDeets() {
+    var request = {
+        placeId: $(".placeNearBy.active").attr("data-placeid"),
+        fields: ['name', 'rating', 'formatted_phone_number', 'url', 'price_level', 'geometry', 'formatted_address', 'review']
+    };
+    service = new google.maps.places.PlacesService(map);
+    service.getDetails(request, callback2);
+}
 function callback2(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-
-        // for(var j = 0; j < $('#places li'); j++) {
-            $('.placePhone' + countPlaces).text(results.formatted_phone_number);
-        // }
-        countPlaces++;
-        
-    
-
-        
+        $('#placeNameText').text("name: " + results.name);
+        $('#placePriceText').text("price: " + results.price_level + "/5");
+        $('#placeRatingText').text("rating: " + results.rating);
+        $('#placeAddressText').text("address: " + results.formatted_address); //need to grab address from other api
+        $('#placePhoneText').text("phone: " + results.formatted_phone_number);
+        $('#placeURLText').text("url: " + results.url);
+        $('#placeReviewsText').text("reviews: " + results.reviews[0].text);
+            console.log(results);
+         
     }
-
 }
 function viewFriendsLink() {
     $("#my-nav li, .friendItem").removeClass("active");
@@ -720,11 +720,20 @@ $("#addressMoreLink").on("click", function() {
     initMap();
     // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
 });
+//Click the back button on the address window
 $("#addressBack").on("click", function() {
     $("#email, #birthday, #address, #phone, #facebook, #instagram, #backBtn").show();
     $("#addressMore").hide();
     $("#places").empty();
     document.getElementById("map").style.display = "none";
+});
+//
+$(document).on("click", ".placeNearBy", function() {
+    $("#places").hide();
+    $("#placeInfo").show();
+    $('.placeNearBy').removeClass("active");
+    $(this).addClass("active");
+    getLocDeets();
 });
 // Trigger Add Friend Function on button click
 $("#addFriendBtn").on("click", function(e) {
