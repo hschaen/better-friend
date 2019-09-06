@@ -918,7 +918,17 @@ $("#signInSubmit").on("click", function(event) { // handle what happens when you
     event.preventDefault();
     submitSignInInfo();
 });
-
+$("#moreFriendInfoLink").on("click", function() {
+if(friendInfoAddl) {
+$("#friendInfoAdditional").hide();
+$(this).text("Show more info");
+friendInfoAddl = false;
+} else {
+$("#friendInfoAdditional").show();
+$(this).text("Show less info");
+friendInfoAddl = true;
+}
+});
 $("#signOut").on("click", function() {
     signOut();
 });
@@ -1049,7 +1059,7 @@ $("#signInInputEmail1").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, form#notesForm").hide();
+    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm").hide();
     addFriendScreen = true;
     $('#signInSubmit').attr("disabled", true);
     
