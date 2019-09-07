@@ -221,7 +221,7 @@ function horoscopeFun() {
         $("#hScopeText").text(xyo.horoscope);
         $("#sunSign").text(sunSign);
         $("#horoscope").show();
-        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #backBtn").hide();
+        $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #backBtn, #moreFriendInfoLink, #viewHistoryLink ").hide();
         $('#saveInfo').attr("disabled", true);
     });
 }
@@ -725,7 +725,7 @@ function backBtnLogic() {
     }
 }
 $("#addressMoreLink").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #friendInfoAdditional, #backBtn").hide();
+    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
     $("#addressMore").show();
     document.getElementById("map").style.display = "block";
     initMap();
@@ -738,7 +738,7 @@ $("#addressBack").on("click", function() {
         $("#places").show();
         placeDeets = false;
     } else {
-        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn").show();
+        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
         $("#addressMore").hide();
         $("#places").empty();
         document.getElementById("map").style.display = "none";
@@ -989,7 +989,7 @@ $("#viewHScope").on("click", function() {
 });
 $("#hScopeBack").on("click", function() {
     $("#horoscope").hide();
-    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn").show();
+    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
     $('#saveInfo').attr("disabled", false);
 
     
