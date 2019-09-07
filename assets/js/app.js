@@ -793,7 +793,7 @@ $("#addFriendsLink").on("click", function() { // you want to see the add friends
     }
     $("#friendInfo, #searchFriends").hide();
     savedInfo();
-});
+}); 
 $("#viewFriendsLink").on("click", function() { // you want to just view your friends list
     viewFriendsLink();
     savedInfo();
@@ -878,8 +878,7 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm, form#notesForm, form#workNameForm").show()
         $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink, #addressMoreLink, #notesTextDiv, #workNameInfo").hide();
  
-l$(this).text("Show more info");
-friendInfoAddl = false;
+        
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -933,6 +932,8 @@ friendInfoAddl = false;
         }
         savedInfo();
         viewFriendsLink();
+        $("#moreFriendInfoLink").text("Show more info");
+        friendInfoAddl = false;
     }
 });
 $("#createAccount").on("click", function() { //show the create accoubt page
@@ -946,14 +947,14 @@ $("#signInSubmit").on("click", function(event) { // handle what happens when you
     submitSignInInfo();
 });
 $("#moreFriendInfoLink").on("click", function() {
-if(friendInfoAddl) {
-$("#friendInfoAdditional").hide();
-$(this).text("Show more info");
-friendInfoAddl = false;
-} else {
-$("#friendInfoAdditional").show();
-$(this).text("Show less info");
-friendInfoAddl = true;
+    if(friendInfoAddl) {
+        $("#friendInfoAdditional").hide();
+        $(this).text("Show more info");
+        friendInfoAddl = false;
+    } else {
+    $("#friendInfoAdditional, #workName, #workNameInfo").show();
+    $(this).text("Show less info");
+    friendInfoAddl = true;
 }
 });
 $("#signOut").on("click", function() {
