@@ -13,10 +13,109 @@ var firebaseDB = firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
 var ref = database.ref("/user-data");
 
-//horoscope api
+// Init global vars
+// Strings
+var numberInList = '';
+var friendName = '';
+var friendNameIs = '';
+var addFriendName = '';
+var newFriendListItem = '';
+var searchText = '';
+var dataFriendNumber = '';
+var friendContainer = '';
+var isBirthday = '';
+var birthdayText = '';
+var facebookText = '';
+var friendDeets = '';
+var facebookInfo = '';
+var birthdayLog = '';
+var facebookLog = '';
+var nameLog = '';
+var bd1 = '';
+var friendsNameText = '';
+var userKey = '';
+var dd = '';
+var mm = '';
+var x = '';
+var userNamePW = '';
+var friendInfoText = '';
+var userName = '';
+var password = '';
+var password2 = '';
+var sv = '';
+var childKey = '';
+var childData = '';
+var userID = '';
+var friendsBday = '';
+var userEmail = '';
+var userNameEmail = '';
+var mapURL = '';
+var mapAddress = '';
+var mapKey = '';
+var place_id = '';
+var placeContent1 = '';
+var placeContent2 = '';
+var placeContent3 = '';
+var workName = '';
+var workNameText = '';
+var workNameLog = '';
 var sunSign = '';
-var xyo = {};
+var formatted_phone_number = '';
 var hScopeApi = '';
+//Arrays
+var friendArray = [];
+var friendsArray = [];
+var con = [];
+var keyArray = [];
+var userNameArray = [];
+var passwordArray = [];
+var array1 = [];
+var userInfo = [];
+var friendInfoArray = [];
+var getFriends = [];
+var friendListItems = [];
+var svEmails = [];
+var placePhone = [];
+var array2 = [];
+//Objects
+var sv1 = {};
+var xyo = {};
+
+//Booleans
+var editInfoBtn = true;
+var bdayAlert = true;
+var addFriendScreen = true;
+var signIn = false;
+var signingIn = true;
+var searchFriendScreen = false;
+var viewFriendScreen = false;
+var blockSignIn = true;
+var blockSignInUN = true;
+var hasCoords = false;
+var placeDeets = false;
+var friendInfoAddl = false;
+
+//Integers
+var friendNumber = 0;
+var friendNumberInList = 0;
+var friendCount = 1;
+var today = 0;
+var userNameInArray = 0;
+var yyyy = 0;
+var long = 0;
+var lat = 0;
+var countPlaces = 0;
+// Other
+var map;
+var service;
+var infowindow;
+var coords;
+var locAy;
+var priceLevel;
+var placeDetail;
+
+
+//Horoscope
 function horoscopeFun() {
     switch(birthdayLog.substring(0,2)) {
         case "01":
@@ -123,104 +222,6 @@ function horoscopeFun() {
         $('#saveInfo').attr("disabled", true);
     });
 }
-// Init global vars
-// Strings
-var numberInList = '';
-var friendName = '';
-var friendNameIs = '';
-var addFriendName = '';
-var newFriendListItem = '';
-var searchText = '';
-var dataFriendNumber = '';
-var friendContainer = '';
-var isBirthday = '';
-var birthdayText = '';
-var facebookText = '';
-var friendDeets = '';
-var facebookInfo = '';
-var birthdayLog = '';
-var facebookLog = '';
-var nameLog = '';
-var bd1 = '';
-var friendsNameText = '';
-var userKey = '';
-var dd = '';
-var mm = '';
-var x = '';
-var userNamePW = '';
-var friendInfoText = '';
-var userName = '';
-var password = '';
-var password2 = '';
-var sv = '';
-var childKey = '';
-var childData = '';
-var userID = '';
-var friendsBday = '';
-var userEmail = '';
-var userNameEmail = '';
-var mapURL = '';
-var mapAddress = '';
-var mapKey = '';
-var place_id = '';
-//Arrays
-var friendArray = [];
-var friendsArray = [];
-var con = [];
-var keyArray = [];
-var userNameArray = [];
-var passwordArray = [];
-var array1 = [];
-var userInfo = [];
-var friendInfoArray = [];
-var getFriends = [];
-var friendListItems = [];
-var svEmails = [];
-var placePhone = [];
-var array2 = [];
-//Objects
-var sv1 = {};
-//Booleans
-var editInfoBtn = true;
-var bdayAlert = true;
-var addFriendScreen = true;
-var signIn = false;
-var signingIn = true;
-var searchFriendScreen = false;
-var viewFriendScreen = false;
-var blockSignIn = true;
-var blockSignInUN = true;
-var hasCoords = false;
-var placeDeets = false;
-//Integers
-var friendNumber = 0;
-var friendNumberInList = 0;
-var friendCount = 1;
-var today = 0;
-var userNameInArray = 0;
-var yyyy = 0;
-var long = 0;
-var lat = 0;
-var countPlaces = 0;
-
-
-var map;
-var service;
-var infowindow;
-var coords;
-var locAy;
-var priceLevel;
-var placeDetail;
-var placeContent1 = '';
-var placeContent2 = '';
-var placeContent3 = '';
-var friendInfoAddl = false;
-var formatted_phone_number = '';
-var workName = '';
-var workNameText = '';
-var workNameLog = '';
-
-
 
 // Convert address to lat/long coords
 function getMapCoords() {
@@ -268,7 +269,7 @@ function initMap() {
     mapOptions);
     var infowindow = new google.maps.InfoWindow({
         content: $("#friendCardName").text() + "'s House"
-      });
+    });
     var marker = new google.maps.Marker({
         position: coords,
         map: map
@@ -282,28 +283,17 @@ function HH() {
     service.nearbySearch(
         {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 1000, type: ['restaurant']},
         function(results, status, pagination) {
-          if (status !== 'OK') return;
-  
-          createMarkers(results);
-        //   moreButton.disabled = !pagination.hasNextPage;
-        //   getNextPage = pagination.hasNextPage && function() {
-        //     pagination.nextPage();
-        //   };
-        
+            if (status !== 'OK') return;
+            createMarkers(results);
         });
     
 
 }
-  
-  function createMarkers(places) {
+function createMarkers(places) {
     //   countPlaces = 0;
     var bounds = new google.maps.LatLngBounds();
     var placesList = document.getElementById('places');
-  
     for (var i = 0, place; place = places[i]; i++) {
-       
-        
-        
         var image = {
             url: place.icon,
             size: new google.maps.Size(71, 71),
@@ -311,7 +301,6 @@ function HH() {
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(25, 25)
         };
-  
         var marker = new google.maps.Marker({
             map: map,
             icon: image,
@@ -320,30 +309,23 @@ function HH() {
         });
         console.log(place); 
         var li = document.createElement('li');
-        // placeContent1 = "phone: <span class='placePhone"+[i]+"'></span>";
-        // placeContent2 = (place.rating) ? " rating: " + place.rating : "";
-        // placeContent3 =  (place.price_level) ? ", price: " + place.price_level + "/5" : "";
-        
-        // if (!place.rating && !place.price_level) {
-
-        // } else {
-            li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a>";
-            placesList.appendChild(li);
-            bounds.extend(place.geometry.location);
-        // }
+        li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a>";
+        placesList.appendChild(li);
+        bounds.extend(place.geometry.location);
     }
     map.fitBounds(bounds);
 }
 // Creates the markers on the map
 function callback(results, status) {
     console.log("calledback");
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      var place = results[i];
-      createMarker(results[i]);
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+            var place = results[i];
+            createMarker(results[i]);
+        }
     }
-  }
 }
+// Get Google Maps Place Details
 function getLocDeets() {
     var request = {
         placeId: $(".placeNearBy.active").attr("data-placeid"),
@@ -352,6 +334,7 @@ function getLocDeets() {
     service = new google.maps.places.PlacesService(map);
     service.getDetails(request, callback2);
 }
+// Show Google Place Details on Page
 function callback2(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         $('#placeNameText').text("name: " + results.name);
@@ -361,10 +344,9 @@ function callback2(results, status) {
         $('#placePhoneText').text("phone: " + results.formatted_phone_number);
         $('#placeURLText').text("url: " + results.url);
         $('#placeReviewsText').text("reviews: " + results.reviews[0].text);
-            console.log(results);
-         
     }
 }
+// Show View Friends
 function viewFriendsLink() {
     $("#my-nav li, .friendItem").removeClass("active");
     $('#viewFriendsLink').parent().addClass("active");
@@ -410,7 +392,6 @@ function yourBirthday() {
     // get all friends birthdays
     if (today === isBirthday) {
         if(bdayAlert === true) {
-            // alert("Today is " + $(".friendItem.active").text() + "'s Birthday. Say Happy Birthday!");
             bdayAlert = false;
         }
     }
@@ -441,7 +422,6 @@ function showSignIn() {
     $("#signInSubmit").text("Sign In");
     $("#signInForm input").val("");
     signingIn = true;
-    
 }
 // Show Create Account Form
 function showCreateAccount() {
@@ -459,8 +439,7 @@ function showFriendsInList() {
         $('#noFriendsList').show();
     } else {
         $('#noFriendsList').hide();
-    checkForBirthdays();
-
+        checkForBirthdays();
         for (var k = 0; k < getFriends.length; k++) { // otherwise show list of friends
             ref.child(userName + "/friend/" + getFriends[k]).update({
                 friendNumber: friendCount
@@ -542,7 +521,7 @@ function showFriendInfo() {
     if (notesLog !== '') {
         $("#notesText").text(notesLog);
     }
-     if (workNameLog !== '') {
+    if (workNameLog !== '') {
         $("#workNameText").text(workNameLog);
     }
     if (emailLog == '' && phoneLog == '' && addressLog == '' && facebookLog == '' && instagramLog == '' && birthdayLog == '' && notesLog == '' && workNameLog == '') {
@@ -710,7 +689,7 @@ function reloadApp() {
 }
 function savedInfo() {
     $("#birthdayForm, #facebookForm, #phoneForm, #instagramForm, #addressForm, #emailForm, #notesForm, #friendInfo,#workNameForm").hide();
-    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #notesTextDiv, #hScopeLink, #addressMoreLink, #listOfFriends").show();
+    $("#birthdayInfo, #facebookInfo, #phoneInfo, #instagramInfo, #addressInfo, #emailInfo, #notesTextDiv, #hScopeLink, #addressMoreLink, #listOfFriends, #moreFriendInfoLink").show();
     $(this).text("Saved");
     setTimeout(function() {
         $('#saveInfo').text("Edit Info");
@@ -875,10 +854,8 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         }
 
         // layout adjustments on button click
-        $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm, form#notesForm, form#workNameForm").show()
+        $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm, form#notesForm, form#workNameForm, #moreFriendInfoLink").show()
         $("#birthdayInfo, #facebookInfo, #addressInfo, #phoneInfo, #instagramInfo, #emailInfo, #horoscope, #hScopeLink, #addressMoreLink, #notesTextDiv, #workNameInfo").hide();
- 
-        
 
         // disable ability to select another friend when one is being edited
         $("#friendsList li").addClass("disabled");
@@ -889,16 +866,15 @@ $("#saveInfo").on("click", function() { // if you edited a friends' info, save i
         //change btn state
         editInfoBtn = false;
     } else {
-        console.log("save info activated");
         birthdayText = $("#birthdayInput").val();
         addressText = $("#addressInput").val();
         emailText = $("#emailInput").val();
         phoneText = $("#phoneInput").val();
         instagramText = $("#instagramInput").val();
         facebookText = $("#facebookInput").val();
-        friendName = $('#friendCardName').val();
-        notesText = $('#notesInput').val();
-        workName = $('#workNameInput').val();
+        friendName = $("#friendCardName").val();
+        notesText = $("#notesInput").val();
+        workNameText = $("#workNameInput").val();
         
         if (birthdayText !== '') {
             $("#birthdayText").text(birthdayText);
@@ -947,15 +923,28 @@ $("#signInSubmit").on("click", function(event) { // handle what happens when you
     submitSignInInfo();
 });
 $("#moreFriendInfoLink").on("click", function() {
-    if(friendInfoAddl) {
-        $("#friendInfoAdditional").hide();
-        $(this).text("Show more info");
-        friendInfoAddl = false;
-    } else {
-    $("#friendInfoAdditional, #workName, #workNameInfo").show();
-    $(this).text("Show less info");
-    friendInfoAddl = true;
-}
+    // shows add'l info in save mode
+    if(!friendInfoAddl) {
+        if(!editInfoBtn) {
+            $("#friendInfoAdditional").show();
+            $(this).text("Show less info");
+            friendInfoAddl = true;
+        } else {
+            $("#friendInfoAdditional, #workName, #workNameInfo").show();
+            $(this).text("Show less info");
+            friendInfoAddl = true;
+        }
+    } else{
+        if(!editInfoBtn) {
+            $("#friendInfoAdditional, #workNameInfo").hide();
+            friendInfoAddl = false;
+            $(this).text("Show more info");
+        } else {
+            $(this).text("Show more info");
+            $("#friendInfoAdditional, #workName, #workNameInfo").hide();
+            friendInfoAddl = false;
+        }
+    }
 });
 $("#signOut").on("click", function() {
     signOut();
