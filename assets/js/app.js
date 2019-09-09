@@ -790,7 +790,7 @@ $("#addHistoryBtn").on("click", function(e){
     historyArray.push(historyData);
         $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + historyData + "</div></li>");
         for(var i = 0; i < historyArray.length; i++) {
-            ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/history/" + [i]).update({
+            ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/historyLog/" + [i]).update({
                 history: historyArray[i]
             });
         }
@@ -985,8 +985,17 @@ $("#signOut").on("click", function() {
     signOut();
 });
 $("#viewHistoryLink").on("click", function() {
+    $("#showHistoryList").empty();
+    var friendHistoryLog = sv["h"].friend["harrison"].historyLog;
+    var friendHistory = '';
     $("#historyPage").show();
     $("#friendInfoData, #viewHistoryLink, #backBtn").hide();
+    for (var i = 0; i < friendHistoryLog.length; i++) {
+        friendHistory = sv["h"].friend["harrison"].historyLog[i].history;
+        $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + friendHistory + "</div></li>");
+        
+        // $("#").append("<li><button>" + friendHistory + "</button></li>");
+    }
 });
 $("#historyBackBtn").on("click", function() {
     $("#historyPage").hide();
