@@ -787,11 +787,14 @@ $("#addHistoryBtn").on("click", function(e){
     e.preventDefault();
     loadFriendInfo();
     historyData = $("#addHistoryInput").val();
-    historyArray.push(friendDeets);
+    historyArray.push(historyData);
         $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + historyData + "</div></li>");
-    ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/history/").push({
-        history: historyData
-    });
+        for(var i = 0; i < historyArray.length; i++) {
+            ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/history/" + [i]).update({
+                history: historyArray[i]
+            });
+        }
+    
     $("#addHistoryInput").val("");
 });
 $(document).on("click",".removeHistoryBtn", function() {
