@@ -986,12 +986,12 @@ $("#signOut").on("click", function() {
 });
 $("#viewHistoryLink").on("click", function() {
     $("#showHistoryList").empty();
-    var friendHistoryLog = sv["h"].friend["harrison"].historyLog;
+    var friendHistoryLog = sv[userName].friend[friendDeets.friendNameIs].historyLog;
     var friendHistory = '';
     $("#historyPage").show();
     $("#friendInfoData, #viewHistoryLink, #backBtn").hide();
     for (var i = 0; i < friendHistoryLog.length; i++) {
-        friendHistory = sv["h"].friend["harrison"].historyLog[i].history;
+        friendHistory = sv[userName].friend[friendDeets.friendNameIs].historyLog[i].history;
         $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + friendHistory + "</div></li>");
         
         // $("#").append("<li><button>" + friendHistory + "</button></li>");
