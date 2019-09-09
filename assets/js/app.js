@@ -81,6 +81,8 @@ var svEmails = [];
 var placePhone = [];
 var array2 = [];
 var historyArray = [];
+var historyLogArray = [];
+var historyLogData = [];
 
 //Objects
 var sv1 = {};
@@ -785,15 +787,28 @@ $("#searchFriendsLink").on("click", function() {
 //Add History to Page
 $("#addHistoryBtn").on("click", function(e){
     e.preventDefault();
-    loadFriendInfo();
-    historyData = $("#addHistoryInput").val();
-    historyArray.push(historyData);
-        $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + historyData + "</div></li>");
-        for(var i = 0; i < historyArray.length; i++) {
-            ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/historyLog/" + [i]).update({
-                history: historyArray[i]
-            });
+    historyData = $("#addHistoryInput").val(); //grab user input
+    loadFriendInfo(); //grab a snapshot of the database
+    historyLogData = sv[userName].friend[friendDeets.friendNameIs].historyLog; //load all the history objects from the selected friend
+    if (typeof historyLogData != "undefined") {
+        historyLogArray.length = 0;
+        historyArray.length = 0;
+        for(var i = 0; i < historyLogData.length; i++){
+            historyLogArray.push(historyLogData[i]); //push all database objects into array
+        };
+        for (var i = 0; i < historyLogArray.length; i++) {
+            historyArray.push(historyLogArray[i].history); //load each pieace of history info into array
         }
+    }
+    historyArray.push(historyData); //store new history item in the array
+    for(var i = 0; i < historyArray.length; i++) {
+        ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/historyLog/" + [i]).update({
+            history: historyArray[i]
+        });
+    }
+    $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + historyData + "</div></li>"); // Create a new line item
+    
+        
     
     $("#addHistoryInput").val("");
 });
