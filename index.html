@@ -231,7 +231,7 @@
                                     </div>
                                 </form>
                             </div>
-                             <!-- Work Info -->
+                            <!-- Work Info -->
                                 <div id="workName">
                                     <p id="workNameInfo">Work's At: <span id="workNameText">Enter work name</span></p>
                                     <form class="form-inline" id="workNameForm">
@@ -246,6 +246,36 @@
                             <div id="viewHistory">
                                 <p><small><a href="#" id="viewHistoryLink">View History</a></small></p>
                             </div>
+                            <!-- History Page -->
+                            <div id="historyPage">
+                                <!-- add History -->
+                                <div id="addHistoryHP">
+                                    <form class="form-inline" id="addHistoryForm">
+                                        <div class="form-group">
+                                            <label for="addHistoryInput">Add some history</label>
+                                            <input id="addHistoryInput" class="form-control" type="text" name="">
+                                        </div>
+                                        <input type="submit" value="+" class="btn btn-primary mt-3" id="addHistoryBtn">
+                                    </form>
+                                </div>
+                                <!-- show History -->
+                                <div id="showHistoryHP">
+                                    <ul id="showHistoryList"></ul>
+                                </div>
+                                <!-- edit History-->
+                                <div id="editHistoryHP">
+                                    <form class="form-inline" id="editHistoryForm">
+                                        <div class="form-group" id="editHistoryList">
+                                        </div>
+                                        <button id="editHistory" data-edithistory="false" class="btn btn-primary">Edit History</button>
+                                    </form>
+                                </div>
+                                <!-- delete History -->
+                                <div id="deleteHistoryHP"></div>
+                                <!-- delete all History -->
+                                <div id="deleteAllHistoryHP"></div>
+                            </div>
+                                
                             <!-- Location Details-->
                             <div id="addressMore">
                                 <!-- <iframe width="320" height="280" frameborder="0" style="border:0" src="" id="mapPlaceIFrame" allowfullscreen></iframe> -->

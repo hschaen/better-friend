@@ -724,35 +724,6 @@ function backBtnLogic() {
         $("#pageTitle").text("View Friends");
     }
 }
-$("#addressMoreLink").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
-    $("#addressMore").show();
-    document.getElementById("map").style.display = "block";
-    initMap();
-    // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
-});
-//Click the back button on the address window
-$("#addressBack").on("click", function() {
-    if (placeDeets) {
-        $("#placeInfo").hide();
-        $("#places").show();
-        placeDeets = false;
-    } else {
-        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
-        $("#addressMore").hide();
-        $("#places").empty();
-        document.getElementById("map").style.display = "none";
-    }
-});
-//
-$(document).on("click", ".placeNearBy", function() {
-    $("#places").hide();
-    $("#placeInfo").show();
-    $('.placeNearBy').removeClass("active");
-    $(this).addClass("active");
-    getLocDeets();
-    placeDeets = true;
-});
 // Trigger Add Friend Function on button click
 $("#addFriendBtn").on("click", function(e) {
     e.preventDefault();
@@ -967,12 +938,55 @@ $("#moreFriendInfoLink").on("click", function() {
 $("#signOut").on("click", function() {
     signOut();
 });
+$("#viewHistoryLink").on("click", function() {
+    $("#historyPage").show();
+});
 $("#backBtn").on("click", function() {
    backBtnLogic();
 });
 $('#mapPlaceHH').on("click", function() {
    HH(); 
 });
+$("#addressMoreLink").on("click", function() {
+    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
+    $("#addressMore").show();
+    document.getElementById("map").style.display = "block";
+    initMap();
+    // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
+});
+//Click the back button on the address window
+$("#addressBack").on("click", function() {
+    if (placeDeets) {
+        $("#placeInfo").hide();
+        $("#places").show();
+        placeDeets = false;
+    } else {
+        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
+        $("#addressMore").hide();
+        $("#places").empty();
+        document.getElementById("map").style.display = "none";
+    }
+});
+// Show the horoscope for selected friend
+$("#viewHScope").on("click", function() {
+    horoscopeFun();
+});
+// Hide the horoscope page and show the friend info
+$("#hScopeBack").on("click", function() {
+    $("#horoscope").hide();
+    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
+    $('#saveInfo').attr("disabled", false); 
+});
+// Show place details
+$(document).on("click", ".placeNearBy", function() {
+    $("#places").hide();
+    $("#placeInfo").show();
+    $('.placeNearBy').removeClass("active");
+    $(this).addClass("active");
+    getLocDeets();
+    placeDeets = true;
+});
+// Show selected friend information
 $(document).on("click", ".friendLink", function() { //what happens when you click on a friend in your friend list
     $('.friendItem').removeClass("active");
     $(this).parent().addClass("active");
@@ -984,23 +998,19 @@ $(document).on("click", ".friendLink", function() { //what happens when you clic
     showFriendInfo();
     getMapCoords();
 });
-$("#viewHScope").on("click", function() {
-    horoscopeFun();
-});
-$("#hScopeBack").on("click", function() {
-    $("#horoscope").hide();
-    $("#phone, #email, #address, #address, #birthday, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
-    $('#saveInfo').attr("disabled", false);
-
-    
-})
+// Remove friend from friend list
 $(document).on("click", ".removeButton", function() {
-    ref.child(userName + "/friend/" + $(this).attr("id")).remove();
-    $("#friendsList").empty();
-    friendCount = 1;
-    $("#friendInfo").hide();
-    loadFriendInfo();
-    showFriendsInList();
+    var removeBtnConfim = confirm("Are you sure you want to remove " + friendNameIs + "from your list of friends?\nEither OK or Cancel.");
+    if (removeBtnConfim) {
+        ref.child(userName + "/friend/" + $(this).attr("id")).remove();
+        $("#friendsList").empty();
+        friendCount = 1;
+        $("#friendInfo").hide();
+        loadFriendInfo();
+        showFriendsInList();
+    } else {
+        return false;
+    }
 });
 $("#signInInputPassword1").on("change", function() {
     if (!signingIn) {
@@ -1094,7 +1104,7 @@ $("#signInInputEmail1").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm, form#workNameForm, form#placeOfOriginForm").hide();
+    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm, form#workNameForm, form#placeOfOriginForm, #historyPage").hide();
     addFriendScreen = true;
     $('#signInSubmit').attr("disabled", true);
     
