@@ -1,4 +1,3 @@
-console.log("initializing firebase");
 // Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
@@ -10,13 +9,17 @@ var firebaseConfig = {
     appId: "1:826334661400:web:2c7de318313607c2"
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
+var firebaseDB = firebase.initializeApp(firebaseConfig);
 var database = firebase.database();
-var ref = database.ref("server/saving-data/fireblog");
-// var auth = firebase.auth();
-// var provider = new firebase.auth.FacebookAuthProvider();
-// // provider.addScope('user_birthday, email, user_events, user_friends');
-// provider.setCustomParameters({
-//     'display': 'popup'
-//   });
+var ref = database.ref("/user-data");
+
+// This loads the list of friends from the db
+function loadFriendInfo() {
+    if (typeof (sv[userName].friend) != "undefined") {
+        getFriends = Object.keys(sv[userName].friend);
+        // grab the name of the selected friend
+        var this1 = $(".friendItem.active a").text();
+        // store info about this friend in friendDeets
+        friendDeets = sv[userName].friend[this1];
+    }
+}

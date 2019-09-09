@@ -113,7 +113,9 @@
         </div>
         <div class="row" id="listOfFriends">
             <div class="col-12">
-                <ul id="friendsList" class="list-group"></ul>
+                <ul id="friendsList" class="list-group">
+                    <!-- This is where the friends list will populate -->
+                </ul>
                 <div id="noFriendsList"><small>Please <a href="#" id="addFriendsListLink">Add a Friend</a>.</small></div>
             </div>
         </div>
@@ -210,14 +212,12 @@
                                     <form class="form-inline" id="notesForm">
                                         <div class="form-group">
                                             <label for="notesInput">Notes</label>
-                                            <textarea id="notesInput" class="form-control"" name="notesInput" cols="50" rows="4"></textarea>
+                                            <textarea cols="50" rows="4" id="notesInput" class="form-control"></textarea>
                                         </div>
                                     </form>
-                                    
                                 </div>
-                                
                                 <!-- More Info -->
-                                <div id="moreFriendInfo"><p class="center"><small><a href="#" id="moreFriendInfoLink">Show more Info</a></small></div>
+                                <div id="moreFriendInfo"><p class="center"><small><a href="#" id="moreFriendInfoLink">Show more Info</a></small></p></div>
                             </div>
                             <!-- Additional Friend Info -->
                             <div id="friendInfoAdditional">
@@ -248,6 +248,9 @@
                             </div>
                             <!-- History Page -->
                             <div id="historyPage">
+                                <!-- History back button -->
+                                <p><a id="historyBackBtn" href="#">&lt; back</a></p>
+
                                 <!-- add History -->
                                 <div id="addHistoryHP">
                                     <form class="form-inline" id="addHistoryForm">
@@ -267,7 +270,7 @@
                                     <form class="form-inline" id="editHistoryForm">
                                         <div class="form-group" id="editHistoryList">
                                         </div>
-                                        <button id="editHistory" data-edithistory="false" class="btn btn-primary">Edit History</button>
+                                        <button id="editHistoryBtn" data-edithistory="false" class="btn btn-primary">Edit History</button>
                                     </form>
                                 </div>
                                 <!-- delete History -->
@@ -342,7 +345,10 @@
 <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE&libraries=places" async defer></script>
-
+<!-- <script src="assets/js/variables.js"></script>
+<script src="assets/js/db.js"></script>
+<script src="assets/js/map.js"></script>
+<script src="assets/js/horoscope.js"></script> -->
 <script src="assets/js/app.js"></script>
 <!-- <script src="assets/js/getHoroscopes.js"></script> -->
 
