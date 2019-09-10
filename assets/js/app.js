@@ -520,21 +520,44 @@ function showFriendInfo() {
     historyLog = friendDeets.history;
     if (birthdayLog !== '') {
         $("#birthdayText").text(birthdayLog);
+    } else {
+        birthdayLog = 'MM/DD/YYYY';
+        $("#birthdayText").text(birthdayLog);
+
     }
     if (facebookLog !== '') {
+        $("#facebookInfo").html("Facebook: <a alt='" + friendName + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
+    } else {
+        facebookLog = "{{userID}}";
         $("#facebookInfo").html("Facebook: <a alt='" + friendName + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
     }
     if (instagramLog !== '') {
         $("#instagramText").text(instagramLog);
+    } else {
+        instagramLog = "{{userID}}";
+        $("#instagramText").text(instagramLog);
+
     }
     if (addressLog !== '') {
         $("#addressText").text(addressLog);
+    } else {
+        addressLog = "Street, City, State, Zip";
+        $("#addressText").text(addressLog);
+
     }
     if (phoneLog !== '') {
         $("#phoneText").text(phoneLog);
+    } else {
+        phoneLog = "XXX-XXX-XXXX";
+        $("#phoneText").text(phoneLog);
+
     }
     if (emailLog !== '') {
         $("#emailText").text(emailLog);
+    } else {
+        emailLog = "name@domain.com";
+        $("#emailText").text(emailLog);
+
     }
     if (notesLog !== '') {
         $("#notesText").text(notesLog);
@@ -556,7 +579,11 @@ function loadFriendInfo() {
         getFriends = Object.keys(sv[userName].friend);
         // grab the name of the selected friend
         var this1 = $(".friendItem.active a").text();
+        // won't work for search. Need to l
         // store info about this friend in friendDeets
+        if (searchFriendScreen) {
+            this1 = $("#searchFriendsText").val();
+        }
         friendDeets = sv[userName].friend[this1];
     }
 }
@@ -613,18 +640,32 @@ function searchFriendInDB() {
         alert('add some friends');
         return false;
     } 
-    for (var m = 0; m < getFriends.length; m++) {
-        if (getFriends[m] === searchText) {
+    // for (var m = 0; m < getFriends.length; m++) {
+    //     if (getFriends[m] === searchText) {
 
-            $('.friendItem').removeClass("active");
+    //         $('.friendItem').removeClass("active");
 
-            $("[data-friendnumber='" + m + "'").addClass("active");
+    //         $("[data-friendnumber='" + m + "'").addClass("active");
+    //         $("#friendInfo").show();
+    //         friendLookUp();
+    //         $('#friendCardName').text(getFriends[m]);
+    //         return true;
+    //     }
+    // }
+    var match = getFriends.some(function(r) {
+        return searchText === r;
+    });
+    if (match) {
+        $('.friendItem').removeClass("active");
+            // $("[data-friendnumber='" + m + "'").addClass("active");
             $("#friendInfo").show();
             friendLookUp();
-            $('#friendCardName').text(getFriends[m]);
+            $('#friendCardName').text(searchText);
             return true;
-        }
+    } else {
+        alert("no match.");
     }
+    //use .some to determine if there is a match (https://stackoverflow.com/a/33874691)
 }
 // Submit signin info
 function submitSignInInfo() {
