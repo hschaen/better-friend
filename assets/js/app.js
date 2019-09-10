@@ -65,6 +65,8 @@ var placeOfOrigin = '';
 var sunSign = '';
 var formatted_phone_number = '';
 var hScopeApi = '';
+var friendHistory = '';
+
 //Arrays
 var friendArray = [];
 var friendsArray = [];
@@ -83,6 +85,7 @@ var array2 = [];
 var historyArray = [];
 var historyLogArray = [];
 var historyLogData = [];
+var friendHistoryLog = [];
 
 //Objects
 var sv1 = {};
@@ -456,7 +459,6 @@ function showFriendsInList() {
             // 
             // Increase friend counter so we can give each friend a unique data-friendnumber
             friendCount++;
-            console.log(friendCount);
         }
     }
 }
@@ -784,48 +786,7 @@ $("#searchFriendsLink").on("click", function() {
     savedInfo();
 
 });
-//Add History to Page
-$("#addHistoryBtn").on("click", function(e){
-    e.preventDefault();
-    historyData = $("#addHistoryInput").val(); //grab user input
-    loadFriendInfo(); //grab a snapshot of the database
-    historyLogData = sv[userName].friend[friendDeets.friendNameIs].historyLog; //load all the history objects from the selected friend
-    if (typeof historyLogData != "undefined") {
-        historyLogArray.length = 0;
-        historyArray.length = 0;
-        for(var i = 0; i < historyLogData.length; i++){
-            historyLogArray.push(historyLogData[i]); //push all database objects into array
-        };
-        for (var i = 0; i < historyLogArray.length; i++) {
-            historyArray.push(historyLogArray[i].history); //load each pieace of history info into array
-        }
-    }
-    historyArray.push(historyData); //store new history item in the array
-    for(var i = 0; i < historyArray.length; i++) {
-        ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/historyLog/" + [i]).update({
-            history: historyArray[i]
-        });
-    }
-    $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + historyData + "</div></li>"); // Create a new line item
-    
-        
-    
-    $("#addHistoryInput").val("");
-});
-$(document).on("click",".removeHistoryBtn", function() {
-    console.log("ew");
-    if(confirm("Are you sure you want to remove " + $(this).parent().attr("data-friendname") + " from your list of friends?\nEither OK or Cancel.")) {
-        $(this).closest(".historyRow").remove();
 
-        // ref.child(userName + "/friend/" + $(this).parent().attr("data-friendname")).remove();
-        // $("#friendsList").empty();
-        // friendCount = 1;
-        // $("#friendInfo").hide();
-        // loadFriendInfo();
-        // showFriendsInList();
-    }
-    
-});
 // if you edited a friends' info, save it
 $("#saveInfo").on("click", function() {
     if (editInfoBtn) { //if the edit button is clicked
@@ -1001,22 +962,62 @@ $("#signOut").on("click", function() {
 });
 $("#viewHistoryLink").on("click", function() {
     $("#showHistoryList").empty();
-    var friendHistoryLog = sv[userName].friend[friendDeets.friendNameIs].historyLog;
-    var friendHistory = '';
+    friendHistoryLog = sv[userName].friend[friendDeets.friendNameIs].historyLog;
+    friendHistory = '';
     $("#historyPage").show();
     $("#friendInfoData, #viewHistoryLink, #backBtn").hide();
     for (var i = 0; i < friendHistoryLog.length; i++) {
         friendHistory = sv[userName].friend[friendDeets.friendNameIs].historyLog[i].history;
-        $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + friendHistory + "</div></li>");
-        
-        // $("#").append("<li><button>" + friendHistory + "</button></li>");
+        $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + friendHistory + "</div></li>"); // Create a new line item
     }
 });
 $("#historyBackBtn").on("click", function() {
     $("#historyPage").hide();
     $("#friendInfoData, #viewHistoryLink, #backBtn").show();
 
-})
+});
+//Add History to Page
+$("#addHistoryBtn").on("click", function(e){
+    e.preventDefault();
+    historyData = $("#addHistoryInput").val(); //grab user input
+    loadFriendInfo(); //grab a snapshot of the database
+    historyLogData = sv[userName].friend[friendDeets.friendNameIs].historyLog; //load all the history objects from the selected friend
+    if (typeof historyLogData != "undefined") {
+        historyLogArray.length = 0;
+        historyArray.length = 0;
+        for(var i = 0; i < historyLogData.length; i++){
+            historyLogArray.push(historyLogData[i]); //push all database objects into array
+        };
+        for (var i = 0; i < historyLogArray.length; i++) {
+            historyArray.push(historyLogArray[i].history); //load each pieace of history info into array
+        }
+    }
+    historyArray.push(historyData); //store new history item in the array
+    for(var i = 0; i < historyArray.length; i++) {
+        ref.child(userName + "/friend/" + friendDeets.friendNameIs + "/historyLog/" + [i]).update({
+            history: historyArray[i]
+        });
+    }
+    $("#showHistoryList").append("<li class='row historyRow'><div class='col-xs-2 historyColumn'><button class='removeHistoryBtn btn btn-primary'>X</buttton></div><div class='col-xs-10'>" + historyData + "</div></li>"); // Create a new line item
+    
+        
+    
+    $("#addHistoryInput").val("");
+});
+$(document).on("click",".removeHistoryBtn", function() {
+    console.log("ew");
+    if(confirm("Are you sure you want to remove " + $(this).parent().attr("data-friendname") + " from your list of friends?\nEither OK or Cancel.")) {
+        $(this).closest(".historyRow").remove();
+
+        // ref.child(userName + "/friend/" + $(this).parent().attr("data-friendname")).remove();
+        // $("#friendsList").empty();
+        // friendCount = 1;
+        // $("#friendInfo").hide();
+        // loadFriendInfo();
+        // showFriendsInList();
+    }
+    
+});
 $("#backBtn").on("click", function() {
    backBtnLogic();
 });
