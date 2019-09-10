@@ -577,7 +577,7 @@ function addFriendToDB() {
             //store friends name in var
             friendName = $("#friendsName").val();
             //create new list item       
-            newFriendListItem = "<li class='list-group-item friendItem active' data-friendnumber='" + friendCount + "' data-friendname='" + friendDeets.friendNameIs + "'><a href='#' class='friendLink' id='" + friendDeets.friendNameIs + "'>" + friendDeets.friendNameIs + "</a><button class='btn btn-danger btn-xs removeButton' id='" + friendDeets.friendNameIs + "'>Remove</button></li>";  
+            newFriendListItem = "<li class='list-group-item friendItem active' data-friendnumber='" + friendCount + "' data-friendname='" + friendName + "'><a href='#' class='friendLink' id='" + friendName + "'>" + friendName + "</a><button class='btn btn-danger btn-xs removeButton' id='" + friendName + "'>Remove</button></li>";  
             //add new list item to list
             $("#friendsList").append(newFriendListItem);
             //store number of friends
