@@ -1072,12 +1072,16 @@ $("#backBtn").on("click", function() {
    backBtnLogic();
 });
 $("#friendEvents").on("click", function() {
-    $("#friendInfoData, #viewHistory").hide();
+    $("#friendInfoData, #viewHistory, #backBtn").hide();
     $("#eventPage").show();
     getEvents();
     isEventPage = true;
     isInfoPage = false;
-})
+});
+$("#eventBackBtn").on("click", function(){
+    $("#friendInfoData, #viewHistory, #backBtn").show();
+    $("#eventPage").hide();
+});
 $('#mapPlaceHH').on("click", function() {
    HH(); 
 });
