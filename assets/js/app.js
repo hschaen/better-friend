@@ -381,10 +381,10 @@ function getEvents() {
                     for(var i = 0; i < eventsRes.length; i++) {
                         eventArray.push({
                             name: eventsRes[i].name,
-                            url: eventsRes[i].url, date: eventsRes[i].dates.start.localDate});
+                            url: eventsRes[i].url, date: eventsRes[i].dates.start.localDate, venue: eventsRes[i].venues[0].name});
                     }
                     for(var i = 0; i < eventArray.length; i++) {
-                        $("#eventPageList").append("<li>"+eventArray[i].date+"<a href="+eventArray[i].url+">"+eventArray[i].name+"</a></li>");
+                        $("#eventPageList").append("<li>["+eventArray[i].date+"] <a href="+eventArray[i].url+">"+eventArray[i].name+" ("+ eventArray[i].venue +")</a></li>");
                     }
                  },
         error: function(xhr, status, err) {
