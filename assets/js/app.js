@@ -86,6 +86,7 @@ var historyArray = [];
 var historyLogArray = [];
 var historyLogData = [];
 var friendHistoryLog = [];
+var eventArray = [];
 
 //Objects
 var sv1 = {};
@@ -104,6 +105,8 @@ var blockSignInUN = true;
 var hasCoords = false;
 var placeDeets = false;
 var friendInfoAddl = false;
+var isEventPage = false;
+var isInfoPage = true;
 
 //Integers
 var friendNumber = 0;
@@ -115,6 +118,7 @@ var yyyy = 0;
 var long = 0;
 var lat = 0;
 var countPlaces = 0;
+var historyNumber = 0;
 // Other
 var map;
 var service;
@@ -356,6 +360,39 @@ function callback2(results, status) {
         $('#placeReviewsText').text("reviews: " + results.reviews[0].text);
     }
 }
+// Events
+jQuery.ajaxPrefilter(function(options) {
+    if (options.crossDomain && jQuery.support.cors) {
+        options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+    }
+});
+function getEvents() {
+    var eventsKey = 'jbcRPqgbSjEpP292bBtSroIPra5lCopy';
+    // var eventsURL = 'https://app.ticketmaster.com/discovery/v2/suggest?apikey=' + eventsKey + '&latlong=' + lat + ',' + long + '&locale=*';
+    var eventsURL = 'https://app.ticketmaster.com/discovery/v2/suggest?apikey=jbcRPqgbSjEpP292bBtSroIPra5lCopy&latlong=' + lat +','+long+'&radius=25&unit=miles&source=ticketmaster&locale=*&countryCode=US&preferredCountry=us'
+    $.ajax({
+        type:"GET",
+        url:eventsURL,
+        async:true,
+        dataType: "json",
+        success: function(json) {
+                    console.log(json);
+                    var eventsRes = json._embedded.events;
+                    for(var i = 0; i < eventsRes.length; i++) {
+                        eventArray.push({
+                            name: eventsRes[i].name,
+                            url: eventsRes[i].url});
+                    }
+                    for(var i = 0; i < eventArray.length; i++) {
+                        $("#eventPageList").append("<li><a href="+eventArray[i].url+">"+eventArray[i].name+"</a></li>");
+                    }
+                 },
+        error: function(xhr, status, err) {
+                    // This time, we do not end up here!
+                 }
+      });
+}
+
 // Show View Friends
 function viewFriendsLink() {
     $("#my-nav li, .friendItem").removeClass("active");
@@ -523,7 +560,6 @@ function showFriendInfo() {
     } else {
         birthdayLog = 'MM/DD/YYYY';
         $("#birthdayText").text(birthdayLog);
-
     }
     if (facebookLog !== '') {
         $("#facebookInfo").html("Facebook: <a alt='" + friendName + "on Facebook' href='https://facebook.com/" + facebookLog + "'>https://facebook.com/" + facebookLog + "</a>");
@@ -536,28 +572,24 @@ function showFriendInfo() {
     } else {
         instagramLog = "{{userID}}";
         $("#instagramText").text(instagramLog);
-
     }
     if (addressLog !== '') {
         $("#addressText").text(addressLog);
     } else {
         addressLog = "Street, City, State, Zip";
         $("#addressText").text(addressLog);
-
     }
     if (phoneLog !== '') {
         $("#phoneText").text(phoneLog);
     } else {
         phoneLog = "XXX-XXX-XXXX";
         $("#phoneText").text(phoneLog);
-
     }
     if (emailLog !== '') {
         $("#emailText").text(emailLog);
     } else {
         emailLog = "name@domain.com";
         $("#emailText").text(emailLog);
-
     }
     if (notesLog !== '') {
         $("#notesText").text(notesLog);
@@ -579,8 +611,6 @@ function loadFriendInfo() {
         getFriends = Object.keys(sv[userName].friend);
         // grab the name of the selected friend
         var this1 = $(".friendItem.active a").text();
-        // won't work for search. Need to l
-        // store info about this friend in friendDeets
         if (searchFriendScreen) {
             this1 = $("#searchFriendsText").val();
         }
@@ -640,24 +670,11 @@ function searchFriendInDB() {
         alert('add some friends');
         return false;
     } 
-    // for (var m = 0; m < getFriends.length; m++) {
-    //     if (getFriends[m] === searchText) {
-
-    //         $('.friendItem').removeClass("active");
-
-    //         $("[data-friendnumber='" + m + "'").addClass("active");
-    //         $("#friendInfo").show();
-    //         friendLookUp();
-    //         $('#friendCardName').text(getFriends[m]);
-    //         return true;
-    //     }
-    // }
     var match = getFriends.some(function(r) {
         return searchText === r;
     });
     if (match) {
         $('.friendItem').removeClass("active");
-            // $("[data-friendnumber='" + m + "'").addClass("active");
             $("#friendInfo").show();
             friendLookUp();
             $('#friendCardName').text(searchText);
@@ -665,7 +682,6 @@ function searchFriendInDB() {
     } else {
         alert("no match.");
     }
-    //use .some to determine if there is a match (https://stackoverflow.com/a/33874691)
 }
 // Submit signin info
 function submitSignInInfo() {
@@ -682,9 +698,7 @@ function submitSignInInfo() {
                 return false;
             }
             if(password != '') {
-                // for (var i = 0; i < array1.length; i++) {
-                //     array2.push(array1[i].toLowerCase());
-                // }
+                
                 if(array1.includes(userName)) {
                     if(password == userNamePW) {
                         $('#app-container').show();
@@ -833,7 +847,6 @@ $("#saveInfo").on("click", function() {
     if (editInfoBtn) { //if the edit button is clicked
         //phoneInfo
         if(friendDeets.phone == "XXX-XXX-XXXX" || friendDeets.phone == '') {
-            // $("#phoneInput").val("");
             $("#phoneInput").attr("placeholder", $("#phoneText").text());
         } else {
             $("#phoneInput").val(friendDeets.phone);
@@ -866,7 +879,6 @@ $("#saveInfo").on("click", function() {
         } else {
             $("#facebookInput").val(friendDeets.facebook);
         }
-        
         //instagram info
         if(friendDeets.instagram == "{{userID}}" || friendDeets.instagram == '') {
             $("#instagramInput").val("");
@@ -880,26 +892,18 @@ $("#saveInfo").on("click", function() {
         } else {
             $("#notesInput").val(friendDeets.notes);
         }
-
         //Origin info
         if(friendDeets.from == "" || friendDeets.from == " ") {
             $("#placeOfOriginInput").val("");
         } else {
             $("#placeOfOriginInput").val(friendDeets.from);
         }
-
          //Work Name info
         if(friendDeets.workName == "" || friendDeets.workName == " ") {
             $("#workNameInput").val("");
         } else {
             $("#workNameInput").val(friendDeets.workName);
         }
-         //History info
-        //  if(friendDeets.history.length < 0) {
-        //     $("#workNameInput").val("");
-        // } else {
-        //     $("#workNameInput").val(friendDeets.workName);
-        // }
         
         // layout adjustments on button click
         $("form#birthdayForm, form#facebookForm, form#addressForm, form#phoneForm, form#instagramForm, form#emailForm, form#notesForm, form#workNameForm, #moreFriendInfoLink, form#placeOfOriginForm").show()
@@ -1046,22 +1050,33 @@ $("#addHistoryBtn").on("click", function(e){
     $("#addHistoryInput").val("");
 });
 $(document).on("click",".removeHistoryBtn", function() {
-    console.log("ew");
+    for(var u = 1; u < $(".removeHistoryBtn").length+1; u++) {
+        console.log(u);
+        $("#showHistoryList li:nth-child("+u+")").attr("data-historynumber", u);
+    }
     if(confirm("Are you sure you want to remove " + $(this).parent().attr("data-friendname") + " from your list of friends?\nEither OK or Cancel.")) {
-        $(this).closest(".historyRow").remove();
-
-        // ref.child(userName + "/friend/" + $(this).parent().attr("data-friendname")).remove();
-        // $("#friendsList").empty();
-        // friendCount = 1;
-        // $("#friendInfo").hide();
-        // loadFriendInfo();
-        // showFriendsInList();
+        // var historyRow = $(this).closest(".historyRow")
+        // historyRow.remove();
+        
+        // ref.child(userName + "/friend/" + historyRow.attr("data-friendname") + "/historyLog/" + useNum).remove();
+    //     // $("#friendsList").empty();
+    //     // friendCount = 1;
+    //     // $("#friendInfo").hide();
+    //     // loadFriendInfo();
+    //     // showFriendsInList();
     }
     
 });
 $("#backBtn").on("click", function() {
    backBtnLogic();
 });
+$("#friendEvents").on("click", function() {
+    $("#friendInfoData, #viewHistory").hide();
+    $("#eventPage").show();
+    getEvents();
+    isEventPage = true;
+    isInfoPage = false;
+})
 $('#mapPlaceHH').on("click", function() {
    HH(); 
 });
