@@ -381,7 +381,7 @@ function getEvents() {
                     for(var i = 0; i < eventsRes.length; i++) {
                         eventArray.push({
                             name: eventsRes[i].name,
-                            url: eventsRes[i].url, date: eventsRes[i].dates.start});
+                            url: eventsRes[i].url, date: eventsRes[i].dates.start.localDate});
                     }
                     for(var i = 0; i < eventArray.length; i++) {
                         $("#eventPageList").append("<li>"+eventArray[i].date+"<a href="+eventArray[i].url+">"+eventArray[i].name+"</a></li>");
