@@ -1110,7 +1110,7 @@ $(".friendNavLink").on("click", function(){
     }
 });
 $("#friendInfoPage").on("click", function() {
-    $("#eventPage, #viewHistory, #backBtn, #addressMore, #historyPage").hide();
+    $("#eventPage, #backBtn, #addressMore, #historyPage").hide();
     $("#friendInfoData").show();
     isInfoPage = true;
     isEventPage = false;
@@ -1132,6 +1132,7 @@ $('#mapPlaceHH').on("click", function() {
 $("#addressMoreLink").on("click", function() {
     $("#friendInfoData, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
     $("#addressMore").show();
+    $("#addressMoreAddress").text(friendDeets.address);
     document.getElementById("map").style.display = "block";
     initMap();
     // $("#mapPlaceIFrame").attr("src","https://www.google.com/maps/embed/v1/place?q=place_id:" + place_id + "&key=" + mapKey);
