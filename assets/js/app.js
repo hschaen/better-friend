@@ -367,10 +367,10 @@ jQuery.ajaxPrefilter(function(options) {
         options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
     }
 });
+
 function getEvents() {
     if(!isEventPage){
         eventArray.length = 0;
-        eventsRes.length = 0;
         var eventsKey = 'jbcRPqgbSjEpP292bBtSroIPra5lCopy';
         // var eventsURL = 'https://app.ticketmaster.com/discovery/v2/suggest?apikey=' + eventsKey + '&latlong=' + lat + ',' + long + '&locale=*';
         var eventsURL = 'https://app.ticketmaster.com/discovery/v2/suggest?apikey=jbcRPqgbSjEpP292bBtSroIPra5lCopy&latlong=' + lat +','+long+'&radius=25&unit=miles&source=ticketmaster&locale=*&countryCode=US&preferredCountry=us'
@@ -382,7 +382,10 @@ function getEvents() {
             dataType: "json",
             success: function(json) {
                 console.log(json);
+                eventsRes.length = 0;
+                console.log(eventsRes)
                 eventsRes = json._embedded.events;
+                console.log(eventsRes)
                 for(var i = 0; i < eventsRes.length; i++) {
                     eventArray.push({
                         name: eventsRes[i].name,
@@ -393,6 +396,8 @@ function getEvents() {
                 for(var i = 0; i < eventArray.length; i++) {
                     $("#eventPageList").append("<li>["+eventArray[i].date+"] <a href="+eventArray[i].url+">"+eventArray[i].name+" ("+ eventArray[i].venue +")</a></li>");
                 }
+                isEventPage = true;
+
             },
             error: function(xhr, status, err) {
                 // This time, we do not end up here!
@@ -688,7 +693,7 @@ function searchFriendInDB() {
     });
     if (match) {
         $('.friendItem').removeClass("active");
-            $("#friendInfo").show();
+            $("#friendInfo, #friendInfoData").show();
             friendLookUp();
             $('#friendCardName').text(searchText);
             return true;
@@ -791,16 +796,22 @@ function backBtnLogic() {
         $("#backBtn, #friendInfo").hide();
         $("#listOfFriends, #addFriends, #addFriend").show();
         $("#pageTitle").text("Add Friends");
+        isEventPage = false;
     }
     if(searchFriendScreen) {
         $("#backBtn, #friendInfo, #listOfFriends").hide();
         $("#searchFriends").show();
         $("#pageTitle").text("Search Friends");
+        isEventPage = false;
     }
     if(viewFriendScreen) {
         $("#backBtn, #friendInfo, #listOfFriends").hide();
         $("#listOfFriends").show();
         $("#pageTitle").text("View Friends");
+        isEventPage = false;
+    }
+    if(isEventPage) {
+        isEventPage = false;
     }
 }
 // Trigger Add Friend Function on button click
@@ -812,6 +823,7 @@ $("#addFriendBtn").on("click", function(e) {
 $("#searchFriendsBtn").on("click", function(e) { 
     e.preventDefault();
     searchFriendInDB();
+    isEventPage = false;
 });
 // you want to see the add friends page
 $("#addFriendsLink").on("click", function() { 
@@ -841,17 +853,17 @@ $("#viewFriendsLink").on("click", function() {
 });
 // you want to search through your friends list
 $("#searchFriendsLink").on("click", function() { 
-    $("#addFriends").hide();
+    $("#addFriends, #backBtn, #friendInfo, #eventPage").hide();
     $("#my-nav li").removeClass("active");
     $(this).parent().addClass("active");
     $("#pageTitle").text("Search Friends");
-    $("#friendInfo").hide();
     $("#searchFriends").show();
-    $("#listOfFriends").hide();
     addFriendScreen = false;
     viewFriendScreen = false;
     searchFriendScreen = true;
     savedInfo();
+    $("#listOfFriends").hide();
+    isEventPage = false;
 
 });
 
@@ -1084,10 +1096,9 @@ $("#backBtn").on("click", function() {
    backBtnLogic();
 });
 $("#friendEvents").on("click", function() {
-    $("#friendInfoData, #viewHistory, #backBtn").hide();
+    $("#friendInfoData, #viewHistory, #backBtn, #addressMore").hide();
     $("#eventPage").show();
     getEvents();
-    isEventPage = true;
     isInfoPage = false;
 });
 $("#eventBackBtn").on("click", function(){
@@ -1147,6 +1158,7 @@ $(document).on("click", ".friendLink", function() { //what happens when you clic
     loadFriendInfo();
     showFriendInfo();
     getMapCoords();
+    isEventPage = false;
 });
 // Remove friend from friend list
 $(document).on("click", ".removeButton", function() {
