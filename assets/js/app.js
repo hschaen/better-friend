@@ -1207,6 +1207,7 @@ $("#addressBack").on("click", function() {
         $("#addressMoreAddress").text(friendDeets.address);
     } else {
         $("#friendInfoData, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink, #viewHistoryLink").show();
+        $("#placesTextHeader").text("");
         $("#addressMore").hide();
         $("#places").empty();
         document.getElementById("map").style.display = "none";
