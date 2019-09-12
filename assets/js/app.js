@@ -324,7 +324,8 @@ function createMarkers(places) {
         });
         console.log(place); 
         var li = document.createElement('li');
-        li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a>";
+        li.className += "places";
+        li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a><br><small><strong>" + place.rating + "</strong>/5, <em><strong>" + place.user_ratings_total + "</strong> ratings</em></small><div class='placeSpace'></div>";
         placesList.appendChild(li);
         bounds.extend(place.geometry.location);
     }
