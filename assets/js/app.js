@@ -1095,21 +1095,42 @@ $(document).on("click",".removeHistoryBtn", function() {
 $("#backBtn").on("click", function() {
    backBtnLogic();
 });
+$(".friendNavLink").on("click", function(){
+    var friendNavLink = $(this).attr("data-friendnav");
+    switch (friendNavLink) {
+        case "info":
+        case "events":
+        case "feed":
+        case "ideas":
+            $(".friendNavLink").attr("disabled", false).removeClass("active");
+            $(this).addClass("active").attr("disabled", true);
+            break;
+        default:
+            break;
+    }
+});
+$("#friendInfoPage").on("click", function() {
+    $("#eventPage, #viewHistory, #backBtn, #addressMore, #historyPage").hide();
+    $("#friendInfoData").show();
+    isInfoPage = true;
+    isEventPage = false;
+
+})
 $("#friendEvents").on("click", function() {
-    $("#friendInfoData, #viewHistory, #backBtn, #addressMore").hide();
+    $("#friendInfoData, #viewHistory, #backBtn, #addressMore, #historyPage").hide();
     $("#eventPage").show();
     getEvents();
     isInfoPage = false;
 });
-$("#eventBackBtn").on("click", function(){
-    $("#friendInfoData, #viewHistory, #backBtn").show();
-    $("#eventPage").hide();
-});
+// $("#eventBackBtn").on("click", function(){
+//     $("#friendInfoData, #viewHistory, #backBtn, #viewHistoryLink").show();
+//     $("#eventPage").hide();
+// });
 $('#mapPlaceHH').on("click", function() {
    HH(); 
 });
 $("#addressMoreLink").on("click", function() {
-    $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
+    $("#friendInfoData, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
     $("#addressMore").show();
     document.getElementById("map").style.display = "block";
     initMap();
@@ -1122,7 +1143,7 @@ $("#addressBack").on("click", function() {
         $("#places").show();
         placeDeets = false;
     } else {
-        $("#email, #birthday, #address, #phone, #facebook, #instagram, #notes, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink").show();
+        $("#friendInfoData, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink, #viewHistoryLink").show();
         $("#addressMore").hide();
         $("#places").empty();
         document.getElementById("map").style.display = "none";

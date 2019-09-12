@@ -130,7 +130,7 @@
                 <div class="card">
                     <h5 class="card-header"><span class="float-left mt-2" id="friendCardName">John Doe</span><button id="saveInfo" class="btn btn-primary float-right editFriendInfo">Edit Info</button></h5>
                     <div class="card-body">
-                        <h5 class="card-title">Info | <a href="#" id="friendEvents">Events</a> | <a href="#" id="friendFeed">Feed</a> | <a href="#" id="friendIdeas">Ideas</a><!-- | <a href="#" id="friendIdeas"></a>--></h5>
+                        <h5 class="card-title"><a href="#" class="friendNavLink active" data-friendnav="info" id="friendInfoPage" disabled="disabled">Info</a> | <a href="#" data-friendnav="events" class="friendNavLink" id="friendEvents">Events</a> | <a href="#" data-friendnav="feed" class="friendNavLink" id="friendFeed">Feed</a> | <a href="#" data-friendnav="ideas" class="friendNavLink" id="friendIdeas">Ideas</a><!-- | <a href="#" id="friendIdeas"></a>--></h5>
                         <div class="card-text">
                             
                             <!-- Friend info page-->
@@ -285,9 +285,9 @@
                                 <div id="eventPageHeader">
                                     <header><h2>Events</h2></header>
                                 </div>
-                                <div id="eventPageBack">
+                                <!-- <div id="eventPageBack">
                                     <p><a id="eventBackBtn" href="#">&lt; back</a></p>  
-                                </div>
+                                </div> -->
                                 <div id="eventPageContent">
                                     <div id="eventPageListContainer">
                                         <p id="eventPageListCopy"></p>

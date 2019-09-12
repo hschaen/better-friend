@@ -15,3 +15,17 @@
 .friendItem.active a {
     color: white;
 }
+.friendNavLink.active, .friendNavLink.active:hover {
+    color: darkgray;
+    text-decoration: none;
+    cursor: default;
+}
+.friendNavLink {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
+.friendNavLink:hover {
+    color: blue;
+    text-decoration: underline;
+}
