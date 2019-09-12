@@ -36,3 +36,6 @@
 .places .placeSpace {
     height:20px;
 }
+#restaurantLink p {
+    line-height: 2em;
+}

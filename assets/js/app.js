@@ -88,6 +88,7 @@ var historyLogData = [];
 var friendHistoryLog = [];
 var eventArray = [];
 var eventsRes = [];
+var markers = [];
 
 //Objects
 var sv1 = {};
@@ -293,16 +294,52 @@ function initMap() {
         infowindow.open(map, marker);
     });
 }
+function clearMarkers() {
+    google.maps.Map.prototype.clearMarkers = function() {
+        for(var i=0; i < this.markers.length; i++){
+            this.markers[i].setMap(null);
+        }
+        this.markers = new Array();
+    }
+}
+function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+function clearMarkers() {
+    setMapOnAll(null);
+}
+// Shows any markers currently in the array.
+function showMarkers() {
+    setMapOnAll(map);
+}
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    clearMarkers();
+    markers = [];
+}
 function HH() {
+    deleteMarkers();
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(
         {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 1000, type: ['restaurant']},
         function(results, status, pagination) {
             if (status !== 'OK') return;
             createMarkers(results);
-        });
-    
-
+        }
+    );
+}
+function HHbars() {
+    deleteMarkers();
+    service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(
+        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 1000, type: ['bar']},
+        function(results, status, pagination) {
+            if (status !== 'OK') return;
+            createMarkers(results);
+        }
+    )
 }
 function createMarkers(places) {
     //   countPlaces = 0;
@@ -322,7 +359,7 @@ function createMarkers(places) {
             title: place.name,
             position: place.geometry.location
         });
-        console.log(place); 
+        markers.push(marker);
         var li = document.createElement('li');
         li.className += "places";
         li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a><br><small><strong>" + place.rating + "</strong>/5, <em><strong>" + place.user_ratings_total + "</strong> ratings</em></small><div class='placeSpace'></div>";
@@ -353,13 +390,27 @@ function getLocDeets() {
 // Show Google Place Details on Page
 function callback2(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-        $('#placeNameText').text("name: " + results.name);
+        console.log(results);
+        $('#addressMoreHeader header h2').html("<a target='_blank' alt='view " + results.name + " in maps' href="+results.url+">"+results.name+"</a>");
         $('#placePriceText').text("price: " + results.price_level + "/5");
         $('#placeRatingText').text("rating: " + results.rating);
-        $('#placeAddressText').text("address: " + results.formatted_address); //need to grab address from other api
+        $('#addressMoreAddress').text(results.formatted_address);
         $('#placePhoneText').text("phone: " + results.formatted_phone_number);
-        $('#placeURLText').text("url: " + results.url);
+        // $('#placeURLText').text("url: " + results.url);
         $('#placeReviewsText').text("reviews: " + results.reviews[0].text);
+        var placeLatLang = {lat: results.geometry.viewport.na.g, lng: results.geometry.viewport.ja.g};
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: placeLatLang,
+            zoom: 15
+        });
+        var marker = new google.maps.Marker({
+            position: placeLatLang,
+            map: map,
+            title: results.name
+        });
+        // $("#addressMoreIframeContainer").show();
+        // $("#map").hide();
+        // $("#addressMoreIframe").attr("src", "https://www.google.com/maps/embed/v1/place?key=" + mapKey + "&q=place_id:" + results.place_id + "></iframe>");
     }
 }
 // Events
@@ -1128,8 +1179,13 @@ $("#friendEvents").on("click", function() {
 //     $("#eventPage").hide();
 // });
 $('#mapPlaceHH').on("click", function() {
-   HH(); 
+    $("#places").empty();
+    HH(); 
 });
+$('#mapPlaceBar').on("click", function() {
+    $("#places").empty();
+    HHbars(); 
+ });
 $("#addressMoreLink").on("click", function() {
     $("#friendInfoData, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
     $("#addressMore").show();
@@ -1144,6 +1200,9 @@ $("#addressBack").on("click", function() {
         $("#placeInfo").hide();
         $("#places").show();
         placeDeets = false;
+        HH();
+        $("#addressMoreHeader header h2").text("Location");
+        $("#addressMoreAddress").text(friendDeets.address);
     } else {
         $("#friendInfoData, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink, #viewHistoryLink").show();
         $("#addressMore").hide();
@@ -1286,7 +1345,7 @@ $("#signInInputEmail1").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm, form#workNameForm, form#placeOfOriginForm, #historyPage, #eventPage").hide();
+    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm, form#workNameForm, form#placeOfOriginForm, #historyPage, #eventPage, #addressMoreIframeContainer").hide();
     addFriendScreen = true;
     $('#signInSubmit').attr("disabled", true);
     

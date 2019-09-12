@@ -1,384 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">  -->
-
-<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.css" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
-<link rel="stylesheet" href="assets/css/style.css">
-<title>Better Friend</title>
-<script src="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.js"></script>
-
-</head>
-<body>
-<div id="loading-screen" class="container">
-    <header class="row header">
-        <div class="col-sm-12 text-center">
-            <h1> Better Friend v 0.0.9</h1>
-        </div>
-    </header>
-    <div class="row">
-        <div class="col-sm-12">
-            <h2 id="signInHeader">Sign In</h2>
-            <form id="signInForm">
-                <div class="form-group" id="emailField">
-                    <label for="signInInputEmail1">Email address</label>
-                    <input type="email" class="form-control" id="signInInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div class="form-group">
-                        <label for="userNameField">Username</label>
-                        <input type="text" class="form-control" id="userNameField" aria-describedby="yourUserName" placeholder="username">
-                        <small id="yourUserName" class="form-text text-muted">Pick a username</small>
-                    </div>
-                <div class="form-group">
-                    <label for="signInInputPassword1">Password</label>
-                    <input type="password" class="form-control" id="signInInputPassword1" placeholder="Password">
-                    <small id="yourPassword" class="form-text text-muted">Pick a password</small>
-                    
-                </div>
-                <div class="form-group" id="pw2">
-                        <label for="signInInputPassword2">Password Again</label>
-                        <input type="password" class="form-control" id="signInInputPassword2" placeholder="Password">
-                    </div>
-               
-                <button id="signInSubmit" type="submit" class="btn btn-primary" disabled="true">Sign In</button>
-            </form>
-            <p id="create-account-link-text"> or <a id="createAccount" href="#">Create an Account</a></p>
-            <p id="sign-in-link-text"> or <a id="signIntoAccount" href="#">Sign In</a></p>
-
-        </div>
-    </div>
-</div>
-<div id="app-container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand">Better Friend</a>
-        <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div id="my-nav" class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#" id="addFriendsLink">Add Friend <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" id="viewFriendsLink">View Friends</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" id="searchFriendsLink">Search Friends</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" id="signOut">Sign Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <div id="firebaseui-auth-container"></div>
-    <div class="container">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-11/css/all.min.css">
+        <link rel="stylesheet" href="assets/css/style.css">
+        <title>Better Friend</title>
+        <script src="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.js"></script>
+    </head>
+    <body>
+    <div id="loading-screen" class="container">
+        <header class="row header">
+            <div class="col-sm-12 text-center">
+                <h1> Better Friend v 0.0.9</h1>
+            </div>
+        </header>
         <div class="row">
             <div class="col-sm-12">
-                <header>
-                    <h1 id="pageTitle">Add Friends</h1>
-                </header>
-            </div>
-        </div>
-        <div class="row" id="searchFriends">
-            <div class="col-12">
-                <form class="form-inline" id="friendSearch">
-                    <div class="form-group">                    
-                        <label for="searchFriendsText">Search:</label>
-                        <input type="text" name="" id="searchFriendsText" class="form-control" placeholder="" aria-describedby="helpId">
-                        <small id="helpId" class="text-muted">Enter your search terms above</small>
+                <h2 id="signInHeader">Sign In</h2>
+                <form id="signInForm">
+                    <div class="form-group" id="emailField">
+                        <label for="signInInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="signInInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
-                    <input type="submit" id="searchFriendsBtn" value="Search" class="mb-2 btn btn-primary">
-
-                </form>
-            </div>
-        </div>
-        <hr>
-        <div class="row" id="addFriends">
-            <div class="col-12">
-                <form class="form-inline" id="addFriend">
                     <div class="form-group">
-                        <label for="friendsName">Add a Friend</label>
-                        <input id="friendsName" class="form-control" type="text" name="">
+                            <label for="userNameField">Username</label>
+                            <input type="text" class="form-control" id="userNameField" aria-describedby="yourUserName" placeholder="username">
+                            <small id="yourUserName" class="form-text text-muted">Pick a username</small>
+                        </div>
+                    <div class="form-group">
+                        <label for="signInInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="signInInputPassword1" placeholder="Password">
+                        <small id="yourPassword" class="form-text text-muted">Pick a password</small>
                     </div>
-                    <input type="submit" value="+" class="btn btn-primary mt-3" id="addFriendBtn">
+                    <div class="form-group" id="pw2">
+                            <label for="signInInputPassword2">Password Again</label>
+                            <input type="password" class="form-control" id="signInInputPassword2" placeholder="Password">
+                        </div>
+                    <button id="signInSubmit" type="submit" class="btn btn-primary" disabled="true">Sign In</button>
                 </form>
+                <p id="create-account-link-text"> or <a id="createAccount" href="#">Create an Account</a></p>
+                <p id="sign-in-link-text"> or <a id="signIntoAccount" href="#">Sign In</a></p>
             </div>
         </div>
-        <div class="row" id="listOfFriends">
-            <div class="col-12">
-                <ul id="friendsList" class="list-group">
-                    <!-- This is where the friends list will populate -->
+    </div>
+    <div id="app-container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand">Better Friend</a>
+            <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="my-nav" class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" id="addFriendsLink">Add Friend <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" tabindex="-1" id="viewFriendsLink">View Friends</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" tabindex="-1" id="searchFriendsLink">Search Friends</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" tabindex="-1" id="signOut">Sign Out</a>
+                    </li>
                 </ul>
-                <div id="noFriendsList"><small>Please <a href="#" id="addFriendsListLink">Add a Friend</a>.</small></div>
             </div>
-        </div>
-        <div class="row" id="backBtn">
-            <div class="col-12">
-                <p><a href="#" alt="back button">&lt;&nbsp;Back</a></p>
+        </nav>
+        <div id="firebaseui-auth-container"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <header>
+                        <h1 id="pageTitle">Add Friends</h1>
+                    </header>
+                </div>
             </div>
-        </div>
-        <hr>
-        <div class="row" id="friendInfo">
-            <div class="col-12">
-                <div class="card">
-                    <h5 class="card-header"><span class="float-left mt-2" id="friendCardName">John Doe</span><button id="saveInfo" class="btn btn-primary float-right editFriendInfo">Edit Info</button></h5>
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="#" class="friendNavLink active" data-friendnav="info" id="friendInfoPage" disabled="disabled">Info</a> | <a href="#" data-friendnav="events" class="friendNavLink" id="friendEvents">Events</a> | <a href="#" data-friendnav="feed" class="friendNavLink" id="friendFeed">Feed</a> | <a href="#" data-friendnav="ideas" class="friendNavLink" id="friendIdeas">Ideas</a><!-- | <a href="#" id="friendIdeas"></a>--></h5>
-                        <div class="card-text">
-                            
-                            <!-- Friend info page-->
-                            <div id="friendInfoData">
-                                <!-- Phone Info -->
-                                <div id="phone">
-                                    <p id="phoneInfo">Phone #: <span id="phoneText">(XXX) XXX-XXXX</span></p>
-                                    <form class="form-inline" id="phoneForm">
-                                        <div class="form-group">
-                                            <label for="phoneInput">Phone:</label>
-                                            <input id="phoneInput" class="form-control" type="phone" name="phoneInput">
-                                            
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Email Info -->
-                                <div id="email">
-                                        <p id="emailInfo">Email: <span id="emailText">name@domain.com</span></p>
-                                        <form class="form-inline" id="emailForm">
+            <div class="row" id="searchFriends">
+                <div class="col-12">
+                    <form class="form-inline" id="friendSearch">
+                        <div class="form-group">                    
+                            <label for="searchFriendsText">Search:</label>
+                            <input type="text" name="" id="searchFriendsText" class="form-control" placeholder="" aria-describedby="helpId">
+                            <small id="helpId" class="text-muted">Enter your search terms above</small>
+                        </div>
+                        <input type="submit" id="searchFriendsBtn" value="Search" class="mb-2 btn btn-primary">
+
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <div class="row" id="addFriends">
+                <div class="col-12">
+                    <form class="form-inline" id="addFriend">
+                        <div class="form-group">
+                            <label for="friendsName">Add a Friend</label>
+                            <input id="friendsName" class="form-control" type="text" name="">
+                        </div>
+                        <input type="submit" value="+" class="btn btn-primary mt-3" id="addFriendBtn">
+                    </form>
+                </div>
+            </div>
+            <div class="row" id="listOfFriends">
+                <div class="col-12">
+                    <ul id="friendsList" class="list-group">
+                        <!-- This is where the friends list will populate -->
+                    </ul>
+                    <div id="noFriendsList"><small>Please <a href="#" id="addFriendsListLink">Add a Friend</a>.</small></div>
+                </div>
+            </div>
+            <div class="row" id="backBtn">
+                <div class="col-12">
+                    <p><a href="#" alt="back button">&lt;&nbsp;Back</a></p>
+                </div>
+            </div>
+            <hr>
+            <div class="row" id="friendInfo">
+                <div class="col-12">
+                    <div class="card">
+                        <h5 class="card-header"><span class="float-left mt-2" id="friendCardName">John Doe</span><button id="saveInfo" class="btn btn-primary float-right editFriendInfo">Edit Info</button></h5>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="#" class="friendNavLink active" data-friendnav="info" id="friendInfoPage" disabled="disabled">Info</a> | <a href="#" data-friendnav="events" class="friendNavLink" id="friendEvents">Events</a> | <a href="#" data-friendnav="feed" class="friendNavLink" id="friendFeed">Feed</a> | <a href="#" data-friendnav="ideas" class="friendNavLink" id="friendIdeas">Ideas</a></h5>
+                            <div class="card-text">
+                                <!-- Friend info page-->
+                                <div id="friendInfoData">
+                                    <!-- Phone Info -->
+                                    <div id="phone">
+                                        <p id="phoneInfo">Phone #: <span id="phoneText">(XXX) XXX-XXXX</span></p>
+                                        <form class="form-inline" id="phoneForm">
                                             <div class="form-group">
-                                                <label for="emailInput">Email:</label>
-                                                <input id="emailInput" class="form-control" type="email" name="emailInput">
+                                                <label for="phoneInput">Phone:</label>
+                                                <input id="phoneInput" class="form-control" type="phone" name="phoneInput">
                                                 
                                             </div>
                                         </form>
                                     </div>
-                                <!-- Address Info -->
-                                <div id="address">
-                                    <p id="addressInfo">Address: <span id="addressText"></span><br/>
-                                        <small><a id="addressMoreLink" href="#">View This Location</a></small></p>
-                                    
-                                    <form class="form-inline" id="addressForm">
-                                        <div class="form-group">
-                                            <label for="addressInput">Address:</label>
-                                            <input id="addressInput" class="form-control" type="text" name="addressInput">
-                                            
+                                    <!-- Email Info -->
+                                    <div id="email">
+                                            <p id="emailInfo">Email: <span id="emailText">name@domain.com</span></p>
+                                            <form class="form-inline" id="emailForm">
+                                                <div class="form-group">
+                                                    <label for="emailInput">Email:</label>
+                                                    <input id="emailInput" class="form-control" type="email" name="emailInput">
+                                                    
+                                                </div>
+                                            </form>
                                         </div>
-                                    </form>
-                                </div>
-                                
-                                <!-- Birthday Info -->
-                                <div id="birthday">
-                                    <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span><br/>
-                                        <small id="hScopeLink"><a href="#" id="viewHScope">View Horoscope</a></small>                                
-                                    </p>
-                                    <form class="form-inline" id="birthdayForm">
-                                        <div class="form-group">
-                                            <label for="birthdayInput">Birthday:</label>
-                                            <input id="birthdayInput" class="form-control" type="text" name="birthdayInput">
-                                            
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Facebook Info -->
-                                <div id="facebook">
-                                    <p id="facebookInfo">Facebook: https://fb.me/<span id="facebookText">{{facebook ID}}</span></p>
-                                    <form class="form-inline" id="facebookForm">
-                                        <div class="form-group">
-                                            <label for="facebookInput">Facebook ID:</label>
-                                            <input id="facebookInput" class="form-control" type="text" name="facebookInput">
-                                            
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Instagram Info -->
-                                <div id="instagram">
-                                    <p id="instagramInfo">Instagram: https://instagram.com/<span id="instagramText">{{instagram ID}}</span></p>
-                                    <form class="form-inline" id="instagramForm">
-                                        <div class="form-group">
-                                            <label for="instagramInput">Instagram ID:</label>
-                                            <input id="instagramInput" class="form-control" type="text" name="instagramInput">
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- Notes -->
-                                <div id="notes">
-                                    <div id="notesTextDiv">
-                                        <p>Notes: <span id="notesText"></span></p>
-                                    </div>
-                    
-                                    <form class="form-inline" id="notesForm">
-                                        <div class="form-group">
-                                            <label for="notesInput">Notes</label>
-                                            <textarea cols="50" rows="4" id="notesInput" class="form-control"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- More Info -->
-                                <div id="moreFriendInfo"><p class="center"><small><a href="#" id="moreFriendInfoLink">Show more Info</a></small></p></div>
-                                <!-- Additional Friend Info -->
-                                <div id="friendInfoAdditional">
-                                    <!-- Place of Origin -->
-                                    <div id="placeOfOrigin">
-                                        <p id="placeOfOriginInfo">From: <span id="placeOfOriginText">City, State, Country</span></p>
-                                        <form class="form-inline" id="placeOfOriginForm">
+                                    <!-- Address Info -->
+                                    <div id="address">
+                                        <p id="addressInfo">Address: <span id="addressText"></span><br/>
+                                            <small><a id="addressMoreLink" href="#">View This Location</a></small></p>
+                                        <form class="form-inline" id="addressForm">
                                             <div class="form-group">
-                                                <label for="placeOfOriginInput">From:</label>
-                                                <input id="placeOfOriginInput" class="form-control" type="text" name="placeOfOriginInput">
+                                                <label for="addressInput">Address:</label>
+                                                <input id="addressInput" class="form-control" type="text" name="addressInput">
+                                                
                                             </div>
                                         </form>
                                     </div>
-                                    <!-- Work Info -->
-                                    <div id="workName">
-                                        <p id="workNameInfo">Work's At: <span id="workNameText">Enter work name</span></p>
-                                        <form class="form-inline" id="workNameForm">
+                                    <!-- Birthday Info -->
+                                    <div id="birthday">
+                                        <p id="birthdayInfo">Birthday: <span id="birthdayText">MM/DD/YYYY</span><br/>
+                                            <small id="hScopeLink"><a href="#" id="viewHScope">View Horoscope</a></small>                                
+                                        </p>
+                                        <form class="form-inline" id="birthdayForm">
                                             <div class="form-group">
-                                                <label for="workNameInput">Work's At</label>
-                                                <input id="workNameInput" class="form-control" type="text" name="workNameInput">
+                                                <label for="birthdayInput">Birthday:</label>
+                                                <input id="birthdayInput" class="form-control" type="text" name="birthdayInput">
+                                                
                                             </div>
                                         </form>
                                     </div>
-                                </div>
-                                <!-- View History Link -->
-                                <div id="viewHistory">
-                                    <p><small><a href="#" id="viewHistoryLink">View History</a></small></p>
-                                </div>
-                            </div>
-                            
-                            <!-- History Page -->
-                            <div id="historyPage">
-                                <div id="historyPageHeader">
-                                    <header><h2>History</h2></header>
-                                </div>
-                                <!-- History back button -->
-                                <p><a id="historyBackBtn" href="#">&lt; back</a></p>
-
-                                <!-- add History -->
-                                <div id="addHistoryHP">
-                                    <form class="form-inline" id="addHistoryForm">
-                                        <div class="form-group">
-                                            <label for="addHistoryInput">Add some history</label>
-                                            <input id="addHistoryInput" class="form-control" type="text" name="">
+                                    <!-- Facebook Info -->
+                                    <div id="facebook">
+                                        <p id="facebookInfo">Facebook: https://fb.me/<span id="facebookText">{{facebook ID}}</span></p>
+                                        <form class="form-inline" id="facebookForm">
+                                            <div class="form-group">
+                                                <label for="facebookInput">Facebook ID:</label>
+                                                <input id="facebookInput" class="form-control" type="text" name="facebookInput">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- Instagram Info -->
+                                    <div id="instagram">
+                                        <p id="instagramInfo">Instagram: https://instagram.com/<span id="instagramText">{{instagram ID}}</span></p>
+                                        <form class="form-inline" id="instagramForm">
+                                            <div class="form-group">
+                                                <label for="instagramInput">Instagram ID:</label>
+                                                <input id="instagramInput" class="form-control" type="text" name="instagramInput">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- Notes -->
+                                    <div id="notes">
+                                        <div id="notesTextDiv">
+                                            <p>Notes: <span id="notesText"></span></p>
                                         </div>
-                                        <input type="submit" value="+" class="btn btn-primary mt-3" id="addHistoryBtn">
-                                    </form>
-                                </div>
-                                <!-- show History -->
-                                <div id="showHistoryHP">
-                                    <ul id="showHistoryList"></ul>
-                                </div>
-                                <!-- edit History-->
-                                <div id="editHistoryHP">
-                                    <form class="form-inline" id="editHistoryForm">
-                                        <div class="form-group" id="editHistoryList">
+                                        <form class="form-inline" id="notesForm">
+                                            <div class="form-group">
+                                                <label for="notesInput">Notes</label>
+                                                <textarea cols="50" rows="4" id="notesInput" class="form-control"></textarea>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- More Info -->
+                                    <div id="moreFriendInfo"><p class="center"><small><a href="#" id="moreFriendInfoLink">Show more Info</a></small></p></div>
+                                    <!-- Additional Friend Info -->
+                                    <div id="friendInfoAdditional">
+                                        <!-- Place of Origin -->
+                                        <div id="placeOfOrigin">
+                                            <p id="placeOfOriginInfo">From: <span id="placeOfOriginText">City, State, Country</span></p>
+                                            <form class="form-inline" id="placeOfOriginForm">
+                                                <div class="form-group">
+                                                    <label for="placeOfOriginInput">From:</label>
+                                                    <input id="placeOfOriginInput" class="form-control" type="text" name="placeOfOriginInput">
+                                                </div>
+                                            </form>
                                         </div>
-                                        <button id="editHistoryBtn" data-edithistory="false" class="btn btn-primary">Edit History</button>
-                                    </form>
-                                </div>
-                                <!-- delete History -->
-                                <div id="deleteHistoryHP"></div>
-                                <!-- delete all History -->
-                                <div id="deleteAllHistoryHP"></div>
-                            </div>
-                            <!-- Event Details-->
-                            <div id="eventPage">
-                                <div id="eventPageHeader">
-                                    <header><h2>Events</h2></header>
-                                </div>
-                                <!-- <div id="eventPageBack">
-                                    <p><a id="eventBackBtn" href="#">&lt; back</a></p>  
-                                </div> -->
-                                <div id="eventPageContent">
-                                    <div id="eventPageListContainer">
-                                        <p id="eventPageListCopy"></p>
-                                        <ul id="eventPageList"></ul>
+                                        <!-- Work Info -->
+                                        <div id="workName">
+                                            <p id="workNameInfo">Work's At: <span id="workNameText">Enter work name</span></p>
+                                            <form class="form-inline" id="workNameForm">
+                                                <div class="form-group">
+                                                    <label for="workNameInput">Work's At</label>
+                                                    <input id="workNameInput" class="form-control" type="text" name="workNameInput">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <!-- View History Link -->
+                                    <div id="viewHistory">
+                                        <p><small><a href="#" id="viewHistoryLink">View History</a></small></p>
                                     </div>
                                 </div>
-                            </div>    
-                            <!-- Location Details-->
-                            <div id="addressMore">
-                                <!-- <iframe width="320" height="280" frameborder="0" style="border:0" src="" id="mapPlaceIFrame" allowfullscreen></iframe> -->
-                                <a href="#" id="addressBack">&lt; back</a>
-                                <div id="addressMoreHeader">
-                                    <header><h2>Location</h2></header>
-                                    <p><strong>Address:</strong> <span id="addressMoreAddress"></span></p>
+                                <!-- History Page -->
+                                <div id="historyPage">
+                                    <div id="historyPageHeader">
+                                        <header><h2>History</h2></header>
+                                    </div>
+                                    <!-- History back button -->
+                                    <p><a id="historyBackBtn" href="#">&lt; back</a></p>
+                                    <!-- add History -->
+                                    <div id="addHistoryHP">
+                                        <form class="form-inline" id="addHistoryForm">
+                                            <div class="form-group">
+                                                <label for="addHistoryInput">Add some history</label>
+                                                <input id="addHistoryInput" class="form-control" type="text" name="">
+                                            </div>
+                                            <input type="submit" value="+" class="btn btn-primary mt-3" id="addHistoryBtn">
+                                        </form>
+                                    </div>
+                                    <!-- show History -->
+                                    <div id="showHistoryHP">
+                                        <ul id="showHistoryList"></ul>
+                                    </div>
+                                    <!-- edit History-->
+                                    <div id="editHistoryHP">
+                                        <form class="form-inline" id="editHistoryForm">
+                                            <div class="form-group" id="editHistoryList">
+                                            </div>
+                                            <button id="editHistoryBtn" data-edithistory="false" class="btn btn-primary">Edit History</button>
+                                        </form>
+                                    </div>
+                                    <!-- delete History -->
+                                    <div id="deleteHistoryHP"></div>
+                                    <!-- delete all History -->
+                                    <div id="deleteAllHistoryHP"></div>
                                 </div>
-                                <div id="map" style="width:100%; height:300px; display: none;"></div>
-                                <p><a href="#" id="mapPlaceHH">Restaurants</a> | <a href="#" id="mapPlaceDirections">Directions</a></p>
-                                <div>
-                                    <ul id="places">
+                                <!-- Event Details-->
+                                <div id="eventPage">
+                                    <div id="eventPageHeader">
+                                        <header><h2>Events</h2></header>
+                                    </div>
+                                    <div id="eventPageContent">
+                                        <div id="eventPageListContainer">
+                                            <p id="eventPageListCopy"></p>
+                                            <ul id="eventPageList"></ul>
+                                        </div>
+                                    </div>
+                                </div>    
+                                <!-- Location Details-->
+                                <div id="addressMore">
+                                    <a href="#" id="addressBack">&lt; back</a>
+                                    <div id="addressMoreHeader">
+                                        <header><h2>Location</h2></header>
+                                        <p><strong>Address:</strong> <span id="addressMoreAddress"></span></p>
+                                    </div>
+                                    <div id="map" style="width:100%; height:300px; display: none;"></div>
+                                    <div id="restaurantLink">
+                                        <p>[<a href="#" id="mapPlaceBar">View Bars</a>]&nbsp;[<a href="#" id="mapPlaceHH">View Restaurants</a>]</p>
+                                    </div>
+                                    <div>
+                                        <ul id="places"></ul>
+                                        <div id="placeInfo">
+                                            <div id="placeRating">
+                                                    <p><span id="placeRatingText"></span></p>
+                                            </div>
+                                            <div id="placePrice">
+                                                    <p><span id="placePriceText"></span></p>
+                                            </div>
+                                            <div id="placePhone">
+                                                    <p><span id="placePhoneText"></span></p>
+                                            </div>
+                                            <div id="placeURL">
+                                                    <p><span id="placeURLText"></span></p>
+                                            </div>
+                                            <div id="placeReviews">
+                                                    <p><span id="placeReviewsText"></span></p>
+                                            </div>  
+                                        </div>
                                         
-                                    </ul>
-                                    <div id="placeInfo">
-                                        <div id="placeName">
-                                            <p><strong><span id="placeNameText"></span></strong> <span id="placeDistance"></span></p>
-                                        </div>
-                                        <div id="placeRating">
-                                                <p><span id="placeRatingText"></span></p>
-                                        </div>
-                                        <div id="placePrince">
-                                                <p><span id="placePriceText"></span></p>
-                                        </div>
-                                        <div id="placeAddress">
-                                                <p><span id="placeAddressText"></span></p>
-                                        </div>
-                                        <div id="placePhone">
-                                                <p><span id="placePhoneText"></span></p>
-                                        </div>
-                                        <div id="placeURL">
-                                                <p><span id="placeURLText"></span></p>
-                                        </div>
-                                        <div id="placeReviews">
-                                                <p><span id="placeReviewsText"></span></p>
-                                        </div>  
                                     </div>
-                                    
                                 </div>
-                            </div>
-                            <!-- Horoscope Info-->
-                            <div id="horoscope">
-                                <p><a id="hScopeBack" href="#">&lt; back</a></p>
-                                <!-- Sun Sign Header-->
-                                <h3 id="sunSign"></h3>
-                                <p id="hScopeText"></p>
+                                <!-- Horoscope Info-->
+                                <div id="horoscope">
+                                    <p><a id="hScopeBack" href="#">&lt; back</a></p>
+                                    <!-- Sun Sign Header-->
+                                    <h3 id="sunSign"></h3>
+                                    <p id="hScopeText"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <footer class="container-fluid">
+            <div class="col-12 text-center">
+                <small>Better Friend | betterfriend.com</small>
+            </div>
+        </footer>
     </div>
-    <footer class="container-fluid">
-        <div class="col-12 text-center">
-            <small>Better Friend | betterfriend.com</small>
-        </div>
-    </footer>
-</div>
-<script
-  src="https://code.jquery.com/jquery-3.4.1.min.js"
-  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-  crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE&libraries=places" async defer></script>
-<!-- <script src="assets/js/variables.js"></script>
-<script src="assets/js/db.js"></script>
-<script src="assets/js/map.js"></script>
-<script src="assets/js/horoscope.js"></script> -->
-<script src="assets/js/app.js"></script>
-<!-- <script src="assets/js/getHoroscopes.js"></script> -->
-
-<!-- <script src="assets/js/login.js"></script> -->
-<script type="text/javascript">
-    
-  </script>
-</body>
+    <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.5/firebase-auth.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE&libraries=places" async defer></script>
+    <script src="assets/js/app.js"></script>
+    </body>
 </html>
