@@ -88,6 +88,7 @@ var historyLogData = [];
 var friendHistoryLog = [];
 var eventArray = [];
 var eventsRes = [];
+var markers = [];
 
 //Objects
 var sv1 = {};
@@ -293,16 +294,52 @@ function initMap() {
         infowindow.open(map, marker);
     });
 }
+function clearMarkers() {
+    google.maps.Map.prototype.clearMarkers = function() {
+        for(var i=0; i < this.markers.length; i++){
+            this.markers[i].setMap(null);
+        }
+        this.markers = new Array();
+    }
+}
+function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+    }
+}
+function clearMarkers() {
+    setMapOnAll(null);
+}
+// Shows any markers currently in the array.
+function showMarkers() {
+    setMapOnAll(map);
+}
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+    clearMarkers();
+    markers = [];
+}
 function HH() {
+    deleteMarkers();
     service = new google.maps.places.PlacesService(map);
     service.nearbySearch(
         {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 1000, type: ['restaurant']},
         function(results, status, pagination) {
             if (status !== 'OK') return;
             createMarkers(results);
-        });
-    
-
+        }
+    );
+}
+function HHbars() {
+    deleteMarkers();
+    service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(
+        {location: new google.maps.LatLng(parseFloat(lat), parseFloat(long)), radius: 1000, type: ['bar']},
+        function(results, status, pagination) {
+            if (status !== 'OK') return;
+            createMarkers(results);
+        }
+    )
 }
 function createMarkers(places) {
     //   countPlaces = 0;
@@ -322,7 +359,7 @@ function createMarkers(places) {
             title: place.name,
             position: place.geometry.location
         });
-        console.log(place); 
+        markers.push(marker);
         var li = document.createElement('li');
         li.className += "places";
         li.innerHTML = "<a class='placeNearBy' href='#' id='" + place.name.split(" ").join("-").toLowerCase() +"' alt='view more info about " + place.name + "' data-placeid='" + place.place_id+"'>" + place.name + "</a><br><small><strong>" + place.rating + "</strong>/5, <em><strong>" + place.user_ratings_total + "</strong> ratings</em></small><div class='placeSpace'></div>";
@@ -367,9 +404,9 @@ function callback2(results, status) {
             zoom: 15
         });
         var marker = new google.maps.Marker({
-        position: placeLatLang,
-        map: map,
-        title: results.name
+            position: placeLatLang,
+            map: map,
+            title: results.name
         });
         // $("#addressMoreIframeContainer").show();
         // $("#map").hide();
@@ -1142,8 +1179,13 @@ $("#friendEvents").on("click", function() {
 //     $("#eventPage").hide();
 // });
 $('#mapPlaceHH').on("click", function() {
-   HH(); 
+    $("#places").empty();
+    HH(); 
 });
+$('#mapPlaceBar').on("click", function() {
+    $("#places").empty();
+    HHbars(); 
+ });
 $("#addressMoreLink").on("click", function() {
     $("#friendInfoData, #friendInfoAdditional, #backBtn, #viewHistoryLink, #moreFriendInfoLink").hide();
     $("#addressMore").show();
