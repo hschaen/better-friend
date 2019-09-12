@@ -1180,10 +1180,12 @@ $("#friendEvents").on("click", function() {
 // });
 $('#mapPlaceHH').on("click", function() {
     $("#places").empty();
+    $("#placesTextHeader").text("Restaurants");
     HH(); 
 });
 $('#mapPlaceBar').on("click", function() {
     $("#places").empty();
+    $("#placesTextHeader").text("Bars");    
     HHbars(); 
  });
 $("#addressMoreLink").on("click", function() {
