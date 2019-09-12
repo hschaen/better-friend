@@ -87,6 +87,7 @@ var historyLogArray = [];
 var historyLogData = [];
 var friendHistoryLog = [];
 var eventArray = [];
+var eventsRes = [];
 
 //Objects
 var sv1 = {};
@@ -368,6 +369,8 @@ jQuery.ajaxPrefilter(function(options) {
 });
 function getEvents() {
     if(!isEventPage){
+        eventArray.length = 0;
+        eventsRes.length = 0;
         var eventsKey = 'jbcRPqgbSjEpP292bBtSroIPra5lCopy';
         // var eventsURL = 'https://app.ticketmaster.com/discovery/v2/suggest?apikey=' + eventsKey + '&latlong=' + lat + ',' + long + '&locale=*';
         var eventsURL = 'https://app.ticketmaster.com/discovery/v2/suggest?apikey=jbcRPqgbSjEpP292bBtSroIPra5lCopy&latlong=' + lat +','+long+'&radius=25&unit=miles&source=ticketmaster&locale=*&countryCode=US&preferredCountry=us'
@@ -379,13 +382,14 @@ function getEvents() {
             dataType: "json",
             success: function(json) {
                 console.log(json);
-                var eventsRes = json._embedded.events;
+                eventsRes = json._embedded.events;
                 for(var i = 0; i < eventsRes.length; i++) {
                     eventArray.push({
                         name: eventsRes[i].name,
                         url: eventsRes[i].url, date: eventsRes[i].dates.start.localDate, venue: eventsRes[i]._embedded.venues[0].name
                     });
                 }
+                $("#eventPageList").empty();
                 for(var i = 0; i < eventArray.length; i++) {
                     $("#eventPageList").append("<li>["+eventArray[i].date+"] <a href="+eventArray[i].url+">"+eventArray[i].name+" ("+ eventArray[i].venue +")</a></li>");
                 }
@@ -395,9 +399,10 @@ function getEvents() {
             }
         });
     } else {
-        eventsRes.length = 0;
-        eventArray.length = 0;
         $("#eventPageList").empty();
+        for(var i = 0; i < eventArray.length; i++) {
+            $("#eventPageList").append("<li>["+eventArray[i].date+"] <a href="+eventArray[i].url+">"+eventArray[i].name+" ("+ eventArray[i].venue +")</a></li>");
+        }
     }
 }
 

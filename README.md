@@ -54,19 +54,16 @@ Information You Get
 
 Tasks/Priorities
   - Fix for loop being called everytime the username field changes
-  - store lat/long data in firebase each time address is updated
   - Autocomplete Search Friends
   - store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
-  - search bug - whoever is found shows data for last selected friend
 
   - birthday alert should be a flag on each friend
   - create notifications panel
-  - edit button reveals blank placeholder text on edit for some users
+
   - format phone number on edit friend form
   - validate email on edit friend form
 
-  - reload all friend info when info is saved (update snapshot)
-  - friend/horoscope back button needs to hide horoscope div
+  
   - show upcoming birthdays
   - show list of bdays
 
@@ -87,4 +84,14 @@ Tasks/Priorities
   - user profile - birthday, address, interests
   - progress meters - how you vibe with friend (different categories, see image)
   -app competitors: the pattern, time passage
+  - edit name
+  - send text messages
+  - send canned emails
+  - email and text templates
+  - ad network
+  -- recommends (sponsored):
+  --- gifts,
+  --- events
+  --- places 
+
 
