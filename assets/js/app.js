@@ -353,13 +353,27 @@ function getLocDeets() {
 // Show Google Place Details on Page
 function callback2(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-        $('#placeNameText').text("name: " + results.name);
+        console.log(results);
+        $('#addressMoreHeader header h2').html("<a target='_blank' alt='view " + results.name + " in maps' href="+results.url+">"+results.name+"</a>");
         $('#placePriceText').text("price: " + results.price_level + "/5");
         $('#placeRatingText').text("rating: " + results.rating);
-        $('#placeAddressText').text("address: " + results.formatted_address); //need to grab address from other api
+        $('#addressMoreAddress').text(results.formatted_address);
         $('#placePhoneText').text("phone: " + results.formatted_phone_number);
-        $('#placeURLText').text("url: " + results.url);
+        // $('#placeURLText').text("url: " + results.url);
         $('#placeReviewsText').text("reviews: " + results.reviews[0].text);
+        var placeLatLang = {lat: results.geometry.viewport.na.g, lng: results.geometry.viewport.ja.g};
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: placeLatLang,
+            zoom: 15
+        });
+        var marker = new google.maps.Marker({
+        position: placeLatLang,
+        map: map,
+        title: results.name
+        });
+        // $("#addressMoreIframeContainer").show();
+        // $("#map").hide();
+        // $("#addressMoreIframe").attr("src", "https://www.google.com/maps/embed/v1/place?key=" + mapKey + "&q=place_id:" + results.place_id + "></iframe>");
     }
 }
 // Events
@@ -1144,6 +1158,9 @@ $("#addressBack").on("click", function() {
         $("#placeInfo").hide();
         $("#places").show();
         placeDeets = false;
+        HH();
+        $("#addressMoreHeader header h2").text("Location");
+        $("#addressMoreAddress").text(friendDeets.address);
     } else {
         $("#friendInfoData, #moreFriendInfo, #backBtn, #viewHistoryLink, #moreFriendInfoLink, #viewHistoryLink").show();
         $("#addressMore").hide();
@@ -1286,7 +1303,7 @@ $("#signInInputEmail1").on("change", function() {
 });
 $(document).ready(function() {
     
-    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm, form#workNameForm, form#placeOfOriginForm, #historyPage, #eventPage").hide();
+    $("#addressMore, #searchFriends, #friendInfo, #phoneForm, #addressForm, #birthdayForm, #facebookForm, #instagramForm, #emailForm, #app-container, #emailField, #pw2, #sign-in-link-text, #backBtn, #horoscope, #yourUserName, #yourPassword, #friendInfoAdditional, form#notesForm, form#workNameForm, form#placeOfOriginForm, #historyPage, #eventPage, #addressMoreIframeContainer").hide();
     addFriendScreen = true;
     $('#signInSubmit').attr("disabled", true);
     
