@@ -5,9 +5,6 @@ var app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.listen(PORT, function(){
-    console.log("connected on port: " + PORT);
-});
 // Your web app's Fire'base configuration
 var firebaseConfig = {
     apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
@@ -1364,3 +1361,6 @@ $(document).ready(function() {
     
 });
 firebaseDB;
+app.listen(PORT, function(){
+    console.log("connected on port: " + PORT);
+});
