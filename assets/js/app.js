@@ -7,7 +7,7 @@
 
 // Your web app's Fire'base configuration
 var firebaseConfig = {
-    apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
+    apiKey: fbKey,
     authDomain: "better-friend-app.firebaseapp.com",
     databaseURL: "https://better-friend-app.firebaseio.com",
     projectId: "better-friend-app",
@@ -257,7 +257,7 @@ function getMapCoords() {
     // if (!hasCoords) {
     //     console.log('No hasCoords');
 
-        mapKey = "AIzaSyByFyVPWb2lJOipfRf0e1XWoiQdkopndyE";
+        mapKey = gooKey;
         mapAddress = friendDeets.address;
         mapURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + mapAddress + "&key=" + mapKey;
         $.ajax({
@@ -1361,6 +1361,6 @@ $(document).ready(function() {
     
 });
 firebaseDB;
-app.listen(PORT, function(){
-    console.log("connected on port: " + PORT);
-});
+// app.listen(PORT, function(){
+//     console.log("connected on port: " + PORT);
+// });
