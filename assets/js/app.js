@@ -1,4 +1,14 @@
-// Your web app's Firebase configuration
+//Express server
+// var express = require("express");
+// var PORT = process.env.PORT || 3000;
+// var app = express();
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+
+// app.listen(PORT, function(){
+//     console.log("connected on port: " + PORT);
+// });
+// Your web app's Fire'base configuration
 var firebaseConfig = {
     apiKey: "AIzaSyCVAEkhIF_68CzFDmBXqzmHVdkqxz07GVM",
     authDomain: "better-friend-app.firebaseapp.com",

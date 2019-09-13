@@ -1,31 +1,19 @@
 # better-friend
 Be a better friend
 
-Problem: People suck. Be a better friend by being there for your friends. Remember important events, Do stuff together, Know what's going on in your friends lives.
-
-Target Audience: People who suck at being a good friend. Women 25-55. Men 30-60.
-
 APIs
-1. Facebook
-2. Calendar
-3. Groupon
+1. Google (Places, Maps)
+2. Ticketmaster (Events)
+3. 
 4. Horoscope
 
 Backend
 1. Firebase
 
 Features
-1. Add your friends to a list
+1. Add you friends to a list
 2. Add properties to each friend
-3. Calendar
-4. Top Friends
-5. Gift stuff (tickets, money, etc)
-6. Feed
-    - friends social media updates
-    - upcoming events
-    - deals/groupons
-7. Alerts
-8. Interact with content
+
 
 
 
@@ -51,47 +39,3 @@ Information You Get
 5. Deals/Groupons
 6. Birthday Reminders
 7. Important Life Events
-
-Tasks/Priorities
-  - Fix for loop being called everytime the username field changes
-  - Autocomplete Search Friends
-  - store logged out if page refreshes or user closes the tab. Should work with sessionstorage flag.
-
-  - birthday alert should be a flag on each friend
-  - create notifications panel
-
-  - format phone number on edit friend form
-  - validate email on edit friend form
-
-  
-  - show upcoming birthdays
-  - show list of bdays
-
-  - get directions to address
-  - happy hour specials / other events around friends address
-  - turn phone # into a link
-  - add loading text when horoscope is clicked
-  - anniversaries
-  - different squads / levels of friends
-  - crm to connect to outlook
-  - last time you hung out
-  - what events you attend
-  - reminder for x# of days
-  - friend resource management
-  - what you will jive in/not jive in
-  - different lists (friends, family, work)
-  - money: birthday? here's an amazon gift card
-  - user profile - birthday, address, interests
-  - progress meters - how you vibe with friend (different categories, see image)
-  -app competitors: the pattern, time passage
-  - edit name
-  - send text messages
-  - send canned emails
-  - email and text templates
-  - ad network
-  -- recommends (sponsored):
-  --- gifts,
-  --- events
-  --- places 
-
-
